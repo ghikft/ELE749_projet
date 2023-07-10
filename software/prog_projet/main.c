@@ -122,7 +122,7 @@ int main(void)
 			//Apply scaling and verify cursor is within the boundarys of the screen
 			if (x_pos > RIGHT_LIMIT*SCALE_FACTOR_INV){
 				currentCursor.x = RIGHT_LIMIT;
-				x_pos = RIGHT_LIMIT*SCALE_FACTOR;
+				x_pos = RIGHT_LIMIT*SCALE_FACTOR_INV;
 			}else if (x_pos < LEFT_LIMIT*SCALE_FACTOR_INV){
 				currentCursor.x = LEFT_LIMIT;
 				x_pos = LEFT_LIMIT*SCALE_FACTOR_INV;
@@ -132,7 +132,7 @@ int main(void)
 
 			if(y_pos> BOTTOM_LIMIT*SCALE_FACTOR_INV){
 				currentCursor.y = BOTTOM_LIMIT;
-				y_pos = BOTTOM_LIMIT*SCALE_FACTOR;
+				y_pos = BOTTOM_LIMIT*SCALE_FACTOR_INV;
 			}else if(y_pos < TOP_LIMIT*SCALE_FACTOR_INV){
 				currentCursor.y = TOP_LIMIT;
 				y_pos = TOP_LIMIT*SCALE_FACTOR_INV;
