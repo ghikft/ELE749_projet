@@ -130,3 +130,7 @@ software/prog_projet/Makefile
 *.txt
 
 software/prog_projet_bsp/
+
+software/prog_projet/.vs/prog_projet/v16/
+
+software/prog_projet/.vs/
