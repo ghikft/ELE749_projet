@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
---lab2.vhd
+--projet.vhd
 --
 --	created on 2023-05-05
 --
@@ -54,7 +54,7 @@ architecture structural of ELE749_projet is
 
 	signal reset_n : std_logic;
 
-	component lab2Arc is
+	component projetArc is
 		port(
 			-- clk.clk		
 			clk_clk                       : in    std_logic	:= '0';
@@ -108,7 +108,7 @@ begin
 	reset_n <= not key(3); --invert the cpu reset signal from KEY(3)
 	
 	
-	nios_system : lab2arc
+	nios_system : projetArc
 	port map(
 		clk_clk 								=> clock_50,
 		reset_reset 						=> reset_n,

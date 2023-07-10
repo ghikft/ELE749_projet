@@ -108,3 +108,25 @@ software/lab2/obj/default/.force_relink
 *.qsf
 
 *.bak
+
+*.qws
+
+projetArc.sopcinfo
+
+projetArc/
+
+software/prog_projet/.cproject
+
+software/prog_projet/.project
+
+software/prog_projet/.settings/
+
+software/prog_projet/create-this-app
+
+software/prog_projet/Makefile
+
+*.objdump
+
+*.txt
+
+software/prog_projet_bsp/
