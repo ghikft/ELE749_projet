@@ -8,7 +8,7 @@
 void recfiller_init(int x_size, int y_size)
 {
     // set framebuffer address
-    IOWR_32DIRECT(RECFILLER_0_BASE, RF_FB_BASE_ADDR, ON_CHIP_MEM_BASE);
+    IOWR_32DIRECT(RECFILLER_0_BASE, RF_FB_BASE_ADDR, ONCHIP_MEM_BASE);
 
     // set x_max
     IOWR_32DIRECT(RECFILLER_0_BASE, RF_X_MAX_ADDR, x_size);

@@ -13,12 +13,21 @@
 #include "system.h"
 #include "altera_up_avalon_video_character_buffer_with_dma.h"
 #include "altera_up_avalon_video_pixel_buffer_dma.h"
+#include "alt_types.h"
+#include "sys/alt_irq.h"
 
+# include "sys/alt_stdio.h"
 /*Module Hardware*/
 #include "recfiller.h"
 
 /* Mouse driver */
 #include "ps2_mouse.h"
+#include "io.h"
+#define TIMER_CONVERSION 50000
+#define TIMER_STAT_REG_OFT		0 	// status register
+#define TIMER_CTRL_REG_OFT		1 	// control register
+#define TIMER_PERIODL_REG_OFT 	2 	// period register, bits 15:0
+#define TIMER_PERIODH_REG_OFT 	3 	// period register, bits 31:16
 
 //Screen border limts
 #define TOP_LIMIT 10
@@ -31,7 +40,8 @@
 #define BACKGROUD_COLOR 128//0xEB
 #define DRAW_COLOR 0
 #define CURSOR_COLOR 0xFF
-
+context_t timer_context;
+alt_up_ps2_dev* tim;
 void timer_write_period(alt_u32 timerBase, alt_u32 period)
 {
 	/**************************************************************************
@@ -59,8 +69,8 @@ void timer_write_period(alt_u32 timerBase, alt_u32 period)
 	/* setup timer for start in continuous mode w/ interrupt */
 	IOWR(timerBase, TIMER_CTRL_REG_OFT, 0x0007); // bits 0, 1, 2 actives
 }
-
-void timer_0_ISR(void* context)
+static void timer_0_ISR(void* context, alt_u32 id) 
+//void timer_0_ISR(void* context)
 {
 	/**************************************************************************
 	 * Interrupt handler for timer 0, flashes the LEDs at the timer period
@@ -75,9 +85,11 @@ void timer_0_ISR(void* context)
 	 * None
 	 *
 	 *************************************************************************/
-
+	//tim = alt_up_ps2_open_dev(TIMER_0_NAME);		//Connexion au module PS/2
+	context_t* ctxt = context;					//Structure qui contient le contexte pour
+												//communiquer avec l'interruption
 	 // clear irq status in order to prevent retriggering
-	IOWR(INTERVALTIMER_BASE, TIMER_STAT_REG_OFT, 0b10);
+	IOWR(TIMER_0_BASE, TIMER_STAT_REG_OFT, 0b10);
 
 	///static alt_u8 ledPattern = 0x01; // intial template
 
@@ -146,13 +158,14 @@ unsigned char get_pixel_color(int x, int y){
 	unsigned char *pixel;
 	unsigned char color;
 	//pixel = (unsigned char *)ONCHIP_MEM_BASE+(y<<9)+x;
-	pixel = (unsigned char *)ONCHIP_MEM_BASE+(y*640)+x;
+	pixel = (unsigned char *)ONCHIP_MEM_BASE +(y*640)+x;
 	color = *pixel;
 	return color;
 }
 
 int main(void)
-{
+{	
+	alt_u32 period = 8;
 	//printf("debut main\n\r");
 	alt_putstr("debut du main \n\r");
 	// Variables pour souris PS2
@@ -170,10 +183,14 @@ int main(void)
 	
 
 	//Stop timer and setup the interrupt, then start with 100ms period (default)
-	stop_timer(INTERVALTIMER_BASE);
-	timer_write_period(INTERVALTIMER_BASE, period);
-	alt_ic_isr_register(INTERVALTIMER_IRQ_INTERRUPT_CONTROLLER_ID, INTERVALTIMER_IRQ, timer_0_ISR, 0x0, 0x0); 
-
+	stop_timer(TIMER_0_BASE);
+	timer_write_period(TIMER_0_BASE, period);
+	//alt_ic_isr_register(TIMER_0_IRQ_INTERRUPT_CONTROLLER_ID, TIMER_0_IRQ, timer_0_ISR, 0x0, 0x0);
+	//if (alt_irq_register(TIMER_0_IRQ_INTERRUPT_CONTROLLER_ID, 0x0, timer_0_ISR) == 0){
+	//	alt_putstr("ISR REGISTERED\n\r");
+	//}
+	//alt_irq_register(PS2_0_IRQ, (void*)(&ps2_context), ps2_isr);
+	alt_irq_register(TIMER_0_IRQ, (void*)(&timer_context), (void*)timer_0_ISR);
 	//init recfiller
 	recfiller_init(640, 480);
 	//Init cursor at the top left of the drawing zone
