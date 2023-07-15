@@ -29,6 +29,19 @@
 #define TIMER_PERIODL_REG_OFT 	2 	// period register, bits 15:0
 #define TIMER_PERIODH_REG_OFT 	3 	// period register, bits 31:16
 
+typedef struct Cursor{
+	int x;
+	int y;
+} Cursor;
+
+int x_mov = 0;
+int y_mov = 0;
+int x_pos = 10;
+int y_pos = 10;
+unsigned char left_btn = 0;
+unsigned char right_btn = 0;
+
+
 //Screen border limts
 #define TOP_LIMIT 10
 #define LEFT_LIMIT 0
@@ -95,6 +108,12 @@ static void timer_0_ISR(void* context, alt_u32 id)
 
 	//ledPattern ^= 0x03; // inverse 2 LSB
 	//IOWR(LEDS_BASE, 0, ledPattern); // Write template to LEDs
+	// process PS2 events
+	if (ps2_process(&left_btn, &right_btn, &x_mov, &y_mov)) {
+		x_pos += x_mov;
+		y_pos -= y_mov;
+		//printf("2\n");
+	}
 }
 
 void start_timer(alt_u32 timerBase)
@@ -136,11 +155,6 @@ void stop_timer(alt_u32 timerBase)
 	IOWR(timerBase, TIMER_CTRL_REG_OFT, 0b1000);
 }
 
-typedef struct Cursor{
-	int x;
-	int y;
-} Cursor;
-
 unsigned char get_pixel_color(int x, int y){
 	/**************************************************************************
 	 * Get the color value of a specific pixel
@@ -169,18 +183,16 @@ int main(void)
 	//printf("debut main\n\r");
 	alt_putstr("debut du main \n\r");
 	// Variables pour souris PS2
-	unsigned char left_btn = 0;
-	unsigned char right_btn = 0;
-	int x_mov = 0;
-	int y_mov = 0;
-	int x_pos = 10;
-	int y_pos = 10;
+	
+
 	char pos_msg[100];
 	int lastRight = 0;
 	int lastLeft = 0;
 	int lastColor = 0;
 
-	
+	Cursor currentCursor;
+	currentCursor.x = 320;
+	currentCursor.y = 240;
 
 	//Stop timer and setup the interrupt, then start with 100ms period (default)
 	stop_timer(TIMER_0_BASE);
@@ -194,9 +206,7 @@ int main(void)
 	//init recfiller
 	recfiller_init(640, 480);
 	//Init cursor at the top left of the drawing zone
-	Cursor currentCursor;
-	currentCursor.x = 320;
-	currentCursor.y = 240;
+	
 
 	/* CHAR BUFFER setup and static display */
 	//alt_up_char_buffer_dev *char_buffer;
@@ -230,12 +240,7 @@ int main(void)
 		// process ps2 events during vertical blank
 		if (!alt_up_pixel_buffer_dma_check_swap_buffers_status(pixel_buffer)) {
 			//printf("1\n");
-			// process PS2 events
-			if (ps2_process(&left_btn, &right_btn, &x_mov, &y_mov)) {
-				x_pos += x_mov;
-				y_pos -= y_mov;
-				//printf("2\n");
-			}
+			
 
             /* Manage cursor */
 			//erase old cursor
