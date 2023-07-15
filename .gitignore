@@ -134,3 +134,7 @@ software/prog_projet_bsp/
 software/prog_projet/.vs/prog_projet/v16/
 
 software/prog_projet/.vs/
+
+software/prog_projet/.force_relink
+
+software/prog_projet/obj/default/.force_relink
