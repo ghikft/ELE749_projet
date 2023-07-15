@@ -167,14 +167,15 @@ int main(void)
 	int lastLeft = 0;
 	int lastColor = 0;
 
-	//init recfiller
-	recfiller_init(640,480);
+	
 
 	//Stop timer and setup the interrupt, then start with 100ms period (default)
 	stop_timer(INTERVALTIMER_BASE);
 	timer_write_period(INTERVALTIMER_BASE, period);
 	alt_ic_isr_register(INTERVALTIMER_IRQ_INTERRUPT_CONTROLLER_ID, INTERVALTIMER_IRQ, timer_0_ISR, 0x0, 0x0); 
 
+	//init recfiller
+	recfiller_init(640, 480);
 	//Init cursor at the top left of the drawing zone
 	Cursor currentCursor;
 	currentCursor.x = 320;
