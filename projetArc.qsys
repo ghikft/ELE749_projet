@@ -9,38 +9,6 @@
    categories="System" />
  <parameter name="bonusData"><![CDATA[bonusData 
 {
-   element alpha_blender_0
-   {
-      datum _sortIndex
-      {
-         value = "11";
-         type = "int";
-      }
-   }
-   element character_buffer_with_dma
-   {
-      datum _sortIndex
-      {
-         value = "10";
-         type = "int";
-      }
-   }
-   element character_buffer_with_dma.avalon_char_buffer_slave
-   {
-      datum baseAddress
-      {
-         value = "134742016";
-         type = "String";
-      }
-   }
-   element character_buffer_with_dma.avalon_char_control_slave
-   {
-      datum baseAddress
-      {
-         value = "134754344";
-         type = "String";
-      }
-   }
    element clocks
    {
       datum _sortIndex
@@ -66,7 +34,7 @@
    {
       datum baseAddress
       {
-         value = "134752256";
+         value = "134744064";
          type = "String";
       }
    }
@@ -74,7 +42,7 @@
    {
       datum _sortIndex
       {
-         value = "12";
+         value = "10";
          type = "int";
       }
    }
@@ -90,7 +58,7 @@
    {
       datum baseAddress
       {
-         value = "134754336";
+         value = "134746176";
          type = "String";
       }
    }
@@ -122,7 +90,7 @@
    {
       datum baseAddress
       {
-         value = "134754304";
+         value = "134746144";
          type = "String";
       }
    }
@@ -138,7 +106,7 @@
    {
       datum baseAddress
       {
-         value = "134754328";
+         value = "134746168";
          type = "String";
       }
    }
@@ -186,7 +154,23 @@
    {
       datum baseAddress
       {
-         value = "134754320";
+         value = "134746160";
+         type = "String";
+      }
+   }
+   element timer_0
+   {
+      datum _sortIndex
+      {
+         value = "12";
+         type = "int";
+      }
+   }
+   element timer_0.s1
+   {
+      datum baseAddress
+      {
+         value = "134746112";
          type = "String";
       }
    }
@@ -194,7 +178,7 @@
    {
       datum _sortIndex
       {
-         value = "13";
+         value = "11";
          type = "int";
       }
    }
@@ -242,27 +226,6 @@
    type="conduit"
    dir="end" />
  <module
-   name="alpha_blender_0"
-   kind="altera_up_avalon_video_alpha_blender"
-   version="18.0"
-   enabled="1">
-  <parameter name="AUTO_CLK_CLOCK_RATE" value="50000000" />
-  <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone V" />
-  <parameter name="mode" value="Simple" />
- </module>
- <module
-   name="character_buffer_with_dma"
-   kind="altera_up_avalon_video_character_buffer_with_dma"
-   version="18.0"
-   enabled="1">
-  <parameter name="AUTO_CLK_CLOCK_RATE" value="50000000" />
-  <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone V" />
-  <parameter name="color_bits" value="1-bit" />
-  <parameter name="enable_transparency" value="true" />
-  <parameter name="resolution" value="80 x 60" />
-  <parameter name="vga_device" value="On-board VGA DAC" />
- </module>
- <module
    name="clocks"
    kind="altera_up_avalon_sys_sdram_pll"
    version="18.0"
@@ -288,7 +251,7 @@
   <parameter name="cpuReset" value="false" />
   <parameter name="customInstSlavesSystemInfo" value="&lt;info/&gt;" />
   <parameter name="dataAddrWidth" value="28" />
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='sdram.s1' start='0x4000000' end='0x8000000' /><slave name='onchip_mem.s1' start='0x8000000' end='0x804B000' /><slave name='character_buffer_with_dma.avalon_char_buffer_slave' start='0x8080000' end='0x8082000' /><slave name='cpu.jtag_debug_module' start='0x8082800' end='0x8083000' /><slave name='pixel_buffer_dma_0.avalon_control_slave' start='0x8083000' end='0x8083010' /><slave name='sysid.control_slave' start='0x8083010' end='0x8083018' /><slave name='ps2_0.avalon_ps2_slave' start='0x8083018' end='0x8083020' /><slave name='jtag_uart.avalon_jtag_slave' start='0x8083020' end='0x8083028' /><slave name='character_buffer_with_dma.avalon_char_control_slave' start='0x8083028' end='0x8083030' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='sdram.s1' start='0x4000000' end='0x8000000' /><slave name='onchip_mem.s1' start='0x8000000' end='0x804B000' /><slave name='cpu.jtag_debug_module' start='0x8080800' end='0x8081000' /><slave name='timer_0.s1' start='0x8081000' end='0x8081020' /><slave name='pixel_buffer_dma_0.avalon_control_slave' start='0x8081020' end='0x8081030' /><slave name='sysid.control_slave' start='0x8081030' end='0x8081038' /><slave name='ps2_0.avalon_ps2_slave' start='0x8081038' end='0x8081040' /><slave name='jtag_uart.avalon_jtag_slave' start='0x8081040' end='0x8081048' /></address-map>]]></parameter>
   <parameter name="dcache_bursts" value="false" />
   <parameter name="dcache_lineSize" value="32" />
   <parameter name="dcache_numTCDM" value="0" />
@@ -315,8 +278,8 @@
   <parameter name="icache_tagramBlockType" value="Automatic" />
   <parameter name="impl" value="Fast" />
   <parameter name="instAddrWidth" value="28" />
-  <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='sdram.s1' start='0x4000000' end='0x8000000' /><slave name='cpu.jtag_debug_module' start='0x8082800' end='0x8083000' /></address-map>]]></parameter>
-  <parameter name="internalIrqMaskSystemInfo" value="3" />
+  <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='sdram.s1' start='0x4000000' end='0x8000000' /><slave name='cpu.jtag_debug_module' start='0x8080800' end='0x8081000' /></address-map>]]></parameter>
+  <parameter name="internalIrqMaskSystemInfo" value="7" />
   <parameter name="manuallyAssignCpuID" value="true" />
   <parameter name="mmu_TLBMissExcOffset" value="0" />
   <parameter name="mmu_TLBMissExcSlave" value="None" />
@@ -533,6 +496,18 @@
    enabled="1">
   <parameter name="id" value="-559038801" />
  </module>
+ <module name="timer_0" kind="altera_avalon_timer" version="18.1" enabled="1">
+  <parameter name="alwaysRun" value="false" />
+  <parameter name="counterSize" value="32" />
+  <parameter name="fixedPeriod" value="false" />
+  <parameter name="period" value="1" />
+  <parameter name="periodUnits" value="MSEC" />
+  <parameter name="resetOutput" value="false" />
+  <parameter name="snapshot" value="true" />
+  <parameter name="systemFrequency" value="50000000" />
+  <parameter name="timeoutPulseOutput" value="false" />
+  <parameter name="watchdogPulse" value="2" />
+ </module>
  <module
    name="vga_controller_0"
    kind="altera_up_avalon_video_vga_controller"
@@ -574,27 +549,9 @@
    kind="avalon"
    version="18.1"
    start="cpu.data_master"
-   end="character_buffer_with_dma.avalon_char_buffer_slave">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08080000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="18.1"
-   start="cpu.data_master"
-   end="character_buffer_with_dma.avalon_char_control_slave">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08083028" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="18.1"
-   start="cpu.data_master"
    end="pixel_buffer_dma_0.avalon_control_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08083000" />
+  <parameter name="baseAddress" value="0x08081020" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -603,7 +560,7 @@
    start="cpu.data_master"
    end="jtag_uart.avalon_jtag_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08083020" />
+  <parameter name="baseAddress" value="0x08081040" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -612,7 +569,7 @@
    start="cpu.data_master"
    end="ps2_0.avalon_ps2_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08083018" />
+  <parameter name="baseAddress" value="0x08081038" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -621,7 +578,7 @@
    start="cpu.data_master"
    end="sysid.control_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08083010" />
+  <parameter name="baseAddress" value="0x08081030" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -630,7 +587,7 @@
    start="cpu.data_master"
    end="cpu.jtag_debug_module">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08082800" />
+  <parameter name="baseAddress" value="0x08080800" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection kind="avalon" version="18.1" start="cpu.data_master" end="sdram.s1">
@@ -647,13 +604,18 @@
   <parameter name="baseAddress" value="0x08000000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
+ <connection kind="avalon" version="18.1" start="cpu.data_master" end="timer_0.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x08081000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
  <connection
    kind="avalon"
    version="18.1"
    start="cpu.instruction_master"
    end="cpu.jtag_debug_module">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08082800" />
+  <parameter name="baseAddress" value="0x08080800" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -668,16 +630,6 @@
  <connection
    kind="avalon_streaming"
    version="18.1"
-   start="alpha_blender_0.avalon_blended_source"
-   end="dual_clock_buffer_0.avalon_dc_buffer_sink" />
- <connection
-   kind="avalon_streaming"
-   version="18.1"
-   start="character_buffer_with_dma.avalon_char_source"
-   end="alpha_blender_0.avalon_foreground_sink" />
- <connection
-   kind="avalon_streaming"
-   version="18.1"
    start="dual_clock_buffer_0.avalon_dc_buffer_source"
    end="vga_controller_0.avalon_vga_sink" />
  <connection
@@ -689,7 +641,7 @@
    kind="avalon_streaming"
    version="18.1"
    start="rgb_resampler_pixel.avalon_rgb_source"
-   end="alpha_blender_0.avalon_background_sink" />
+   end="dual_clock_buffer_0.avalon_dc_buffer_sink" />
  <connection kind="clock" version="18.1" start="clocks.sys_clk" end="cpu.clk" />
  <connection kind="clock" version="18.1" start="clocks.sys_clk" end="sysid.clk" />
  <connection
@@ -698,12 +650,6 @@
    start="clocks.sys_clk"
    end="jtag_uart.clk" />
  <connection kind="clock" version="18.1" start="clocks.sys_clk" end="ps2_0.clk" />
- <connection kind="clock" version="18.1" start="clocks.sys_clk" end="sdram.clk" />
- <connection
-   kind="clock"
-   version="18.1"
-   start="clocks.sys_clk"
-   end="alpha_blender_0.clk" />
  <connection
    kind="clock"
    version="18.1"
@@ -713,12 +659,9 @@
    kind="clock"
    version="18.1"
    start="clocks.sys_clk"
-   end="character_buffer_with_dma.clk" />
- <connection
-   kind="clock"
-   version="18.1"
-   start="clocks.sys_clk"
    end="pixel_buffer_dma_0.clk" />
+ <connection kind="clock" version="18.1" start="clocks.sys_clk" end="timer_0.clk" />
+ <connection kind="clock" version="18.1" start="clocks.sys_clk" end="sdram.clk" />
  <connection
    kind="clock"
    version="18.1"
@@ -754,6 +697,9 @@
  <connection kind="interrupt" version="18.1" start="cpu.d_irq" end="jtag_uart.irq">
   <parameter name="irqNumber" value="0" />
  </connection>
+ <connection kind="interrupt" version="18.1" start="cpu.d_irq" end="timer_0.irq">
+  <parameter name="irqNumber" value="2" />
+ </connection>
  <connection
    kind="reset"
    version="18.1"
@@ -783,17 +729,7 @@
    kind="reset"
    version="18.1"
    start="clocks.reset_source"
-   end="alpha_blender_0.reset" />
- <connection
-   kind="reset"
-   version="18.1"
-   start="clocks.reset_source"
    end="rgb_resampler_pixel.reset" />
- <connection
-   kind="reset"
-   version="18.1"
-   start="clocks.reset_source"
-   end="character_buffer_with_dma.reset" />
  <connection
    kind="reset"
    version="18.1"
@@ -804,6 +740,11 @@
    version="18.1"
    start="video_clk.reset_source"
    end="vga_controller_0.reset" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="clocks.reset_source"
+   end="timer_0.reset" />
  <connection
    kind="reset"
    version="18.1"

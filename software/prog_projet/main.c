@@ -78,15 +78,15 @@ int main(void)
 	currentCursor.y = 240;
 
 	/* CHAR BUFFER setup and static display */
-	alt_up_char_buffer_dev *char_buffer;
-	char_buffer = alt_up_char_buffer_open_dev("/dev/character_buffer_with_dma");
-	if(char_buffer == NULL){
+	//alt_up_char_buffer_dev *char_buffer;
+	//char_buffer = alt_up_char_buffer_open_dev("/dev/character_buffer_with_dma");
+	/*if (char_buffer == NULL) {
 		printf("char buff is dead\n\r");
 	}else{
 		printf("char buff ok\n\r");
-	}
-	alt_up_char_buffer_init(char_buffer);
-	sprintf(pos_msg, "NiosDraw 1.42.69 - Nicolas Gagnier - Robin Galipeau");
+	}*/
+	//alt_up_char_buffer_init(char_buffer);
+	//sprintf(pos_msg, "NiosDraw 1.42.69 - Nicolas Gagnier - Robin Galipeau");
 	//alt_up_char_buffer_string(char_buffer, pos_msg, 0,5);
 
 	/* PIXEL BUFFER setup and background display */
@@ -108,17 +108,18 @@ int main(void)
 
 		// process ps2 events during vertical blank
 		if (!alt_up_pixel_buffer_dma_check_swap_buffers_status(pixel_buffer)) {
-
+			//printf("1\n");
 			// process PS2 events
 			if (ps2_process(&left_btn, &right_btn, &x_mov, &y_mov)) {
 				x_pos += x_mov;
 				y_pos -= y_mov;
+				//printf("2\n");
 			}
 
             /* Manage cursor */
 			//erase old cursor
 			alt_up_pixel_buffer_dma_draw(pixel_buffer,lastColor,currentCursor.x,currentCursor.y);
-
+			//printf("3\n");
 			//Apply scaling and verify cursor is within the boundarys of the screen
 			if (x_pos > RIGHT_LIMIT*SCALE_FACTOR_INV){
 				currentCursor.x = RIGHT_LIMIT;
@@ -129,7 +130,7 @@ int main(void)
 			}else{
 				currentCursor.x = x_pos*SCALE_FACTOR;
 			}
-
+			//printf("4\n");
 			if(y_pos> BOTTOM_LIMIT*SCALE_FACTOR_INV){
 				currentCursor.y = BOTTOM_LIMIT;
 				y_pos = BOTTOM_LIMIT*SCALE_FACTOR_INV;
@@ -171,8 +172,8 @@ int main(void)
 			}
 
 			// send new position to char buff
-            sprintf(pos_msg, "X:%d Y:%d  ", currentCursor.x, currentCursor.y);
-            alt_up_char_buffer_string(char_buffer, pos_msg, 60,59);
+            //sprintf(pos_msg, "X:%d Y:%d  ", currentCursor.x, currentCursor.y);
+            //alt_up_char_buffer_string(char_buffer, pos_msg, 60,59);
 
 			// vertical refresh
 			alt_up_pixel_buffer_dma_swap_buffers(pixel_buffer);
