@@ -2,11 +2,12 @@
  * main.c
  * nouvelle valeur timeout ps2 0x001fffff
  *  Created on: Jun 12, 2023
- *      Author: ghikf
+ *      Author: ghikf et robin
  */
 /* C Library */
 #include <stdio.h>		// printf()
 #include <string.h> 	// sprintf()
+
 
 /* Altera-specific */
 #include "alt_types.h"
@@ -97,16 +98,7 @@ static void timer_0_ISR(void* context, alt_u32 id)
 
 	///static alt_u8 ledPattern = 0x01; // intial template
 
-	//ledPattern ^= 0x03; // inverse 2 LSB
-	//IOWR(LEDS_BASE, 0, ledPattern); // Write template to LEDs
-	// process PS2 events
-	if (ps2_process(&left_btn, &right_btn, &x_mov, &y_mov)) {
-		x_pos += x_mov;
-		y_pos -= y_mov;
-		//printf("2\n");
-	}
-	// clear irq status in order to prevent retriggering
-	IOWR(TIMER_0_BASE, TIMER_STAT_REG_OFT, 0b10);
+	
 }
 
 void start_timer(alt_u32 timerBase)
@@ -234,15 +226,23 @@ int main(void)
 
 	ps2_init(); 		// from ps2_mouse.h
 	printf("init complete\n");
-
+	//recfiller_draw_rectangle(0, 0, 40, 60, 0);
+	//recfiller_draw_rectangle(40, 60, 200, 200, 132);
 	/* main loop */
 	while (1) {
 
 		// process ps2 events during vertical blank
 		if (!alt_up_pixel_buffer_dma_check_swap_buffers_status(pixel_buffer)) {
 			//printf("1\n");
-			
-
+			//ledPattern ^= 0x03; // inverse 2 LSB
+			//IOWR(LEDS_BASE, 0, ledPattern); // Write template to LEDs
+			// process PS2 events
+			if (ps2_process(&left_btn, &right_btn, &x_mov, &y_mov)) {
+				x_pos += x_mov;
+				y_pos -= y_mov;
+				//printf("2\n");
+			}
+			//recfiller_draw_rectangle(0, 0, 40, 60, 0);
             /* Manage cursor */
 			//erase old cursor
 			alt_up_pixel_buffer_dma_draw(pixel_buffer,lastColor,currentCursor.x,currentCursor.y);
