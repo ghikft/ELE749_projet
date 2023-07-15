@@ -93,8 +93,7 @@ static void timer_0_ISR(void* context, alt_u32 id)
 	//tim = alt_up_ps2_open_dev(TIMER_0_NAME);		//Connexion au module PS/2
 	context_t* ctxt = context;					//Structure qui contient le contexte pour
 												//communiquer avec l'interruption
-	 // clear irq status in order to prevent retriggering
-	IOWR(TIMER_0_BASE, TIMER_STAT_REG_OFT, 0b10);
+	 
 
 	///static alt_u8 ledPattern = 0x01; // intial template
 
@@ -106,6 +105,8 @@ static void timer_0_ISR(void* context, alt_u32 id)
 		y_pos -= y_mov;
 		//printf("2\n");
 	}
+	// clear irq status in order to prevent retriggering
+	IOWR(TIMER_0_BASE, TIMER_STAT_REG_OFT, 0b10);
 }
 
 void start_timer(alt_u32 timerBase)
@@ -193,14 +194,16 @@ int main(void)
 
 	//Stop timer and setup the interrupt, then start with 100ms period (default)
 	stop_timer(TIMER_0_BASE);
-	timer_write_period(TIMER_0_BASE, period);
-	start_timer(TIMER_0_BASE);
+	
+	
 	//alt_ic_isr_register(TIMER_0_IRQ_INTERRUPT_CONTROLLER_ID, TIMER_0_IRQ, timer_0_ISR, 0x0, 0x0);
 	//if (alt_irq_register(TIMER_0_IRQ_INTERRUPT_CONTROLLER_ID, 0x0, timer_0_ISR) == 0){
 	//	alt_putstr("ISR REGISTERED\n\r");
 	//}
 	//alt_irq_register(PS2_0_IRQ, (void*)(&ps2_context), ps2_isr);
 	alt_irq_register(TIMER_0_IRQ, (void*)(&timer_context), (void*)timer_0_ISR);
+	timer_write_period(TIMER_0_BASE, period);
+	start_timer(TIMER_0_BASE);
 	//init recfiller
 	recfiller_init(640, 480);
 	//Init cursor at the top left of the drawing zone
