@@ -2,11 +2,12 @@
  * main.c
  * nouvelle valeur timeout ps2 0x001fffff
  *  Created on: Jun 12, 2023
- *      Author: ghikf
+ *      Author: ghikf et robin
  */
 /* C Library */
 #include <stdio.h>		// printf()
 #include <string.h> 	// sprintf()
+
 
 /* Altera-specific */
 #include "alt_types.h"
