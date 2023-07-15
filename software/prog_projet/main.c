@@ -34,14 +34,6 @@ typedef struct Cursor{
 	int y;
 } Cursor;
 
-int x_mov = 0;
-int y_mov = 0;
-int x_pos = 10;
-int y_pos = 10;
-unsigned char left_btn = 0;
-unsigned char right_btn = 0;
-
-
 //Screen border limts
 #define TOP_LIMIT 10
 #define LEFT_LIMIT 0
@@ -183,7 +175,12 @@ int main(void)
 	//printf("debut main\n\r");
 	alt_putstr("debut du main \n\r");
 	// Variables pour souris PS2
-	
+	int x_mov = 0;
+	int y_mov = 0;
+	int x_pos = 10;
+	int y_pos = 10;
+	unsigned char left_btn = 0;
+	unsigned char right_btn = 0;
 
 	char pos_msg[100];
 	int lastRight = 0;
