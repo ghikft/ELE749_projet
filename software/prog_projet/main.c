@@ -197,6 +197,7 @@ int main(void)
 	//Stop timer and setup the interrupt, then start with 100ms period (default)
 	stop_timer(TIMER_0_BASE);
 	timer_write_period(TIMER_0_BASE, period);
+	start_timer(TIMER_0_BASE);
 	//alt_ic_isr_register(TIMER_0_IRQ_INTERRUPT_CONTROLLER_ID, TIMER_0_IRQ, timer_0_ISR, 0x0, 0x0);
 	//if (alt_irq_register(TIMER_0_IRQ_INTERRUPT_CONTROLLER_ID, 0x0, timer_0_ISR) == 0){
 	//	alt_putstr("ISR REGISTERED\n\r");
