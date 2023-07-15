@@ -14,6 +14,9 @@
 #include "altera_up_avalon_video_character_buffer_with_dma.h"
 #include "altera_up_avalon_video_pixel_buffer_dma.h"
 
+/*Module Hardware*/
+#include "recfiller.h"
+
 /* Mouse driver */
 #include "ps2_mouse.h"
 
@@ -164,6 +167,8 @@ int main(void)
 	int lastLeft = 0;
 	int lastColor = 0;
 
+	//init recfiller
+	recfiller_init(640,480);
 
 	//Stop timer and setup the interrupt, then start with 100ms period (default)
 	stop_timer(INTERVALTIMER_BASE);
