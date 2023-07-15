@@ -29,6 +29,98 @@
 #define DRAW_COLOR 0
 #define CURSOR_COLOR 0xFF
 
+void timer_write_period(alt_u32 timerBase, alt_u32 period)
+{
+	/**************************************************************************
+	 * start the timer in continuous mode with interrupts
+	 **************************************************************************
+	 * Parametres
+	 * timerBase: Base address of timer
+	 * period: desired period in ms
+	 *
+	 * Return
+	 * None
+	 *
+	 * Side effects
+	 * None
+	 *
+	 *************************************************************************/
+	period = period * TIMER_CONVERSION;
+	alt_u16 high, low;
+	/* split 32 bits period into two 16 bits */
+	high = (alt_u16)(period >> 16);
+	low = (alt_u16)(period & 0x0000FFFF);
+	/* write period */
+	IOWR(timerBase, TIMER_PERIODH_REG_OFT, high);
+	IOWR(timerBase, TIMER_PERIODL_REG_OFT, low);
+	/* setup timer for start in continuous mode w/ interrupt */
+	IOWR(timerBase, TIMER_CTRL_REG_OFT, 0x0007); // bits 0, 1, 2 actives
+}
+
+void timer_0_ISR(void* context)
+{
+	/**************************************************************************
+	 * Interrupt handler for timer 0, flashes the LEDs at the timer period
+	 **************************************************************************
+	 * Parametres
+	 * *context: conext of ISR
+	 *
+	 * Return
+	 * None
+	 *
+	 * Side effects
+	 * None
+	 *
+	 *************************************************************************/
+
+	 // clear irq status in order to prevent retriggering
+	IOWR(INTERVALTIMER_BASE, TIMER_STAT_REG_OFT, 0b10);
+
+	///static alt_u8 ledPattern = 0x01; // intial template
+
+	//ledPattern ^= 0x03; // inverse 2 LSB
+	//IOWR(LEDS_BASE, 0, ledPattern); // Write template to LEDs
+}
+
+void start_timer(alt_u32 timerBase)
+{
+	/**************************************************************************
+	 * start the timer in continuous mode with interrupts
+	 **************************************************************************
+	 * Parametres
+	 * timerBase: Base address of timer
+	 *
+	 * Return
+	 * None
+	 *
+	 * Side effects
+	 * None
+	 *
+	 *************************************************************************/
+
+	IOWR(timerBase, TIMER_CTRL_REG_OFT, 0b0111);
+}
+
+void stop_timer(alt_u32 timerBase)
+{
+	/**************************************************************************
+	 * Stop the timer
+	 **************************************************************************
+	 * Parametres
+	 * timerBase: Base address of timer
+	 *
+	 * Return
+	 * None
+	 *
+	 * Side effects
+	 * turns off the interrupt,
+	 * turns off continuous
+	 *
+	 *************************************************************************/
+
+	IOWR(timerBase, TIMER_CTRL_REG_OFT, 0b1000);
+}
+
 typedef struct Cursor{
 	int x;
 	int y;
@@ -71,6 +163,12 @@ int main(void)
 	int lastRight = 0;
 	int lastLeft = 0;
 	int lastColor = 0;
+
+
+	//Stop timer and setup the interrupt, then start with 100ms period (default)
+	stop_timer(INTERVALTIMER_BASE);
+	timer_write_period(INTERVALTIMER_BASE, period);
+	alt_ic_isr_register(INTERVALTIMER_IRQ_INTERRUPT_CONTROLLER_ID, INTERVALTIMER_IRQ, timer_0_ISR, 0x0, 0x0); 
 
 	//Init cursor at the top left of the drawing zone
 	Cursor currentCursor;
