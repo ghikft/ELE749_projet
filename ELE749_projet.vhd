@@ -105,7 +105,7 @@ architecture structural of ELE749_projet is
 	end component;
 	
 begin
-	reset_n <= not key(3); --invert the cpu reset signal from KEY(3)
+	reset_n <= not key(2); --invert the cpu reset signal from KEY(3)
 	
 	
 	nios_system : projetArc

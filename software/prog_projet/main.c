@@ -215,6 +215,7 @@ int main(void)
 	/* PIXEL BUFFER setup and background display */
 	alt_up_pixel_buffer_dma_dev *pixel_buffer;
 	pixel_buffer=alt_up_pixel_buffer_dma_open_dev(PIXEL_BUFFER_DMA_0_NAME);
+	
 	if(pixel_buffer == NULL){
 		alt_putstr("pixel buff is dead \n\r");
 	}else{
