@@ -186,8 +186,8 @@ int main(void)
 
 	//Stop timer and setup the interrupt, then start with 100ms period (default)
 	stop_timer(TIMER_0_BASE);
-	
-	
+	//timer_write_period(TIMER_0_BASE, period);
+	//start_timer(TIMER_0_BASE);
 	//alt_ic_isr_register(TIMER_0_IRQ_INTERRUPT_CONTROLLER_ID, TIMER_0_IRQ, timer_0_ISR, 0x0, 0x0);
 	//if (alt_irq_register(TIMER_0_IRQ_INTERRUPT_CONTROLLER_ID, 0x0, timer_0_ISR) == 0){
 	//	alt_putstr("ISR REGISTERED\n\r");
@@ -227,7 +227,8 @@ int main(void)
 	ps2_init(); 		// from ps2_mouse.h
 	printf("init complete\n");
 	//recfiller_draw_rectangle(0, 0, 40, 60, 0);
-	//recfiller_draw_rectangle(40, 60, 200, 200, 132);
+	
+	printf("recfill %d\n", recfiller_draw_rectangle(1, 1, 10, 10, 44));
 	/* main loop */
 	while (1) {
 
@@ -297,7 +298,7 @@ int main(void)
 				lastLeft = 0;
 				lastRight = 0;
 			}
-
+			
 			// send new position to char buff
             //sprintf(pos_msg, "X:%d Y:%d  ", currentCursor.x, currentCursor.y);
             //alt_up_char_buffer_string(char_buffer, pos_msg, 60,59);
