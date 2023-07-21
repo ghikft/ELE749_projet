@@ -1,13 +1,37 @@
-* Description
+/* Description
 * Library to draw with software
-* ********************************************************************/
+*********************************************************************/
 #ifndef SOFT_DRAW_H_
 #define SOFT_DRAW_H_
 
+#include "alt_types.h"
+#include "system.h"
+#include "altera_up_avalon_video_pixel_buffer_dma.h"
+
+typedef enum drawingOpp_En {
+    EMPTY_RECT,
+    EMPTY_ELLIPSE
+}drawingOpp;
+//drawingOpp lastDrawingOpp;
+
+typedef struct lastDrawingVar_S {
+    drawingOpp lastDrawingOpp;
+    alt_u8 lastDrawnPixelMemory[2300];
+    int numberOfPixelForLastDraw;
+}lastDrawingVar;
+
+lastDrawingVar lastDrawingData;
+
 void soft_recfiller_init(int x_size, int y_size);
 
-unsigned int soft_recfiller_draw_rectangle(int x_left, int y_top,
+unsigned char get_pixel_color2(int x, int y);
+
+
+void soft_emptyRect_draw(int x_left, int y_top,
     int x_right, int y_bottom,
-    int color);
+    int color, int erasePreviousWork, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer);
+/*unsigned int soft_recfiller_draw_rectangle(int x_left, int y_top,
+    int x_right, int y_bottom,
+    int color);*/
 
 #endif  // SOFT_DRAW_H_

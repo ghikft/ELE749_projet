@@ -21,6 +21,8 @@
 /*Module Hardware*/
 #include "recfiller.h"
 
+/*Module software*/
+#include "softwareDraw.h"
 /* Mouse driver */
 #include "ps2_mouse.h"
 #include "io.h"
@@ -30,11 +32,17 @@
 #define TIMER_PERIODL_REG_OFT 	2 	// period register, bits 15:0
 #define TIMER_PERIODH_REG_OFT 	3 	// period register, bits 31:16
 
+
+
 typedef struct Cursor{
 	int x;
 	int y;
 } Cursor;
 
+typedef struct Point {
+	int x;
+	int y;
+} Point;
 //Screen border limts
 #define TOP_LIMIT 10
 #define LEFT_LIMIT 0
@@ -162,7 +170,31 @@ unsigned char get_pixel_color(int x, int y){
 	color = *pixel;
 	return color;
 }
-
+void process_cursor_pos(Cursor *currentCursor, int *x_pos, int *y_pos ) {
+	if (*x_pos > RIGHT_LIMIT * SCALE_FACTOR_INV) {
+		currentCursor->x = RIGHT_LIMIT;
+		*x_pos = RIGHT_LIMIT * SCALE_FACTOR_INV;
+	}
+	else if (*x_pos < LEFT_LIMIT * SCALE_FACTOR_INV) {
+		currentCursor->x = LEFT_LIMIT;
+		*x_pos = LEFT_LIMIT * SCALE_FACTOR_INV;
+	}
+	else {
+		currentCursor->x = *x_pos * SCALE_FACTOR;
+	}
+	//printf("4\n");
+	if (*y_pos > BOTTOM_LIMIT * SCALE_FACTOR_INV) {
+		currentCursor->y = BOTTOM_LIMIT;
+		*y_pos = BOTTOM_LIMIT * SCALE_FACTOR_INV;
+	}
+	else if (*y_pos < TOP_LIMIT * SCALE_FACTOR_INV) {
+		currentCursor->y = TOP_LIMIT;
+		*y_pos = TOP_LIMIT * SCALE_FACTOR_INV;
+	}
+	else {
+		currentCursor->y = *y_pos * SCALE_FACTOR;
+	}
+}
 int main(void)
 {	
 	alt_u32 period = 8;
@@ -171,8 +203,8 @@ int main(void)
 	// Variables pour souris PS2
 	int x_mov = 0;
 	int y_mov = 0;
-	int x_pos = 10;
-	int y_pos = 10;
+	int x_pos = 0;
+	int y_pos = 0;
 	unsigned char left_btn = 0;
 	unsigned char right_btn = 0;
 
@@ -180,11 +212,13 @@ int main(void)
 	int lastRight = 0;
 	int lastLeft = 0;
 	int lastColor = 0;
-
+	char startUsingTool=0;
+	Point firstPoint, secondPoint;
 	Cursor currentCursor;
-	currentCursor.x = 320;
-	currentCursor.y = 240;
+	currentCursor.x = 0;
+	currentCursor.y = 0;
 
+	process_cursor_pos(&currentCursor, &x_pos, &y_pos);
 	//Stop timer and setup the interrupt, then start with 100ms period (default)
 	stop_timer(TIMER_0_BASE);
 	//timer_write_period(TIMER_0_BASE, period);
@@ -227,8 +261,11 @@ int main(void)
 	ps2_init(); 		// from ps2_mouse.h
 	printf("init complete\n");
 	//recfiller_draw_rectangle(0, 0, 40, 60, 0);
-	
-	printf("recfill %d\n", recfiller_draw_rectangle(1, 1, 10, 10, 44));
+	firstPoint.x = 0;
+	firstPoint.y = 0;
+	secondPoint.x = 200;
+	secondPoint.y = 200;
+	//printf("recfill %d\n", recfiller_draw_rectangle(1, 1, 10, 10, 44));
 	/* main loop */
 	while (1) {
 
@@ -249,7 +286,8 @@ int main(void)
 			alt_up_pixel_buffer_dma_draw(pixel_buffer,lastColor,currentCursor.x,currentCursor.y);
 			//printf("3\n");
 			//Apply scaling and verify cursor is within the boundarys of the screen
-			if (x_pos > RIGHT_LIMIT*SCALE_FACTOR_INV){
+			process_cursor_pos(&currentCursor,&x_pos, &y_pos);
+			/*if (x_pos > RIGHT_LIMIT * SCALE_FACTOR_INV) {
 				currentCursor.x = RIGHT_LIMIT;
 				x_pos = RIGHT_LIMIT*SCALE_FACTOR_INV;
 			}else if (x_pos < LEFT_LIMIT*SCALE_FACTOR_INV){
@@ -267,21 +305,30 @@ int main(void)
 				y_pos = TOP_LIMIT*SCALE_FACTOR_INV;
 			}else{
 				currentCursor.y = y_pos*SCALE_FACTOR;
-			}
+			}*/
 			//Save the last cursor pixel color for next turn in the loop
 			lastColor = get_pixel_color(currentCursor.x, currentCursor.y);
 			//Draw cursor
 			alt_up_pixel_buffer_dma_draw(pixel_buffer,CURSOR_COLOR,currentCursor.x,currentCursor.y);
-
+			soft_emptyRect_draw(firstPoint.x, firstPoint.y,
+				secondPoint.x, secondPoint.y,
+				DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);
 			/* process clicks */
 			if (left_btn){ //Draw during left click
-				alt_up_pixel_buffer_dma_draw(pixel_buffer,DRAW_COLOR,currentCursor.x,currentCursor.y);
+				/*alt_up_pixel_buffer_dma_draw(pixel_buffer, DRAW_COLOR, currentCursor.x, currentCursor.y);
 				lastColor = DRAW_COLOR;
 				if(!lastLeft){
 					alt_putstr("left clik, DRAWING\n\r");
 					printf("Drawing at: X:%d Y:%d\n\r",currentCursor.x, currentCursor.y);
 				}else{
 					printf("Drawing at: X:%d Y:%d\n\r",currentCursor.x, currentCursor.y);
+				}*/
+				if (startUsingTool == 0) {
+					printf("first point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
+					//firstPoint.x = currentCursor.x;
+					//firstPoint.y = currentCursor.y;
+					startUsingTool = 1;
+					lastLeft = 1;
 				}
 				lastLeft = 1;
 			}else if(right_btn){ //erase whole screen if right click
@@ -294,6 +341,15 @@ int main(void)
 			else{ //clear click flags
 				if(lastLeft){
 					alt_putstr("left released, STOP DRAWING\n\r");
+					if (startUsingTool == 1) {
+						startUsingTool = 0;
+						//secondPoint.x = currentCursor.x;
+						//secondPoint.y = currentCursor.y;
+						printf("second point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
+						//soft_emptyRect_draw(firstPoint.x, firstPoint.y,
+							//secondPoint.x, secondPoint.y,
+							//DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);
+					}
 				}
 				lastLeft = 0;
 				lastRight = 0;
