@@ -22,6 +22,7 @@ typedef struct lastDrawingVar_S {
     int lastFirstPointY;
     int lastSecondPointX;
     int lastSecondPointY;
+    int firstErase;
 }lastDrawingVar;
 
 lastDrawingVar lastDrawingData;

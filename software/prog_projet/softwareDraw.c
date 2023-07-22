@@ -42,7 +42,7 @@ void soft_emptyRect_draw(int x_left, int y_top,
 	
 	if (erasePreviousWork == TRUE) {
 		if (lastDrawingData->firstErase == TRUE) {
-			lastDrawingData->firstErase == FALSE
+			lastDrawingData->firstErase == FALSE;
 		}
 		else {
 			x = lastDrawingData->lastFirstPointX;
@@ -166,7 +166,7 @@ void draw_empty_ellipse(int x_center, int y_center, int x_radius, int y_radius,
 		y++;
 		stoppingY = stoppingY+twoASquare;
 		ellipseError = ellipseError+yChange;
-		yChange = ychange+twoASquare;
+		yChange = yChange+twoASquare;
 		if((2*ellipseError+xChange)>0){
 			x--;
 			stoppingX = stoppingX-twoBSquare;

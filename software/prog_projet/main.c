@@ -365,7 +365,8 @@ int main(void)
 				lastLeft = 0;
 				lastRight = 0;
 			}
-			
+			draw_empty_ellipse(200, 200, 60, 100,
+				DRAW_COLOR, pixel_buffer);
 			// send new position to char buff
             //sprintf(pos_msg, "X:%d Y:%d  ", currentCursor.x, currentCursor.y);
             //alt_up_char_buffer_string(char_buffer, pos_msg, 60,59);
