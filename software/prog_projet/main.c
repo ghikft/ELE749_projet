@@ -262,10 +262,13 @@ int main(void)
 	ps2_init(); 		// from ps2_mouse.h
 	printf("init complete\n");
 	//recfiller_draw_rectangle(0, 0, 40, 60, 0);
-	firstPoint.x = 0;
-	firstPoint.y = 0;
-	secondPoint.x = 200;
-	secondPoint.y = 200;
+	firstPoint.x = 100;
+	firstPoint.y = 100;
+	secondPoint.x = 110;
+	secondPoint.y = 110;
+	soft_emptyRect_draw(firstPoint.x, firstPoint.y,
+						secondPoint.x, secondPoint.y,
+						DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);
 	//printf("recfill %d\n", recfiller_draw_rectangle(1, 1, 10, 10, 44));
 	/* main loop */
 	while (1) {
@@ -311,9 +314,10 @@ int main(void)
 			lastColor = get_pixel_color(currentCursor.x, currentCursor.y);
 			//Draw cursor
 			alt_up_pixel_buffer_dma_draw(pixel_buffer,CURSOR_COLOR,currentCursor.x,currentCursor.y);
-			soft_emptyRect_draw(firstPoint.x, firstPoint.y,
+			/*soft_emptyRect_draw(firstPoint.x, firstPoint.y,
 				secondPoint.x, secondPoint.y,
-				DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);
+				DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);*/
+			//printf("exit draw rect\n\r");
 			/* process clicks */
 			if (left_btn){ //Draw during left click
 				/*alt_up_pixel_buffer_dma_draw(pixel_buffer, DRAW_COLOR, currentCursor.x, currentCursor.y);
@@ -326,8 +330,8 @@ int main(void)
 				}*/
 				if (startUsingTool == 0) {
 					printf("first point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
-					//firstPoint.x = currentCursor.x;
-					//firstPoint.y = currentCursor.y;
+					firstPoint.x = currentCursor.x;
+					firstPoint.y = currentCursor.y;
 					startUsingTool = 1;
 					lastLeft = 1;
 				}
@@ -344,12 +348,12 @@ int main(void)
 					alt_putstr("left released, STOP DRAWING\n\r");
 					if (startUsingTool == 1) {
 						startUsingTool = 0;
-						//secondPoint.x = currentCursor.x;
-						//secondPoint.y = currentCursor.y;
+						secondPoint.x = currentCursor.x;
+						secondPoint.y = currentCursor.y;
 						printf("second point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
 						//soft_emptyRect_draw(firstPoint.x, firstPoint.y,
-							//secondPoint.x, secondPoint.y,
-							//DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);
+						//	secondPoint.x, secondPoint.y,
+						//	DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);
 					}
 				}
 				lastLeft = 0;
