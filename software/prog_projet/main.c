@@ -198,7 +198,7 @@ int main(void)
 {	
 	alt_u32 period = 8;
 	//printf("debut main\n\r");
-	alt_putstr("debut du main \n\r");
+	alt_putstr("\n\r\n\r\n\rdebut du main \n\r");
 	// Variables pour souris PS2
 	int x_mov = 0;
 	int y_mov = 0;
@@ -256,9 +256,11 @@ int main(void)
 	}else{
 		alt_putstr("pixel buff ok\n\r");
 	}
-	alt_up_pixel_buffer_dma_clear_screen(pixel_buffer,0);
+	printf("clear screen\n");
+	//alt_up_pixel_buffer_dma_clear_screen(pixel_buffer,0);
+	printf("draw background\n");
 	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 0,0,640,480,BACKGROUD_COLOR,0);
-
+	printf("start ps2\n");
 	ps2_init(); 		// from ps2_mouse.h
 	printf("init complete\n");
 	//recfiller_draw_rectangle(0, 0, 40, 60, 0);
@@ -271,6 +273,7 @@ int main(void)
 	//					DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);
 	//printf("recfill %d\n", recfiller_draw_rectangle(1, 1, 10, 10, 44));
 	/* main loop */
+	
 	while (1) {
 
 		// process ps2 events during vertical blank
@@ -290,7 +293,7 @@ int main(void)
 			if (startUsingTool == 0) {
 				//erase old cursor
 				alt_up_pixel_buffer_dma_draw(pixel_buffer, lastColor, currentCursor.x, currentCursor.y);
-				//printf("3\n");
+				printf("3\n");
 				//Apply scaling and verify cursor is within the boundarys of the screen
 				process_cursor_pos(&currentCursor, &x_pos, &y_pos);
 				/*if (x_pos > RIGHT_LIMIT * SCALE_FACTOR_INV) {
@@ -338,9 +341,9 @@ int main(void)
 					lastLeft = 1;
 				}
 				lastLeft = 1;
-				soft_emptyRect_draw(firstPoint.x, firstPoint.y,
-						currentCursor.x, currentCursor.y,
-						DRAW_COLOR, 1, &lastDrawingData, pixel_buffer);
+				//soft_emptyRect_draw(firstPoint.x, firstPoint.y,
+				//		currentCursor.x, currentCursor.y,
+				//		DRAW_COLOR, 1, &lastDrawingData, pixel_buffer);
 
 			}else if(right_btn){ //erase whole screen if right click
 				alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 0,0,640,480,BACKGROUD_COLOR,0);
@@ -365,8 +368,7 @@ int main(void)
 				lastLeft = 0;
 				lastRight = 0;
 			}
-			draw_empty_ellipse(200, 200, 60, 100,
-				DRAW_COLOR, pixel_buffer);
+			//draw_empty_ellipse(200, 200, 60, 100,DRAW_COLOR, pixel_buffer);
 			// send new position to char buff
             //sprintf(pos_msg, "X:%d Y:%d  ", currentCursor.x, currentCursor.y);
             //alt_up_char_buffer_string(char_buffer, pos_msg, 60,59);
