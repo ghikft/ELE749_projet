@@ -285,39 +285,41 @@ int main(void)
 				//printf("2\n");
 			}
 			//recfiller_draw_rectangle(0, 0, 40, 60, 0);
-            /* Manage cursor */
-			//erase old cursor
-			alt_up_pixel_buffer_dma_draw(pixel_buffer,lastColor,currentCursor.x,currentCursor.y);
-			//printf("3\n");
-			//Apply scaling and verify cursor is within the boundarys of the screen
-			process_cursor_pos(&currentCursor,&x_pos, &y_pos);
-			/*if (x_pos > RIGHT_LIMIT * SCALE_FACTOR_INV) {
-				currentCursor.x = RIGHT_LIMIT;
-				x_pos = RIGHT_LIMIT*SCALE_FACTOR_INV;
-			}else if (x_pos < LEFT_LIMIT*SCALE_FACTOR_INV){
-				currentCursor.x = LEFT_LIMIT;
-				x_pos = LEFT_LIMIT*SCALE_FACTOR_INV;
-			}else{
-				currentCursor.x = x_pos*SCALE_FACTOR;
+            
+			/* Manage cursor */
+			if (startUsingTool == 0) {
+				//erase old cursor
+				alt_up_pixel_buffer_dma_draw(pixel_buffer, lastColor, currentCursor.x, currentCursor.y);
+				//printf("3\n");
+				//Apply scaling and verify cursor is within the boundarys of the screen
+				process_cursor_pos(&currentCursor, &x_pos, &y_pos);
+				/*if (x_pos > RIGHT_LIMIT * SCALE_FACTOR_INV) {
+					currentCursor.x = RIGHT_LIMIT;
+					x_pos = RIGHT_LIMIT*SCALE_FACTOR_INV;
+				}else if (x_pos < LEFT_LIMIT*SCALE_FACTOR_INV){
+					currentCursor.x = LEFT_LIMIT;
+					x_pos = LEFT_LIMIT*SCALE_FACTOR_INV;
+				}else{
+					currentCursor.x = x_pos*SCALE_FACTOR;
+				}
+				//printf("4\n");
+				if(y_pos> BOTTOM_LIMIT*SCALE_FACTOR_INV){
+					currentCursor.y = BOTTOM_LIMIT;
+					y_pos = BOTTOM_LIMIT*SCALE_FACTOR_INV;
+				}else if(y_pos < TOP_LIMIT*SCALE_FACTOR_INV){
+					currentCursor.y = TOP_LIMIT;
+					y_pos = TOP_LIMIT*SCALE_FACTOR_INV;
+				}else{
+					currentCursor.y = y_pos*SCALE_FACTOR;
+				}*/
+				//Save the last cursor pixel color for next turn in the loop
+				lastColor = get_pixel_color(currentCursor.x, currentCursor.y);
+				//Draw cursor
+				alt_up_pixel_buffer_dma_draw(pixel_buffer, CURSOR_COLOR, currentCursor.x, currentCursor.y);
 			}
-			//printf("4\n");
-			if(y_pos> BOTTOM_LIMIT*SCALE_FACTOR_INV){
-				currentCursor.y = BOTTOM_LIMIT;
-				y_pos = BOTTOM_LIMIT*SCALE_FACTOR_INV;
-			}else if(y_pos < TOP_LIMIT*SCALE_FACTOR_INV){
-				currentCursor.y = TOP_LIMIT;
-				y_pos = TOP_LIMIT*SCALE_FACTOR_INV;
-			}else{
-				currentCursor.y = y_pos*SCALE_FACTOR;
-			}*/
-			//Save the last cursor pixel color for next turn in the loop
-			lastColor = get_pixel_color(currentCursor.x, currentCursor.y);
-			//Draw cursor
-			alt_up_pixel_buffer_dma_draw(pixel_buffer,CURSOR_COLOR,currentCursor.x,currentCursor.y);
-			/*soft_emptyRect_draw(firstPoint.x, firstPoint.y,
-				secondPoint.x, secondPoint.y,
-				DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);*/
-			//printf("exit draw rect\n\r");
+			else {
+				process_cursor_pos(&currentCursor, &x_pos, &y_pos);
+			}
 			/* process clicks */
 			if (left_btn){ //Draw during left click
 				/*alt_up_pixel_buffer_dma_draw(pixel_buffer, DRAW_COLOR, currentCursor.x, currentCursor.y);
@@ -338,7 +340,7 @@ int main(void)
 				lastLeft = 1;
 				soft_emptyRect_draw(firstPoint.x, firstPoint.y,
 						currentCursor.x, currentCursor.y,
-						DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);
+						DRAW_COLOR, 1, &lastDrawingData, pixel_buffer);
 
 			}else if(right_btn){ //erase whole screen if right click
 				alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 0,0,640,480,BACKGROUD_COLOR,0);
