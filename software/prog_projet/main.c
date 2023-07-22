@@ -229,7 +229,9 @@ int main(void)
 	//alt_irq_register(PS2_0_IRQ, (void*)(&ps2_context), ps2_isr);
 	alt_irq_register(TIMER_0_IRQ, (void*)(&timer_context), (void*)timer_0_ISR);
 	timer_write_period(TIMER_0_BASE, period);
-	start_timer(TIMER_0_BASE);
+	//start_timer(TIMER_0_BASE);
+	//Stop timer and setup the interrupt, then start with 100ms period (default)
+	stop_timer(TIMER_0_BASE);
 	//init recfiller
 	recfiller_init(640, 480);
 	//Init cursor at the top left of the drawing zone
@@ -257,7 +259,7 @@ int main(void)
 		alt_putstr("pixel buff ok\n\r");
 	}
 	printf("clear screen\n");
-	//alt_up_pixel_buffer_dma_clear_screen(pixel_buffer,0);
+	alt_up_pixel_buffer_dma_clear_screen(pixel_buffer,0);
 	printf("draw background\n");
 	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 0,0,640,480,BACKGROUD_COLOR,0);
 	printf("start ps2\n");
@@ -293,7 +295,7 @@ int main(void)
 			if (startUsingTool == 0) {
 				//erase old cursor
 				alt_up_pixel_buffer_dma_draw(pixel_buffer, lastColor, currentCursor.x, currentCursor.y);
-				printf("3\n");
+				//printf("3\n");
 				//Apply scaling and verify cursor is within the boundarys of the screen
 				process_cursor_pos(&currentCursor, &x_pos, &y_pos);
 				/*if (x_pos > RIGHT_LIMIT * SCALE_FACTOR_INV) {
@@ -368,7 +370,7 @@ int main(void)
 				lastLeft = 0;
 				lastRight = 0;
 			}
-			//draw_empty_ellipse(200, 200, 60, 100,DRAW_COLOR, pixel_buffer);
+			draw_empty_ellipse(200, 200, 60, 100,DRAW_COLOR, pixel_buffer);
 			// send new position to char buff
             //sprintf(pos_msg, "X:%d Y:%d  ", currentCursor.x, currentCursor.y);
             //alt_up_char_buffer_string(char_buffer, pos_msg, 60,59);

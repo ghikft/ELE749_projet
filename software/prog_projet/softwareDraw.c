@@ -163,7 +163,7 @@ void draw_empty_ellipse(int x_center, int y_center, int x_radius, int y_radius,
 	//1st point set of the quadrant of the ellipse
 	while(stoppingX >= stoppingY){
 		printf("L1 x: %d, y: %d",x,y);
-		//plot4points(x_center,y_center,x,y,pixel_buffer,color);
+		plot4points(x_center,y_center,x,y,pixel_buffer,color);
 		y++;
 		stoppingY = stoppingY+twoASquare;
 		ellipseError = ellipseError+yChange;
@@ -186,9 +186,9 @@ void draw_empty_ellipse(int x_center, int y_center, int x_radius, int y_radius,
 	stoppingY = twoASquare*y_radius;
 
 	//2nd point set of the quadrant of the ellipse
-	while(stoppingX<=stoppingY){
+	/*while (stoppingX <= stoppingY) {
 		printf("L2 x: %d, y: %d",x,y);
-		//plot4points(x_center,y_center,x,y,pixel_buffer,color);
+		plot4points(x_center,y_center,x,y,pixel_buffer,color);
 		x++;
 		stoppingX=stoppingX+twoBSquare;
 		ellipseError=ellipseError+xChange;
@@ -199,14 +199,14 @@ void draw_empty_ellipse(int x_center, int y_center, int x_radius, int y_radius,
 			ellipseError=ellipseError+yChange;
 			yChange= yChange+twoASquare;
 		}
-	}
+	}*/
 }
 
 void plot4points(int cx, int cy, int x, int y, alt_up_pixel_buffer_dma_dev* pixel_buffer, int color){
 	alt_up_pixel_buffer_dma_draw(pixel_buffer,color, cx+x,cy+y); //Q1
-	alt_up_pixel_buffer_dma_draw(pixel_buffer,color, cx-x,cy+y); //Q2
-	alt_up_pixel_buffer_dma_draw(pixel_buffer,color, cx-x,cy-y); //Q3
-	alt_up_pixel_buffer_dma_draw(pixel_buffer,color, cx+x,cy-y); //Q4
+	//alt_up_pixel_buffer_dma_draw(pixel_buffer,color, cx-x,cy+y); //Q2
+	//alt_up_pixel_buffer_dma_draw(pixel_buffer,color, cx-x,cy-y); //Q3
+	//alt_up_pixel_buffer_dma_draw(pixel_buffer,color, cx+x,cy-y); //Q4
 }
 
 unsigned char get_pixel_color2(int x, int y) {
