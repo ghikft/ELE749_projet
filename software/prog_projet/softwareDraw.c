@@ -7,6 +7,8 @@
 #define TRUE	1
 #define FALSE	0
 
+void plot4points(int cx, int cy, int x, int y, alt_up_pixel_buffer_dma_dev* pixel_buffer, int color);
+
 //extern alt_up_pixel_buffer_dma_dev *pixel_buffer;
 
 //alt_u8 lastDrawnOp = lastDrawingOpp;
@@ -136,6 +138,73 @@ void init_lastDrawingVar(lastDrawingVar* lastDrawingData) {
 	lastDrawingData->lastFirstPointY = 0;
 	lastDrawingData->lastSecondPointX = 0;
 	lastDrawingData->lastSecondPointY = 0;
+}
+
+void draw_empty_ellipse(int x_center, int y_center, int x_radius, int y_radius, 
+						int color, alt_up_pixel_buffer_dma_dev* pixel_buffer){
+	
+	int x,y;
+	int xChange, yChange;
+	int ellipseError;
+	int twoASquare, twoBSquare;
+	int stoppingX, stoppingY;
+	
+	//setup of work variables for first loop
+	twoASquare = 2*x_radius*x_radius;
+	twoBSquare = 2*y_radius*y_radius;
+	x = x_radius;
+	y = y_radius;
+	xChange = y_radius*y_radius*(1-2*x_radius);
+	yChange = x_radius*x_radius;
+	ellipseError = 0;
+	stoppingX = twoBSquare*x_radius;
+	stoppingY = 0;
+
+	//1st point set of the quadrant of the ellipse
+	while(stoppingX >= stoppingY){
+		plot4points(x_center,y_center,x,y,pixel_buffer,color);
+		y++;
+		stoppingY = stoppingY+twoASquare;
+		ellipseError = ellipseError+yChange;
+		yChange = ychange+twoASquare;
+		if((2*ellipseError+xChange)>0){
+			x--;
+			stoppingX = stoppingX-twoBSquare;
+			ellipseError = ellipseError+xChange;
+			xChange = xChange+twoBSquare;
+		}
+	}
+
+	//setup of work variable for second loop
+	x=0;
+	y=y_radius;
+	xChange = y_radius*y_radius;
+	yChange = x_radius*x_radius*(1-2*y_radius);
+	ellipseError = 0;
+	stoppingX=0;
+	stoppingY = twoASquare*y_radius;
+
+	//2nd point set of the quadrant of the ellipse
+	while(stoppingX<=stoppingY){
+		plot4points(x_center,y_center,x,y,pixel_buffer,color);
+		x++;
+		stoppingX=stoppingX+twoBSquare;
+		ellipseError=ellipseError+xChange;
+		xChange =xChange+twoBSquare;
+		if((2*ellipseError+yChange)>0){
+			y--;
+			stoppingY=stoppingY-twoASquare;
+			ellipseError=ellipseError+yChange;
+			yChange= yChange+twoASquare;
+		}
+	}
+}
+
+void plot4points(int cx, int cy, int x, int y, alt_up_pixel_buffer_dma_dev* pixel_buffer, int color){
+	alt_up_pixel_buffer_dma_draw(pixel_buffer,color, cx+x,cy+y); //Q1
+	alt_up_pixel_buffer_dma_draw(pixel_buffer,color, cx-x,cy+y); //Q2
+	alt_up_pixel_buffer_dma_draw(pixel_buffer,color, cx-x,cy-y); //Q3
+	alt_up_pixel_buffer_dma_draw(pixel_buffer,color, cx+x,cy-y); //Q4
 }
 
 unsigned char get_pixel_color2(int x, int y) {

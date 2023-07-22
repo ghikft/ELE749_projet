@@ -38,4 +38,7 @@ void soft_emptyRect_draw(int x_left, int y_top,
     int x_right, int y_bottom,
     int color);*/
 
+void draw_empty_ellipse(int x_center, int y_center, int x_radius, int y_radius, 
+						int color, alt_up_pixel_buffer_dma_dev* pixel_buffer);
+
 #endif  // SOFT_DRAW_H_
