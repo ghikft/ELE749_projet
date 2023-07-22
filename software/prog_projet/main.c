@@ -266,9 +266,9 @@ int main(void)
 	firstPoint.y = 100;
 	secondPoint.x = 110;
 	secondPoint.y = 110;
-	soft_emptyRect_draw(firstPoint.x, firstPoint.y,
-						secondPoint.x, secondPoint.y,
-						DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);
+	//soft_emptyRect_draw(firstPoint.x, firstPoint.y,
+	//					secondPoint.x, secondPoint.y,
+	//					DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);
 	//printf("recfill %d\n", recfiller_draw_rectangle(1, 1, 10, 10, 44));
 	/* main loop */
 	while (1) {
@@ -336,6 +336,10 @@ int main(void)
 					lastLeft = 1;
 				}
 				lastLeft = 1;
+				soft_emptyRect_draw(firstPoint.x, firstPoint.y,
+						currentCursor.x, currentCursor.y,
+						DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);
+
 			}else if(right_btn){ //erase whole screen if right click
 				alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 0,0,640,480,BACKGROUD_COLOR,0);
 				if(!lastRight){
