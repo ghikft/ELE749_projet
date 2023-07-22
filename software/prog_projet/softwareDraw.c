@@ -162,7 +162,8 @@ void draw_empty_ellipse(int x_center, int y_center, int x_radius, int y_radius,
 
 	//1st point set of the quadrant of the ellipse
 	while(stoppingX >= stoppingY){
-		plot4points(x_center,y_center,x,y,pixel_buffer,color);
+		printf("L1 x: %d, y: %d",x,y);
+		//plot4points(x_center,y_center,x,y,pixel_buffer,color);
 		y++;
 		stoppingY = stoppingY+twoASquare;
 		ellipseError = ellipseError+yChange;
@@ -186,7 +187,8 @@ void draw_empty_ellipse(int x_center, int y_center, int x_radius, int y_radius,
 
 	//2nd point set of the quadrant of the ellipse
 	while(stoppingX<=stoppingY){
-		plot4points(x_center,y_center,x,y,pixel_buffer,color);
+		printf("L2 x: %d, y: %d",x,y);
+		//plot4points(x_center,y_center,x,y,pixel_buffer,color);
 		x++;
 		stoppingX=stoppingX+twoBSquare;
 		ellipseError=ellipseError+xChange;
