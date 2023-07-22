@@ -18,6 +18,10 @@ typedef struct lastDrawingVar_S {
     drawingOpp lastDrawingOpp;
     alt_u8 lastDrawnPixelMemory[2300];
     int numberOfPixelForLastDraw;
+    int lastFirstPointX;
+    int lastFirstPointY;
+    int lastSecondPointX;
+    int lastSecondPointY;
 }lastDrawingVar;
 
 lastDrawingVar lastDrawingData;
