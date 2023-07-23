@@ -235,19 +235,6 @@ int main(void)
 	//init recfiller
 	recfiller_init(640, 480);
 	//Init cursor at the top left of the drawing zone
-	
-
-	/* CHAR BUFFER setup and static display */
-	//alt_up_char_buffer_dev *char_buffer;
-	//char_buffer = alt_up_char_buffer_open_dev("/dev/character_buffer_with_dma");
-	/*if (char_buffer == NULL) {
-		printf("char buff is dead\n\r");
-	}else{
-		printf("char buff ok\n\r");
-	}*/
-	//alt_up_char_buffer_init(char_buffer);
-	//sprintf(pos_msg, "NiosDraw 1.42.69 - Nicolas Gagnier - Robin Galipeau");
-	//alt_up_char_buffer_string(char_buffer, pos_msg, 0,5);
 
 	/* PIXEL BUFFER setup and background display */
 	alt_up_pixel_buffer_dma_dev *pixel_buffer;
@@ -298,25 +285,6 @@ int main(void)
 				//printf("3\n");
 				//Apply scaling and verify cursor is within the boundarys of the screen
 				process_cursor_pos(&currentCursor, &x_pos, &y_pos);
-				/*if (x_pos > RIGHT_LIMIT * SCALE_FACTOR_INV) {
-					currentCursor.x = RIGHT_LIMIT;
-					x_pos = RIGHT_LIMIT*SCALE_FACTOR_INV;
-				}else if (x_pos < LEFT_LIMIT*SCALE_FACTOR_INV){
-					currentCursor.x = LEFT_LIMIT;
-					x_pos = LEFT_LIMIT*SCALE_FACTOR_INV;
-				}else{
-					currentCursor.x = x_pos*SCALE_FACTOR;
-				}
-				//printf("4\n");
-				if(y_pos> BOTTOM_LIMIT*SCALE_FACTOR_INV){
-					currentCursor.y = BOTTOM_LIMIT;
-					y_pos = BOTTOM_LIMIT*SCALE_FACTOR_INV;
-				}else if(y_pos < TOP_LIMIT*SCALE_FACTOR_INV){
-					currentCursor.y = TOP_LIMIT;
-					y_pos = TOP_LIMIT*SCALE_FACTOR_INV;
-				}else{
-					currentCursor.y = y_pos*SCALE_FACTOR;
-				}*/
 				//Save the last cursor pixel color for next turn in the loop
 				lastColor = get_pixel_color(currentCursor.x, currentCursor.y);
 				//Draw cursor
@@ -335,7 +303,8 @@ int main(void)
 				}else{
 					printf("Drawing at: X:%d Y:%d\n\r",currentCursor.x, currentCursor.y);
 				}*/
-				if (startUsingTool == 0) {
+				//rectangle
+				/*if (startUsingTool == 0) {
 					printf("first point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
 					firstPoint.x = currentCursor.x;
 					firstPoint.y = currentCursor.y;
@@ -345,7 +314,24 @@ int main(void)
 				lastLeft = 1;
 				soft_emptyRect_draw(firstPoint.x, firstPoint.y,
 						currentCursor.x, currentCursor.y,
-						DRAW_COLOR, 1, &lastDrawingData, pixel_buffer);
+						DRAW_COLOR, 1, &lastDrawingData, pixel_buffer);*/
+				//elipse
+				if (startUsingTool == 0) {
+					printf("first point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
+					firstPoint.x = currentCursor.x;
+					firstPoint.y = currentCursor.y;
+					startUsingTool = 1;
+					lastLeft = 1;
+					draw_empty_ellipse(firstPoint.x, firstPoint.y,
+							currentCursor.x-firstPoint.x, currentCursor.y-firstPoint.y,
+							DRAW_COLOR, pixel_buffer, 0, &lastDrawingData);
+				}
+				else{
+					lastLeft = 1;
+					draw_empty_ellipse(firstPoint.x, firstPoint.y,
+							currentCursor.x-firstPoint.x, currentCursor.y-firstPoint.y,
+							DRAW_COLOR, pixel_buffer, 1, &lastDrawingData);
+				}
 				
 
 			}else if(right_btn){ //erase whole screen if right click
@@ -358,12 +344,24 @@ int main(void)
 			else{ //clear click flags
 				if(lastLeft){
 					alt_putstr("left released, STOP DRAWING\n\r");
-					if (startUsingTool == 1) {
+					//rectangle
+					/*if (startUsingTool == 1) {
 						startUsingTool = 0;
 						secondPoint.x = currentCursor.x;
 						secondPoint.y = currentCursor.y;
 						printf("second point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
 						//soft_emptyRect_draw(firstPoint.x, firstPoint.y,
+						//	secondPoint.x, secondPoint.y,
+						//	DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);
+						lastDrawingData.firstErase = 1;
+					}*/
+					//Ellipse
+					if (startUsingTool == 1) {
+						startUsingTool = 0;
+						secondPoint.x = currentCursor.x;
+						secondPoint.y = currentCursor.y;
+						printf("second point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
+						//	soft_emptyRect_draw(firstPoint.x, firstPoint.y,
 						//	secondPoint.x, secondPoint.y,
 						//	DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);
 						lastDrawingData.firstErase = 1;
