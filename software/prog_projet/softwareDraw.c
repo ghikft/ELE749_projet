@@ -37,7 +37,7 @@ void soft_emptyRect_draw(int x_left, int y_top,
 	int y;
 	
 	
-	//if in process of dragging the rectangle to desired size, supress the old rectangle first	
+	//if in process of dragging the rectangle to desired size, supress the old rectangle first
 	if (erasePreviousWork == TRUE) {
 		if (lastDrawingData->firstErase == TRUE) {
 			lastDrawingData->lastFirstPointX = x_left;
@@ -204,11 +204,12 @@ void draw_empty_ellipse(int x_center, int y_center, int x_radius, int y_radius,
 	}
 }
 
+
 void plot4points(int cx, int cy, int x, int y, alt_up_pixel_buffer_dma_dev* pixel_buffer, int color){
 	alt_up_pixel_buffer_dma_draw(pixel_buffer,color, cx+x,cy+y); //Q1
 	alt_up_pixel_buffer_dma_draw(pixel_buffer,color, cx-x,cy+y); //Q2
 	alt_up_pixel_buffer_dma_draw(pixel_buffer,color, cx-x,cy-y); //Q3
-	alt_up_pixel_buffer_dma_draw(pixel_buffer,color, cx+x,cy-y); //Q4
+	alt_up_pixel_buffer_dma_draw(pixel_buffer,color, cx+x,cy-y); //Q4 
 }
 
 unsigned char get_pixel_color2(int x, int y) {
