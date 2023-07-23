@@ -343,9 +343,10 @@ int main(void)
 					lastLeft = 1;
 				}
 				lastLeft = 1;
-				//soft_emptyRect_draw(firstPoint.x, firstPoint.y,
-				//		currentCursor.x, currentCursor.y,
-				//		DRAW_COLOR, 1, &lastDrawingData, pixel_buffer);
+				soft_emptyRect_draw(firstPoint.x, firstPoint.y,
+						currentCursor.x, currentCursor.y,
+						DRAW_COLOR, 1, &lastDrawingData, pixel_buffer);
+				
 
 			}else if(right_btn){ //erase whole screen if right click
 				alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 0,0,640,480,BACKGROUD_COLOR,0);
@@ -365,12 +366,13 @@ int main(void)
 						//soft_emptyRect_draw(firstPoint.x, firstPoint.y,
 						//	secondPoint.x, secondPoint.y,
 						//	DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);
+						lastDrawingData.firstErase = 1;
 					}
 				}
 				lastLeft = 0;
 				lastRight = 0;
 			}
-			draw_empty_ellipse(200, 200, 60, 100,DRAW_COLOR, pixel_buffer);
+			//draw_empty_ellipse(200, 200, 60, 100,DRAW_COLOR, pixel_buffer);
 			// send new position to char buff
             //sprintf(pos_msg, "X:%d Y:%d  ", currentCursor.x, currentCursor.y);
             //alt_up_char_buffer_string(char_buffer, pos_msg, 60,59);

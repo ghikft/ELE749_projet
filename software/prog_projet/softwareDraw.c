@@ -37,16 +37,18 @@ void soft_emptyRect_draw(int x_left, int y_top,
 	int y;
 	
 	
-	//if in process of dragging the rectangle to desired size, supress the old rectangle first
-	
-	
+	//if in process of dragging the rectangle to desired size, supress the old rectangle first	
 	if (erasePreviousWork == TRUE) {
 		if (lastDrawingData->firstErase == TRUE) {
-			lastDrawingData->firstErase == FALSE;
+			lastDrawingData->lastFirstPointX = x_left;
+			lastDrawingData->lastSecondPointX = x_left;
+			lastDrawingData->lastFirstPointY = y_top;
+			lastDrawingData->lastSecondPointY = y_top;
 		}
-		else {
+		//else {
 			x = lastDrawingData->lastFirstPointX;
 			y = lastDrawingData->lastFirstPointY;
+
 			int iter = 0;
 			while (x < lastDrawingData->lastSecondPointX) {
 				alt_up_pixel_buffer_dma_draw(pixel_buffer, lastDrawingData->lastDrawnPixelMemory[iter], x, y);
@@ -68,7 +70,7 @@ void soft_emptyRect_draw(int x_left, int y_top,
 				y--;
 				iter++;
 			}
-		}
+		//}
 	}
 	
 	//reorder point so the x_left coordinate are always smaller than x_right and y_top smaller than y_bottom
@@ -153,7 +155,7 @@ void draw_empty_ellipse(int x_center, int y_center, int x_radius, int y_radius,
 	twoASquare = 2*x_radius*x_radius;
 	twoBSquare = 2*y_radius*y_radius;
 	x = x_radius;
-	y = y_radius;
+	y = 0;
 	xChange = y_radius*y_radius*(1-2*x_radius);
 	yChange = x_radius*x_radius;
 	ellipseError = 0;
@@ -186,7 +188,7 @@ void draw_empty_ellipse(int x_center, int y_center, int x_radius, int y_radius,
 	stoppingY = twoASquare*y_radius;
 
 	//2nd point set of the quadrant of the ellipse
-	/*while (stoppingX <= stoppingY) {
+	while (stoppingX <= stoppingY) {
 		printf("L2 x: %d, y: %d",x,y);
 		plot4points(x_center,y_center,x,y,pixel_buffer,color);
 		x++;
@@ -199,14 +201,14 @@ void draw_empty_ellipse(int x_center, int y_center, int x_radius, int y_radius,
 			ellipseError=ellipseError+yChange;
 			yChange= yChange+twoASquare;
 		}
-	}*/
+	}
 }
 
 void plot4points(int cx, int cy, int x, int y, alt_up_pixel_buffer_dma_dev* pixel_buffer, int color){
 	alt_up_pixel_buffer_dma_draw(pixel_buffer,color, cx+x,cy+y); //Q1
-	//alt_up_pixel_buffer_dma_draw(pixel_buffer,color, cx-x,cy+y); //Q2
-	//alt_up_pixel_buffer_dma_draw(pixel_buffer,color, cx-x,cy-y); //Q3
-	//alt_up_pixel_buffer_dma_draw(pixel_buffer,color, cx+x,cy-y); //Q4
+	alt_up_pixel_buffer_dma_draw(pixel_buffer,color, cx-x,cy+y); //Q2
+	alt_up_pixel_buffer_dma_draw(pixel_buffer,color, cx-x,cy-y); //Q3
+	alt_up_pixel_buffer_dma_draw(pixel_buffer,color, cx+x,cy-y); //Q4
 }
 
 unsigned char get_pixel_color2(int x, int y) {
