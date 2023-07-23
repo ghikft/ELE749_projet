@@ -46,49 +46,50 @@ void soft_emptyRect_draw(int x_left, int y_top,
 			lastDrawingData->lastFirstPointY = y_top;
 			lastDrawingData->lastSecondPointY = y_top;
 		}
-		//else {
-			x = lastDrawingData->lastFirstPointX;
-			y = lastDrawingData->lastFirstPointY;
+		x = lastDrawingData->lastFirstPointX;
+		y = lastDrawingData->lastFirstPointY;
 
-			int iter = 0;
-			while (x < lastDrawingData->lastSecondPointX) {
-				alt_up_pixel_buffer_dma_draw(pixel_buffer, lastDrawingData->lastDrawnPixelMemory[iter], x, y);
-				x++;
-				iter++;
-			}
-			while (y < lastDrawingData->lastSecondPointY) {
-				alt_up_pixel_buffer_dma_draw(pixel_buffer, lastDrawingData->lastDrawnPixelMemory[iter], x, y);
-				y++;
-				iter++;
-			}
-			while (x > lastDrawingData->lastFirstPointX) {
-				alt_up_pixel_buffer_dma_draw(pixel_buffer, lastDrawingData->lastDrawnPixelMemory[iter], x, y);
-				x--;
-				iter++;
-			}
-			while (y > lastDrawingData->lastFirstPointY) {
-				alt_up_pixel_buffer_dma_draw(pixel_buffer, lastDrawingData->lastDrawnPixelMemory[iter], x, y);
-				y--;
-				iter++;
-			}
-		//}
+		int iter = 0;
+		while (x < lastDrawingData->lastSecondPointX) {
+			alt_up_pixel_buffer_dma_draw(pixel_buffer, lastDrawingData->lastDrawnPixelMemory[iter], x, y);
+			x++;
+			iter++;
+		}
+		while (y < lastDrawingData->lastSecondPointY) {
+			alt_up_pixel_buffer_dma_draw(pixel_buffer, lastDrawingData->lastDrawnPixelMemory[iter], x, y);
+			y++;
+			iter++;
+		}			
+		while (x > lastDrawingData->lastFirstPointX) {
+			alt_up_pixel_buffer_dma_draw(pixel_buffer, lastDrawingData->lastDrawnPixelMemory[iter], x, y);
+			x--;
+			iter++;
+		}			
+		while (y > lastDrawingData->lastFirstPointY) {
+			alt_up_pixel_buffer_dma_draw(pixel_buffer, lastDrawingData->lastDrawnPixelMemory[iter], x, y);
+			y--;
+			iter++;
+		}
 	}
 	
 	//reorder point so the x_left coordinate are always smaller than x_right and y_top smaller than y_bottom
-	if (x_left > x_right) {
-		tempReorder = x_left;
-		x_left = x_right;
-		x_right = tempReorder;		
-	}
-	lastDrawingData->lastFirstPointX = x_left;
-	lastDrawingData->lastSecondPointX = x_right;
-	if (y_top > y_bottom) {
-		tempReorder = y_top;
-		y_top = y_bottom;
-		y_bottom = tempReorder;		
-	}
-	lastDrawingData->lastFirstPointY = y_top;
-	lastDrawingData->lastSecondPointY = y_bottom;
+	if((x_left!=x_right)&&(y_top!=y_bottom)){
+		if (x_left > x_right) {
+			tempReorder = x_left;
+			x_left = x_right;
+			x_right = tempReorder;
+		}	
+		lastDrawingData->lastFirstPointX = x_left;
+		lastDrawingData->lastSecondPointX = x_right;
+	
+		if (y_top > y_bottom) {
+			tempReorder = y_top;
+			y_top = y_bottom;
+			y_bottom = tempReorder;
+		}
+		lastDrawingData->lastFirstPointY = y_top;
+		lastDrawingData->lastSecondPointY = y_bottom;
+	
 	//Draw the new rectangle
 	//if (erasePreviousWork == FALSE) {
 		//printf("draw rect\n\r");
@@ -114,23 +115,23 @@ void soft_emptyRect_draw(int x_left, int y_top,
 			lastDrawingData->numberOfPixelForLastDraw++;
 		}
 		//printf("loop2 end y %d\n\r", y);
-		while (x > x_left) {
-			lastDrawingData->lastDrawnPixelMemory[lastDrawingData->numberOfPixelForLastDraw] = get_pixel_color2(x, y);
-			alt_up_pixel_buffer_dma_draw(pixel_buffer, color, x, y);
-			//printf("loop3 %d\n\r", x);
+		while (x > x_left) {			
+			lastDrawingData->lastDrawnPixelMemory[lastDrawingData->numberOfPixelForLastDraw] = get_pixel_color2(x, y);			
+			alt_up_pixel_buffer_dma_draw(pixel_buffer, color, x, y);			
+				//printf("loop3 %d\n\r", x);
 			x--;
 			lastDrawingData->numberOfPixelForLastDraw++;
 		}
 		//printf("loop3 end x %d\n\r", x);
-		while (y > y_top) {
-			lastDrawingData->lastDrawnPixelMemory[lastDrawingData->numberOfPixelForLastDraw] = get_pixel_color2(x, y);
-			alt_up_pixel_buffer_dma_draw(pixel_buffer, color, x, y);
-			//printf("loop4 %d\n\r", y);
+		while (y > y_top) {			
+			lastDrawingData->lastDrawnPixelMemory[lastDrawingData->numberOfPixelForLastDraw] = get_pixel_color2(x, y);			
+			alt_up_pixel_buffer_dma_draw(pixel_buffer, color, x, y);			
+				//printf("loop4 %d\n\r", y);
 			y--;
 			lastDrawingData->numberOfPixelForLastDraw++;
 		}
 		//printf("loop4 end y %d\n\r", y);
-	//}
+	}
 	
 	//printf("nb pixel %d\n\r", lastDrawingData->numberOfPixelForLastDraw++);
 }
