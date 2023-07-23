@@ -61,12 +61,12 @@ void soft_emptyRect_draw(int x_left, int y_top,
 				y++;
 				iter++;
 			}
-			while (x > x_left) {
+			while (x > lastDrawingData->lastFirstPointX) {
 				alt_up_pixel_buffer_dma_draw(pixel_buffer, lastDrawingData->lastDrawnPixelMemory[iter], x, y);
 				x--;
 				iter++;
 			}
-			while (y > y_top) {
+			while (y > lastDrawingData->lastFirstPointY) {
 				alt_up_pixel_buffer_dma_draw(pixel_buffer, lastDrawingData->lastDrawnPixelMemory[iter], x, y);
 				y--;
 				iter++;
