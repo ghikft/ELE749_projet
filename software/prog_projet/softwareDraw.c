@@ -40,6 +40,7 @@ void soft_emptyRect_draw(int x_left, int y_top,
 	//if in process of dragging the rectangle to desired size, supress the old rectangle first
 	if (erasePreviousWork == TRUE) {
 		if (lastDrawingData->firstErase == TRUE) {
+			lastDrawingData->firstErase = FALSE;
 			lastDrawingData->lastFirstPointX = x_left;
 			lastDrawingData->lastSecondPointX = x_left;
 			lastDrawingData->lastFirstPointY = y_top;
