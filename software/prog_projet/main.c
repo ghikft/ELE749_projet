@@ -32,7 +32,19 @@
 #define TIMER_PERIODL_REG_OFT 	2 	// period register, bits 15:0
 #define TIMER_PERIODH_REG_OFT 	3 	// period register, bits 31:16
 
-
+typedef enum currentTool {
+	EMPTY_RECTANGLE,
+	FILLED_RECTANGLE,
+	EMPTY_ELLIPSE,
+	FILLED_ELLIPSE,
+	LINE,
+	CPY_CUT_PASTE,
+	FILL,
+	COLOR_SAMPLE,
+	PONG,
+	SNAKE,
+	COLOR_SELECTION
+}currentTool;
 
 typedef struct Cursor{
 	int x;
@@ -267,24 +279,18 @@ int main(void)
 	
 	while (1) {
 
-		// process ps2 events during vertical blank
+		// process screen drawing during vertical blank
 		if (!alt_up_pixel_buffer_dma_check_swap_buffers_status(pixel_buffer)) {
-			//printf("1\n");
-			//ledPattern ^= 0x03; // inverse 2 LSB
-			//IOWR(LEDS_BASE, 0, ledPattern); // Write template to LEDs
-			// process PS2 events
+			// process ps2 events during vertical blank
 			if (ps2_process(&left_btn, &right_btn, &x_mov, &y_mov)) {
 				x_pos += x_mov;
 				y_pos -= y_mov;
-				//printf("2\n");
-			}
-			//recfiller_draw_rectangle(0, 0, 40, 60, 0);
-            
-			/* Manage cursor */
+			}            
+			/* Manage cursor when not using tool*/
 			if (startUsingTool == 0) {
 				//erase old cursor
 				alt_up_pixel_buffer_dma_draw(pixel_buffer, lastColor, currentCursor.x, currentCursor.y);
-				//printf("3\n");
+				
 				//Apply scaling and verify cursor is within the boundarys of the screen
 				process_cursor_pos(&currentCursor, &x_pos, &y_pos);
 				//Save the last cursor pixel color for next turn in the loop
@@ -292,9 +298,10 @@ int main(void)
 				//Draw cursor
 				alt_up_pixel_buffer_dma_draw(pixel_buffer, CURSOR_COLOR, currentCursor.x, currentCursor.y);
 			}
-			else {
+			else {//only get cursor position when using tool
 				process_cursor_pos(&currentCursor, &x_pos, &y_pos);
 			}
+
 			/* process clicks */
 			if (left_btn){ //Draw during left click
 				/*alt_up_pixel_buffer_dma_draw(pixel_buffer, DRAW_COLOR, currentCursor.x, currentCursor.y);
@@ -348,7 +355,7 @@ int main(void)
 				if(lastLeft){
 					alt_putstr("left released, STOP DRAWING\n\r");
 					//rectangle
-					/*if (startUsingTool == 1) {
+					if (startUsingTool == 1) {
 						startUsingTool = 0;
 						secondPoint.x = currentCursor.x;
 						secondPoint.y = currentCursor.y;
@@ -357,9 +364,9 @@ int main(void)
 						//	secondPoint.x, secondPoint.y,
 						//	DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);
 						lastDrawingData.firstErase = 1;
-					}*/
+					}
 					//Ellipse
-					if (startUsingTool == 1) {
+					/*if (startUsingTool == 1) {
 						startUsingTool = 0;
 						secondPoint.x = currentCursor.x;
 						secondPoint.y = currentCursor.y;
@@ -374,7 +381,7 @@ int main(void)
 						//	secondPoint.x, secondPoint.y,
 						//	DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);
 						lastDrawingData.firstErase = 1;
-					}
+					}*/
 				}
 				lastLeft = 0;
 				lastRight = 0;
