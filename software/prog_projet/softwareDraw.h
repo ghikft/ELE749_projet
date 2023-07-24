@@ -8,10 +8,10 @@
 #include "system.h"
 #include "altera_up_avalon_video_pixel_buffer_dma.h"
 
-typedef enum drawingOpp_En {
+/*typedef enum drawingOpp_En {
     EMPTY_RECT,
     EMPTY_ELLIPSE
-}drawingOpp;
+}drawingOpp;*/
 typedef struct pixelValue_S{
     int x;
     int y;
@@ -20,7 +20,7 @@ typedef struct pixelValue_S{
 //drawingOpp lastDrawingOpp;
 
 typedef struct lastDrawingVar_S {
-    drawingOpp lastDrawingOpp;
+    //drawingOpp lastDrawingOpp;
     alt_u8 lastDrawnPixelMemory[2300];
     pixelValue lastEllipse[2400];
     int numberOfPixelForLastDraw;

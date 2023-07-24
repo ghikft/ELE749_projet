@@ -32,7 +32,7 @@
 #define TIMER_PERIODL_REG_OFT 	2 	// period register, bits 15:0
 #define TIMER_PERIODH_REG_OFT 	3 	// period register, bits 31:16
 
-typedef enum currentTool {
+typedef enum tool {
 	EMPTY_RECTANGLE,
 	FILLED_RECTANGLE,
 	EMPTY_ELLIPSE,
@@ -44,7 +44,7 @@ typedef enum currentTool {
 	PONG,
 	SNAKE,
 	COLOR_SELECTION
-}currentTool;
+}tool;
 
 typedef struct Cursor{
 	int x;
@@ -56,16 +56,31 @@ typedef struct Point {
 	int y;
 } Point;
 //Screen border limts
-#define TOP_LIMIT 10
+#define TOP_LIMIT 0
 #define LEFT_LIMIT 0
 #define RIGHT_LIMIT 639
 #define BOTTOM_LIMIT 479
+#define DRAWING_ZONE_LEFT_LIMIT 61
+
 #define SCALE_FACTOR 0.1
 #define SCALE_FACTOR_INV 10
 //Colors
 #define BACKGROUD_COLOR 128//0xEB
 #define DRAW_COLOR 0
 #define CURSOR_COLOR 0xFF
+#define TOOL_BOX_BACKGROUND_COLOR 3
+#define SELECTION_COLOR 128
+
+#define BLACK 0
+#define ERASE_PREVIOUS_WORK 1
+#define NOT_ERASE_PREVIOUS_WORK 0
+
+#define ICON_LEFT_X 2
+#define ICON_TOP_Y 2
+#define ICON_WIDTH 26
+#define ICON_HEIGHT 26
+#define ICON_SPACING 2
+
 context_t timer_context;
 alt_up_ps2_dev* tim;
 void timer_write_period(alt_u32 timerBase, alt_u32 period)
@@ -181,6 +196,105 @@ unsigned char get_pixel_color(int x, int y){
 	color = *pixel;
 	return color;
 }
+
+void draw_selection_Frame(int x1, int y1, int x2, int y2, char selected,
+	lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+	//draw selection perimiter
+	if (selected) {
+		soft_emptyRect_draw(x1, y1, x2, y2, SELECTION_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
+		soft_emptyRect_draw(x1+1, y1+1, x2-1, y2-1, SELECTION_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
+	}
+	else {
+		soft_emptyRect_draw(x1, y1, x2, y2, TOOL_BOX_BACKGROUND_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
+		soft_emptyRect_draw(x1 + 1, y1 + 1, x2 -1, y2 -1, BLACK, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
+	}
+}
+void draw_icon(tool icon, char selected,
+	lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+
+	switch (icon) {
+	case EMPTY_RECTANGLE:
+		
+		//draw selection perimiter
+		/*if (selected) {
+			soft_emptyRect_draw(2, 2, 29, 29, SELECTION_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
+			soft_emptyRect_draw(3, 3, 28, 28, SELECTION_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
+		}
+		else {
+			soft_emptyRect_draw(2, 2, 29, 29, TOOL_BOX_BACKGROUND_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
+			soft_emptyRect_draw(3, 3, 28, 28, BLACK, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
+		}	*/	
+		draw_selection_Frame(2, 2, 29, 29, selected, lastDrawingData, pixel_buffer);
+		//draw icon
+		soft_emptyRect_draw(6, 11, 25, 20, BLACK, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
+		break;
+	case FILLED_RECTANGLE:
+		//draw selection perimiter
+		/*if (selected) {
+			soft_emptyRect_draw(31, 2, 58, 29, SELECTION_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
+			soft_emptyRect_draw(32, 3, 57, 28, SELECTION_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
+		}
+		else {
+			soft_emptyRect_draw(31, 2, 58, 29, TOOL_BOX_BACKGROUND_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
+			soft_emptyRect_draw(32, 3, 57, 28, BLACK, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
+		}*/
+		draw_selection_Frame(31, 2, 58, 29, selected, lastDrawingData, pixel_buffer);
+		//draw icon
+		alt_up_pixel_buffer_dma_draw_box(pixel_buffer,35 ,11, 55, 20, BLACK, 0);
+		break;
+	case EMPTY_ELLIPSE:
+		//draw selection perimiter
+		if (selected) {
+			soft_emptyRect_draw(2, 31, 32, 57, SELECTION_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
+			soft_emptyRect_draw(3, 30, 28, 28, SELECTION_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
+		}
+		else {
+			soft_emptyRect_draw(2, 31, 29, 29, TOOL_BOX_BACKGROUND_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
+			soft_emptyRect_draw(3, 30, 28, 28, BLACK, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
+		}
+		//draw icon
+		soft_emptyRect_draw(6, 11, 25, 20, BLACK, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
+		break;
+	case FILLED_ELLIPSE:
+		//draw selection perimiter
+		if (selected) {
+			soft_emptyRect_draw(31, 2, 57, 29, SELECTION_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
+			soft_emptyRect_draw(32, 3, 58, 28, SELECTION_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
+		}
+		else {
+			soft_emptyRect_draw(31, 2, 57, 29, TOOL_BOX_BACKGROUND_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
+			soft_emptyRect_draw(32, 3, 58, 28, BLACK, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
+		}
+		//draw icon
+		alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 35, 11, 55, 20, BLACK, 0);
+		break;
+	case LINE:
+		break;
+	case PONG:
+		break;
+	case SNAKE:
+		break;
+	case FILL:
+		break;
+	case COLOR_SAMPLE:
+		break;
+	case CPY_CUT_PASTE:
+		break;	
+	default:
+		break;
+	}
+	
+
+}
+void draw_tool_bar(lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+	//draw tool bar background
+	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, LEFT_LIMIT, TOP_LIMIT, DRAWING_ZONE_LEFT_LIMIT, BOTTOM_LIMIT, TOOL_BOX_BACKGROUND_COLOR, 0);
+	//Draw frame
+	soft_emptyRect_draw(LEFT_LIMIT, TOP_LIMIT, DRAWING_ZONE_LEFT_LIMIT, BOTTOM_LIMIT,NOT_ERASE_PREVIOUS_WORK, BLACK, lastDrawingData, pixel_buffer);
+	soft_emptyRect_draw(LEFT_LIMIT+1, TOP_LIMIT+1, DRAWING_ZONE_LEFT_LIMIT-1, BOTTOM_LIMIT-1, NOT_ERASE_PREVIOUS_WORK, BLACK, lastDrawingData, pixel_buffer);
+	draw_icon(EMPTY_RECTANGLE, 0, lastDrawingData, pixel_buffer);
+	draw_icon(FILLED_RECTANGLE, 0, lastDrawingData, pixel_buffer);
+}
 void process_cursor_pos(Cursor *currentCursor, int *x_pos, int *y_pos ) {
 	if (*x_pos > RIGHT_LIMIT * SCALE_FACTOR_INV) {
 		currentCursor->x = RIGHT_LIMIT;
@@ -226,6 +340,7 @@ int main(void)
 	char startUsingTool=0;
 	Point firstPoint, secondPoint;
 	Cursor currentCursor;
+	tool currentTool;
 	currentCursor.x = 0;
 	currentCursor.y = 0;
 
@@ -276,7 +391,7 @@ int main(void)
 	/* main loop */
 
 	soft_emptyRect_draw(0,0,40,480,0,0,&lastDrawingData,pixel_buffer);
-	
+	draw_tool_bar(&lastDrawingData, pixel_buffer);
 	while (1) {
 
 		// process screen drawing during vertical blank
