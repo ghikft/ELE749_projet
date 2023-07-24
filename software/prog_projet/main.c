@@ -38,12 +38,14 @@ typedef enum tool {
 	EMPTY_ELLIPSE,
 	FILLED_ELLIPSE,
 	LINE,
-	CPY_CUT_PASTE,
+	CPY_PASTE,
 	FILL,
+	CUT_PASTE,
 	COLOR_SAMPLE,
 	PONG,
 	SNAKE,
-	COLOR_SELECTION
+	COLOR_SELECTION,
+	CLEAR
 }tool;
 
 typedef struct Cursor{
@@ -214,72 +216,75 @@ void draw_icon(tool icon, char selected,
 
 	switch (icon) {
 	case EMPTY_RECTANGLE:
-		
-		//draw selection perimiter
-		/*if (selected) {
-			soft_emptyRect_draw(2, 2, 29, 29, SELECTION_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
-			soft_emptyRect_draw(3, 3, 28, 28, SELECTION_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
-		}
-		else {
-			soft_emptyRect_draw(2, 2, 29, 29, TOOL_BOX_BACKGROUND_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
-			soft_emptyRect_draw(3, 3, 28, 28, BLACK, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
-		}	*/	
 		draw_selection_Frame(2, 2, 29, 29, selected, lastDrawingData, pixel_buffer);
 		//draw icon
 		soft_emptyRect_draw(6, 11, 25, 20, BLACK, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
 		break;
 	case FILLED_RECTANGLE:
-		//draw selection perimiter
-		/*if (selected) {
-			soft_emptyRect_draw(31, 2, 58, 29, SELECTION_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
-			soft_emptyRect_draw(32, 3, 57, 28, SELECTION_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
-		}
-		else {
-			soft_emptyRect_draw(31, 2, 58, 29, TOOL_BOX_BACKGROUND_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
-			soft_emptyRect_draw(32, 3, 57, 28, BLACK, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
-		}*/
 		draw_selection_Frame(31, 2, 58, 29, selected, lastDrawingData, pixel_buffer);
 		//draw icon
 		alt_up_pixel_buffer_dma_draw_box(pixel_buffer,35 ,11, 55, 20, BLACK, 0);
 		break;
 	case EMPTY_ELLIPSE:
 		//draw selection perimiter
-		if (selected) {
-			soft_emptyRect_draw(2, 31, 32, 57, SELECTION_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
-			soft_emptyRect_draw(3, 30, 28, 28, SELECTION_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
-		}
-		else {
-			soft_emptyRect_draw(2, 31, 29, 29, TOOL_BOX_BACKGROUND_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
-			soft_emptyRect_draw(3, 30, 28, 28, BLACK, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
-		}
+		draw_selection_Frame(2, 31, 29, 58, selected, lastDrawingData, pixel_buffer);
 		//draw icon
-		soft_emptyRect_draw(6, 11, 25, 20, BLACK, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
+		draw_empty_ellipse(16, 45, 8, 4, BLACK, pixel_buffer, NOT_ERASE_PREVIOUS_WORK, lastDrawingData);
 		break;
 	case FILLED_ELLIPSE:
 		//draw selection perimiter
-		if (selected) {
-			soft_emptyRect_draw(31, 2, 57, 29, SELECTION_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
-			soft_emptyRect_draw(32, 3, 58, 28, SELECTION_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
-		}
-		else {
-			soft_emptyRect_draw(31, 2, 57, 29, TOOL_BOX_BACKGROUND_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
-			soft_emptyRect_draw(32, 3, 58, 28, BLACK, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
-		}
+		draw_selection_Frame(31, 31, 58, 58, selected, lastDrawingData, pixel_buffer);
 		//draw icon
-		alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 35, 11, 55, 20, BLACK, 0);
+		draw_empty_ellipse(45, 45, 8, 4, BLACK, pixel_buffer, NOT_ERASE_PREVIOUS_WORK, lastDrawingData);
 		break;
 	case LINE:
-		break;
-	case PONG:
-		break;
-	case SNAKE:
-		break;
+		//draw selection perimiter
+		draw_selection_Frame(2, 60, 29, 87, selected, lastDrawingData, pixel_buffer);
+		//draw icon
+		draw_empty_ellipse(16, 74, 8, 4, BLACK, pixel_buffer, NOT_ERASE_PREVIOUS_WORK, lastDrawingData);
+		break;	
 	case FILL:
+		//draw selection perimiter
+		draw_selection_Frame(31, 60, 58, 87, selected, lastDrawingData, pixel_buffer);
+		//draw icon
+		draw_empty_ellipse(45, 74, 8, 4, BLACK, pixel_buffer, NOT_ERASE_PREVIOUS_WORK, lastDrawingData);
 		break;
 	case COLOR_SAMPLE:
+		//draw selection perimiter
+		draw_selection_Frame(2, 89, 29, 116, selected, lastDrawingData, pixel_buffer);
+		//draw icon
+		draw_empty_ellipse(16, 103, 8, 4, BLACK, pixel_buffer, NOT_ERASE_PREVIOUS_WORK, lastDrawingData);
 		break;
-	case CPY_CUT_PASTE:
+	case CPY_PASTE:
+		//draw selection perimiter
+		draw_selection_Frame(31, 89, 58, 116, selected, lastDrawingData, pixel_buffer);
+		//draw icon
+		draw_empty_ellipse(45, 103, 8, 4, BLACK, pixel_buffer, NOT_ERASE_PREVIOUS_WORK, lastDrawingData);
 		break;	
+	case CUT_PASTE:
+		//draw selection perimiter
+		draw_selection_Frame(2, 118, 29, 145, selected, lastDrawingData, pixel_buffer);
+		//draw icon
+		draw_empty_ellipse(16, 132, 8, 4, BLACK, pixel_buffer, NOT_ERASE_PREVIOUS_WORK, lastDrawingData);
+		break;
+	case PONG:
+		//draw selection perimiter
+		draw_selection_Frame(2, 408, 29, 435, selected, lastDrawingData, pixel_buffer);
+		//draw icon
+		draw_empty_ellipse(16, 422, 8, 4, BLACK, pixel_buffer, NOT_ERASE_PREVIOUS_WORK, lastDrawingData);
+		break;
+	case SNAKE:
+		//draw selection perimiter
+		draw_selection_Frame(31, 408, 58, 435, selected, lastDrawingData, pixel_buffer);
+		//draw icon
+		draw_empty_ellipse(45, 422, 8, 4, BLACK, pixel_buffer, NOT_ERASE_PREVIOUS_WORK, lastDrawingData);
+		break;
+	case CLEAR:
+		//draw selection perimiter
+		draw_selection_Frame(2, 437, 29, 464, selected, lastDrawingData, pixel_buffer);
+		//draw icon
+		draw_empty_ellipse(16, 451, 8, 4, BLACK, pixel_buffer, NOT_ERASE_PREVIOUS_WORK, lastDrawingData);
+		break;
 	default:
 		break;
 	}
@@ -294,6 +299,27 @@ void draw_tool_bar(lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev*
 	soft_emptyRect_draw(LEFT_LIMIT+1, TOP_LIMIT+1, DRAWING_ZONE_LEFT_LIMIT-1, BOTTOM_LIMIT-1, NOT_ERASE_PREVIOUS_WORK, BLACK, lastDrawingData, pixel_buffer);
 	draw_icon(EMPTY_RECTANGLE, 0, lastDrawingData, pixel_buffer);
 	draw_icon(FILLED_RECTANGLE, 0, lastDrawingData, pixel_buffer);
+	draw_icon(EMPTY_ELLIPSE, 0, lastDrawingData, pixel_buffer);
+	draw_icon(FILLED_ELLIPSE, 0, lastDrawingData, pixel_buffer);
+	draw_icon(LINE, 0, lastDrawingData, pixel_buffer);
+	draw_icon(FILL, 0, lastDrawingData, pixel_buffer);
+	draw_icon(COLOR_SAMPLE, 0, lastDrawingData, pixel_buffer);
+	draw_icon(CPY_PASTE, 0, lastDrawingData, pixel_buffer);
+	draw_icon(CUT_PASTE, 0, lastDrawingData, pixel_buffer);
+	draw_icon(PONG, 0, lastDrawingData, pixel_buffer);
+	draw_icon(SNAKE, 0, lastDrawingData, pixel_buffer);
+	draw_icon(CLEAR, 0, lastDrawingData, pixel_buffer);
+	//draw_selection_Frame(2, 147, 29, 174, 0, lastDrawingData, pixel_buffer);
+	//draw_selection_Frame(2, 176, 29, 203, 0, lastDrawingData, pixel_buffer);
+	//draw_selection_Frame(2, 205, 29, 232, 0, lastDrawingData, pixel_buffer);
+	//draw_selection_Frame(2, 234, 29, 261, 0, lastDrawingData, pixel_buffer);
+	//draw_selection_Frame(2, 263, 29, 290, 0, lastDrawingData, pixel_buffer);
+	//draw_selection_Frame(2, 292, 29, 319, 0, lastDrawingData, pixel_buffer);
+	//draw_selection_Frame(2, 321, 29, 348, 0, lastDrawingData, pixel_buffer);
+	//draw_selection_Frame(2, 350, 29, 377, 0, lastDrawingData, pixel_buffer);
+	//draw_selection_Frame(2, 379, 29, 406, 0, lastDrawingData, pixel_buffer);
+	//draw_selection_Frame(2, 408, 29, 435, 0, lastDrawingData, pixel_buffer);//hauteur pour snake et pong
+	//draw_selection_Frame(2, 437, 29, 464, 0, lastDrawingData, pixel_buffer);//position clear
 }
 void process_cursor_pos(Cursor *currentCursor, int *x_pos, int *y_pos ) {
 	if (*x_pos > RIGHT_LIMIT * SCALE_FACTOR_INV) {
