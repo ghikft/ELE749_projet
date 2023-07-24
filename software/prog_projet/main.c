@@ -262,6 +262,8 @@ int main(void)
 	//					DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);
 	//printf("recfill %d\n", recfiller_draw_rectangle(1, 1, 10, 10, 44));
 	/* main loop */
+
+	soft_emptyRect_draw(0,0,40,480,0,0,&lastDrawingData,pixel_buffer);
 	
 	while (1) {
 
@@ -317,6 +319,7 @@ int main(void)
 						DRAW_COLOR, 1, &lastDrawingData, pixel_buffer);*/
 				//elipse
 				if (startUsingTool == 0) {
+					alt_up_pixel_buffer_dma_draw(pixel_buffer, lastColor, currentCursor.x, currentCursor.y);
 					printf("first point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
 					firstPoint.x = currentCursor.x;
 					firstPoint.y = currentCursor.y;
@@ -361,6 +364,12 @@ int main(void)
 						secondPoint.x = currentCursor.x;
 						secondPoint.y = currentCursor.y;
 						printf("second point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
+						draw_empty_ellipse(firstPoint.x, firstPoint.y,
+							currentCursor.x-firstPoint.x, currentCursor.y-firstPoint.y,
+							DRAW_COLOR, pixel_buffer, 1, &lastDrawingData);
+						draw_empty_ellipse(firstPoint.x, firstPoint.y,
+							currentCursor.x-firstPoint.x, currentCursor.y-firstPoint.y,
+							DRAW_COLOR, pixel_buffer, 0, &lastDrawingData);
 						//	soft_emptyRect_draw(firstPoint.x, firstPoint.y,
 						//	secondPoint.x, secondPoint.y,
 						//	DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);

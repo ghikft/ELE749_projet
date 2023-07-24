@@ -12,11 +12,17 @@ typedef enum drawingOpp_En {
     EMPTY_RECT,
     EMPTY_ELLIPSE
 }drawingOpp;
+typedef struct pixelValue_S{
+    int x;
+    int y;
+    alt_u8 color;
+}pixelValue;
 //drawingOpp lastDrawingOpp;
 
 typedef struct lastDrawingVar_S {
     drawingOpp lastDrawingOpp;
     alt_u8 lastDrawnPixelMemory[2300];
+    pixelValue lastEllipse[2400];
     int numberOfPixelForLastDraw;
     int lastFirstPointX;
     int lastFirstPointY;
