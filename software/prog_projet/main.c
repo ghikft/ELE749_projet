@@ -310,7 +310,7 @@ void draw_icon(tool icon, char selected,
 	
 
 }
-void draw_tool_bar(lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+void draw_tool_bar(tool currentTool, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
 	//draw tool bar background
 	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, LEFT_LIMIT, TOP_LIMIT, DRAWING_ZONE_LEFT_LIMIT, BOTTOM_LIMIT, TOOL_BOX_BACKGROUND_COLOR, 0);
 	//Draw frame
@@ -340,6 +340,9 @@ void draw_tool_bar(lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev*
 	//draw_selection_Frame(2, 379, 29, 406, 0, lastDrawingData, pixel_buffer);
 	//draw_selection_Frame(2, 408, 29, 435, 0, lastDrawingData, pixel_buffer);//hauteur pour snake et pong
 	//draw_selection_Frame(2, 437, 29, 464, 0, lastDrawingData, pixel_buffer);//position clear
+
+	//Draw the current selected tool
+	draw_icon(currentTool, 1, lastDrawingData, pixel_buffer);
 }
 
 void toolSelection(Cursor* currentCursor, tool* currentTool, tool* lastTool, int startUsingTool, 
@@ -416,7 +419,7 @@ void process_cursor_pos(Cursor *currentCursor, int *x_pos, int *y_pos ) {
 	}
 }
 
-void start_button(char* startButtonPressed,unsigned char* left_btn, unsigned char* lastLeft, int* lastCursorColor,
+void start_button(tool currentTool, char* startButtonPressed,unsigned char* left_btn, unsigned char* lastLeft, int* lastCursorColor,
 	Cursor* currentCursor, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
 	
 	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 290, 220, 350, 260, 16, 0);
@@ -435,7 +438,7 @@ void start_button(char* startButtonPressed,unsigned char* left_btn, unsigned cha
 			*startButtonPressed = 1;
 			*lastLeft = 0;
 			alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 62, 0, 640, 480, BACKGROUD_COLOR, 0);
-			draw_tool_bar(lastDrawingData, pixel_buffer);
+			draw_tool_bar(currentTool, lastDrawingData, pixel_buffer);
 			//alt_up_pixel_buffer_dma_draw(pixel_buffer, BACKGROUD_COLOR, currentCursor.x, currentCursor.y);
 			*lastCursorColor = BACKGROUD_COLOR;
 		}
@@ -532,8 +535,8 @@ int main(void)
 
 	//initiate the drawing zone and tool bar
 	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 62, 0, 640, 480, BACKGROUD_COLOR, 0);
-	draw_tool_bar(&lastDrawingData, pixel_buffer);
-	draw_icon(currentTool, 1, &lastDrawingData, pixel_buffer);
+	draw_tool_bar(currentTool , &lastDrawingData, pixel_buffer);
+	//draw_icon(currentTool, 1, &lastDrawingData, pixel_buffer);
 	while (1) {
 
 		// process screen drawing during vertical blank
@@ -545,7 +548,7 @@ int main(void)
 			}  
 			//if using tool only get the new cursor position
 			if (startUsingTool == 1) {
-				process_cursor_pos(&currentCursor, &x_pos, &y_pos);
+				process_cursor_pos(&currentCursor, &x_pos, &y_pos);				
 			}
 			/* Manage cursor when not using tool*/
 			/*if (startUsingTool == 0) {
@@ -563,16 +566,19 @@ int main(void)
 				process_cursor_pos(&currentCursor, &x_pos, &y_pos);
 			}*/
 
+			//need to press the start button before being able to do anything else
 			if (startButtonPressed == 0) {
-				start_button(&startButtonPressed,&left_btn, &lastLeft, &lastCursorColor, &currentCursor, &lastDrawingData, pixel_buffer);
-				draw_icon(currentTool, 1, &lastDrawingData, pixel_buffer);
+				start_button(currentTool, &startButtonPressed,&left_btn, &lastLeft, &lastCursorColor, &currentCursor, &lastDrawingData, pixel_buffer);
+				//draw_icon(currentTool, 1, &lastDrawingData, pixel_buffer);
 			}
 			else {
-				//Check for tool selection not using a tool and cursor inside the tool bar
+				//Check for tool selection if not using a tool and cursor inside the tool bar
+				
 				toolSelection(&currentCursor, &currentTool, &lastTool, startUsingTool, &drawingColor, left_btn, &lastDrawingData, pixel_buffer);
 				/* process clicks */
-				//if (currentCursor.x > DRAWING_ZONE_LEFT_LIMIT) {//limit the usage of tool while in the 
-					if (left_btn) { //Draw during left click
+				//
+				if (left_btn) { //Draw during left click
+					//if (currentCursor.x > DRAWING_ZONE_LEFT_LIMIT) {//limit the usage of tool while in the 
 						if (currentTool == PENCIL) {
 							startUsingTool = 1;
 							lastLeft = 1;
@@ -622,79 +628,90 @@ int main(void)
 									DRAW_COLOR, pixel_buffer, 1, &lastDrawingData);
 							}
 						}
-						else if (currentTool == CLEAR) {
-							if (currentCursor.x <= 29 && currentCursor.y < 464) {
-								if (startUsingTool == 0) {
-									startUsingTool = 1;
-									lastLeft = 1;
-								}
+					//}//clear in an exception it only activable when cursor is on the icon
+					else if (currentTool == CLEAR) {
+						if (currentCursor.x <= 29 && currentCursor.y < 464 && currentCursor.y > 437) {
+							if (startUsingTool == 0) {
+								startUsingTool = 1;
+								lastLeft = 1;
 							}
 						}
 					}
-					else if (right_btn) { //erase whole screen if right click
-						//alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 62, 0, 640, 480, BACKGROUD_COLOR, 0);
-						//draw_tool_bar(&lastDrawingData, pixel_buffer);
-						//draw_icon(currentTool, 1, &lastDrawingData, pixel_buffer);
-						//if (!lastRight) {
-						printf("right click (X:%d,Y:%d), CLEAR SCREEN\n\r", currentCursor.x, currentCursor.y);
-						//}
-						//lastRight = 1;
-					}
-					else { //clear click flags
-						if (lastLeft) {
-							alt_putstr("left released, STOP DRAWING\n\r");
-							//rectangle
-							if (currentTool == PENCIL) {
+				}
+				else if (right_btn) { //erase whole screen if right click
+					//alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 62, 0, 640, 480, BACKGROUD_COLOR, 0);
+					//draw_tool_bar(&lastDrawingData, pixel_buffer);
+					//draw_icon(currentTool, 1, &lastDrawingData, pixel_buffer);
+					//if (!lastRight) {
+					printf("right click (X:%d,Y:%d), CLEAR SCREEN\n\r", currentCursor.x, currentCursor.y);
+					//}
+					//lastRight = 1;
+				}
+				else { //clear click flags
+					if (lastLeft) {
+						alt_putstr("left released, STOP DRAWING\n\r");
+						//rectangle
+						if (currentTool == PENCIL) {
+							startUsingTool = 0;
+							lastLeft = 0;
+							//draw_icon(currentTool, 1, &lastDrawingData, pixel_buffer);
+						}
+						else if(currentTool==EMPTY_RECTANGLE){
+							if (startUsingTool == 1) {
+								lastCursorColor = DRAW_COLOR;
 								startUsingTool = 0;
+								secondPoint.x = currentCursor.x;
+								secondPoint.y = currentCursor.y;
+								printf("second point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
+								//soft_emptyRect_draw(firstPoint.x, firstPoint.y,
+								//	secondPoint.x, secondPoint.y,
+								//	DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);
+								lastDrawingData.firstErase = 1;
+								lastLeft = 0;
+								//draw_icon(currentTool, 1, &lastDrawingData, pixel_buffer);
+							}
+						}
+						else if (currentTool == EMPTY_ELLIPSE) {
+							//Ellipse
+							if (startUsingTool == 1) {
+								startUsingTool = 0;
+								secondPoint.x = currentCursor.x;
+								secondPoint.y = currentCursor.y;
+								printf("second point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
+								draw_empty_ellipse(firstPoint.x, firstPoint.y,
+									currentCursor.x - firstPoint.x, currentCursor.y - firstPoint.y,
+									DRAW_COLOR, pixel_buffer, 1, &lastDrawingData);
+								draw_empty_ellipse(firstPoint.x, firstPoint.y,
+									currentCursor.x - firstPoint.x, currentCursor.y - firstPoint.y,
+									DRAW_COLOR, pixel_buffer, 0, &lastDrawingData);
+								//	soft_emptyRect_draw(firstPoint.x, firstPoint.y,
+								//	secondPoint.x, secondPoint.y,
+								//	DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);
+
+								//draw_icon(currentTool, 1, &lastDrawingData, pixel_buffer);
+								lastDrawingData.firstErase = 1;
 								lastLeft = 0;
 							}
-							else if(currentTool==EMPTY_RECTANGLE){
-								if (startUsingTool == 1) {
-									lastCursorColor = DRAW_COLOR;
-									startUsingTool = 0;
-									secondPoint.x = currentCursor.x;
-									secondPoint.y = currentCursor.y;
-									printf("second point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
-									//soft_emptyRect_draw(firstPoint.x, firstPoint.y,
-									//	secondPoint.x, secondPoint.y,
-									//	DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);
-									lastDrawingData.firstErase = 1;
-								}
-							}
-							else if (currentTool == EMPTY_ELLIPSE) {
-								//Ellipse
-								if (startUsingTool == 1) {
-									startUsingTool = 0;
-									secondPoint.x = currentCursor.x;
-									secondPoint.y = currentCursor.y;
-									printf("second point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
-									draw_empty_ellipse(firstPoint.x, firstPoint.y,
-										currentCursor.x - firstPoint.x, currentCursor.y - firstPoint.y,
-										DRAW_COLOR, pixel_buffer, 1, &lastDrawingData);
-									draw_empty_ellipse(firstPoint.x, firstPoint.y,
-										currentCursor.x - firstPoint.x, currentCursor.y - firstPoint.y,
-										DRAW_COLOR, pixel_buffer, 0, &lastDrawingData);
-									//	soft_emptyRect_draw(firstPoint.x, firstPoint.y,
-									//	secondPoint.x, secondPoint.y,
-									//	DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);
-									lastDrawingData.firstErase = 1;
-								}
-							}
-							if (currentTool == CLEAR) {
-								startUsingTool = 0;
-								alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 62, 0, 640, 480, BACKGROUD_COLOR, 0);
-								draw_tool_bar(&lastDrawingData, pixel_buffer);
-								draw_icon(currentTool, 1, &lastDrawingData, pixel_buffer);
-							}
+							
 						}
-						lastLeft = 0;
-						lastRight = 0;
+						if (currentTool == CLEAR) {
+							lastLeft = 0;
+							startUsingTool = 0;
+							alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 62, 0, 640, 480, BACKGROUD_COLOR, 0);
+							//draw_tool_bar(currentTool, &lastDrawingData, pixel_buffer);
+							//draw_icon(currentTool, 1, &lastDrawingData, pixel_buffer);
+						}
+						draw_tool_bar(currentTool, &lastDrawingData, pixel_buffer);
+						//lastLeft = 0;
 					}
-				//}
+					
+					//lastLeft = 0;
+					lastRight = 0;
+				}
 			}
 			
 
-			//draw teh cursor on top of everithing (last drawing operation)
+			//draw the cursor on top of everithing (last drawing operation)
 			cursor_draw(startUsingTool, &lastCursorColor, &currentCursor, &x_pos, &y_pos, pixel_buffer);
 			// vertical refresh
 			alt_up_pixel_buffer_dma_swap_buffers(pixel_buffer);
