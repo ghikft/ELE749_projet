@@ -32,7 +32,14 @@
 #define TIMER_PERIODL_REG_OFT 	2 	// period register, bits 15:0
 #define TIMER_PERIODH_REG_OFT 	3 	// period register, bits 31:16
 
+typedef enum mode {
+	DRAWING_MODE,
+	SNAKE_MODE,
+	PONG_MODE
+}mode;
 typedef enum tool {
+	NO_TOOL,
+	PENCIL,
 	EMPTY_RECTANGLE,
 	FILLED_RECTANGLE,
 	EMPTY_ELLIPSE,
@@ -82,6 +89,12 @@ typedef struct Point {
 #define ICON_WIDTH 26
 #define ICON_HEIGHT 26
 #define ICON_SPACING 2
+
+#define IN_TOOL_BAR 1
+#define NOT_IN_TOOL_BAR 0
+
+#define TOOL_SELECTED 1
+#define TOOL_NOT_SELECTED 0
 
 context_t timer_context;
 alt_up_ps2_dev* tim;
@@ -267,6 +280,12 @@ void draw_icon(tool icon, char selected,
 		//draw icon
 		draw_empty_ellipse(16, 132, 8, 4, BLACK, pixel_buffer, NOT_ERASE_PREVIOUS_WORK, lastDrawingData);
 		break;
+	case PENCIL:
+		//draw selection perimiter
+		draw_selection_Frame(31, 118, 58, 145, selected, lastDrawingData, pixel_buffer);
+		//draw icon
+		draw_empty_ellipse(45, 132, 8, 4, BLACK, pixel_buffer, NOT_ERASE_PREVIOUS_WORK, lastDrawingData);
+		break;	
 	case PONG:
 		//draw selection perimiter
 		draw_selection_Frame(2, 408, 29, 435, selected, lastDrawingData, pixel_buffer);
@@ -306,6 +325,7 @@ void draw_tool_bar(lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev*
 	draw_icon(COLOR_SAMPLE, 0, lastDrawingData, pixel_buffer);
 	draw_icon(CPY_PASTE, 0, lastDrawingData, pixel_buffer);
 	draw_icon(CUT_PASTE, 0, lastDrawingData, pixel_buffer);
+	draw_icon(PENCIL, 1, lastDrawingData, pixel_buffer);
 	draw_icon(PONG, 0, lastDrawingData, pixel_buffer);
 	draw_icon(SNAKE, 0, lastDrawingData, pixel_buffer);
 	draw_icon(CLEAR, 0, lastDrawingData, pixel_buffer);
@@ -320,6 +340,55 @@ void draw_tool_bar(lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev*
 	//draw_selection_Frame(2, 379, 29, 406, 0, lastDrawingData, pixel_buffer);
 	//draw_selection_Frame(2, 408, 29, 435, 0, lastDrawingData, pixel_buffer);//hauteur pour snake et pong
 	//draw_selection_Frame(2, 437, 29, 464, 0, lastDrawingData, pixel_buffer);//position clear
+}
+
+void toolSelection(Cursor* currentCursor, tool* currentTool, tool* lastTool, int startUsingTool, 
+	char* drawingColor, char left_btn, lastDrawingVar *lastDrawingData,
+	alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+
+	//inside the tool bar zone and no tool currently in use
+	if (startUsingTool == 0 && currentCursor->x < DRAWING_ZONE_LEFT_LIMIT) {
+		//in first or second column of tool
+		if (currentCursor->x <= 29 && left_btn) {
+			if (currentCursor->y < 29) *currentTool = EMPTY_RECTANGLE;
+			else if (currentCursor->y < 58) *currentTool = EMPTY_ELLIPSE;
+			else if (currentCursor->y < 87) *currentTool = LINE;
+			else if (currentCursor->y < 116) *currentTool = COLOR_SAMPLE;
+			else if (currentCursor->y < 145) *currentTool = CUT_PASTE;
+			else if (currentCursor->y < 435) *currentTool = PONG;
+			else if (currentCursor->y < 464) *currentTool = CLEAR;
+
+		}
+		//second column
+		else if (currentCursor->x >= 32 && left_btn) {
+			if (currentCursor->y < 29) *currentTool = FILLED_RECTANGLE;
+			else if (currentCursor->y < 58) *currentTool = FILLED_ELLIPSE;
+			else if (currentCursor->y < 87) *currentTool = FILL;
+			else if (currentCursor->y < 116) *currentTool = CPY_PASTE;
+			else if (currentCursor->y < 145) *currentTool = PENCIL;
+			else if (currentCursor->y < 435) *currentTool = SNAKE;
+		}
+		//clear old selection and select the new tool
+		if (*lastTool != *currentTool) {
+			draw_icon(*lastTool, TOOL_NOT_SELECTED, lastDrawingData, pixel_buffer);
+			*lastTool = *currentTool;
+			draw_icon(*currentTool, TOOL_SELECTED, lastDrawingData, pixel_buffer);
+		}
+		//test if in the first, second, third or forth column of color
+		if (currentCursor->x < 15) {
+			//test for every height 
+			//then drawingColor = XXXX;
+		}
+		else if (currentCursor->x < 30) {
+
+		}
+		else if (currentCursor->x < 45) {
+
+		}
+		else if (currentCursor->x < DRAWING_ZONE_LEFT_LIMIT) {
+
+		}
+	}
 }
 void process_cursor_pos(Cursor *currentCursor, int *x_pos, int *y_pos ) {
 	if (*x_pos > RIGHT_LIMIT * SCALE_FACTOR_INV) {
@@ -358,7 +427,7 @@ int main(void)
 	int y_pos = 0;
 	unsigned char left_btn = 0;
 	unsigned char right_btn = 0;
-
+	char drawingColor = BLACK;
 	char pos_msg[100];
 	int lastRight = 0;
 	int lastLeft = 0;
@@ -366,9 +435,11 @@ int main(void)
 	char startUsingTool=0;
 	Point firstPoint, secondPoint;
 	Cursor currentCursor;
-	tool currentTool;
+	tool currentTool = PENCIL;
+	tool lastTool = EMPTY_ELLIPSE;
 	currentCursor.x = 0;
 	currentCursor.y = 0;
+	mode programMode = DRAWING_MODE;
 
 	process_cursor_pos(&currentCursor, &x_pos, &y_pos);
 	//Stop timer and setup the interrupt, then start with 100ms period (default)
@@ -416,7 +487,8 @@ int main(void)
 	//printf("recfill %d\n", recfiller_draw_rectangle(1, 1, 10, 10, 44));
 	/* main loop */
 
-	soft_emptyRect_draw(0,0,40,480,0,0,&lastDrawingData,pixel_buffer);
+	//initiate the drawing zone and tool bar
+	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 62, 0, 640, 480, BACKGROUD_COLOR, 0);
 	draw_tool_bar(&lastDrawingData, pixel_buffer);
 	while (1) {
 
@@ -443,6 +515,8 @@ int main(void)
 				process_cursor_pos(&currentCursor, &x_pos, &y_pos);
 			}
 
+			//Check for tool selection not using a tool and cursor inside the tool bar
+			toolSelection(&currentCursor, &currentTool, &lastTool, startUsingTool,&drawingColor, left_btn, &lastDrawingData, pixel_buffer);
 			/* process clicks */
 			if (left_btn){ //Draw during left click
 				/*alt_up_pixel_buffer_dma_draw(pixel_buffer, DRAW_COLOR, currentCursor.x, currentCursor.y);
