@@ -66,11 +66,11 @@ typedef struct Point {
 	int y;
 } Point;
 //Screen border limts
-#define TOP_LIMIT 0
-#define LEFT_LIMIT 0
-#define RIGHT_LIMIT 639
-#define BOTTOM_LIMIT 479
-#define DRAWING_ZONE_LEFT_LIMIT 61
+//#define TOP_LIMIT 0
+//#define LEFT_LIMIT 0
+//#define RIGHT_LIMIT 639
+//#define BOTTOM_LIMIT 479
+//#define DRAWING_ZONE_LEFT_LIMIT 61
 
 #define SCALE_FACTOR 0.1
 #define SCALE_FACTOR_INV 10
@@ -676,6 +676,18 @@ int main(void)
 								selectedColor, pixel_buffer, 1, &lastDrawingData);
 						}
 					}
+					else if (currentTool == FILL) {
+						if (startUsingTool == 0) {
+							startUsingTool = 1;
+							lastLeft = 1;
+							firstPoint.x = currentCursor.x;
+							firstPoint.y = currentCursor.y;
+							printf("\n\n\nSTART_FILL first click\n\r");
+							printf("selected color: %d\n\r", selectedColor);
+							
+							
+						}
+					}
 					//}//clear in an exception it only activable when cursor is on the icon
 					else if (currentTool == CLEAR) {
 						if (currentCursor.x <= 29 && currentCursor.y < 464 && currentCursor.y > 437) {
@@ -730,12 +742,12 @@ int main(void)
 								secondPoint.x = currentCursor.x;
 								secondPoint.y = currentCursor.y;
 								printf("second point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
-								/*draw_empty_ellipse(firstPoint.x, firstPoint.y,
+								draw_empty_ellipse(firstPoint.x, firstPoint.y,
 									currentCursor.x - firstPoint.x, currentCursor.y - firstPoint.y,
 									selectedColor, pixel_buffer, 1, &lastDrawingData);
 								draw_empty_ellipse(firstPoint.x, firstPoint.y,
 									currentCursor.x - firstPoint.x, currentCursor.y - firstPoint.y,
-									selectedColor, pixel_buffer, 0, &lastDrawingData);*/
+									selectedColor, pixel_buffer, 0, &lastDrawingData);
 								//	soft_emptyRect_draw(firstPoint.x, firstPoint.y,
 								//	secondPoint.x, secondPoint.y,
 								//	DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);
@@ -745,6 +757,15 @@ int main(void)
 								lastLeft = 0;
 							}
 							
+						}
+						else if (currentTool == FILL) {
+							startUsingTool = 0;
+							lastLeft = 0;
+							//clear the cursor and launch the fill operation
+							alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, firstPoint.x, firstPoint.y);
+							flood_fill_zone(firstPoint.x, firstPoint.y, selectedColor, pixel_buffer);
+							//update the last cursor color beacause of the fill
+							lastCursorColor = selectedColor;
 						}
 						if (currentTool == CLEAR) {
 							lastLeft = 0;

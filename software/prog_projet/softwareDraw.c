@@ -3,6 +3,7 @@
 #include "system.h"
 #include "altera_up_avalon_video_pixel_buffer_dma.h"
 #include <stdio.h>
+#include "project_variables.h"
 
 #define TRUE	1
 #define FALSE	0
@@ -288,4 +289,43 @@ unsigned char get_pixel_color2(int x, int y) {
 	pixel = (unsigned char*)ONCHIP_MEM_BASE + (y * 640) + x;
 	color = *pixel;
 	return color;
+}
+
+void flood_fill_zone(int startX, int startY, int fillColor, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+	int initialColor = get_pixel_color2(startX, startY);
+	//printf("initial color %d\n\r",initialColor);
+	if (fillColor == initialColor) {
+		//printf("FILL early exit\n\r");
+	}
+	else {
+		//printf("lunch recursion\n\r");
+		flood_fill_sub(startX, startY, fillColor, initialColor, pixel_buffer);
+		//printf("END_FILL\n\r");
+	}
+}
+
+char flood_fill_sub(int x, int y, int fillColor, int initialColor, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+	//check if outside drawing zone, if the current color is diffiernt from the initailColor to replace
+	//or if the currentColor is the same as the one we are filling with
+	if (x <= DRAWING_ZONE_LEFT_LIMIT || x > RIGHT_LIMIT || y<TOP_LIMIT || y> BOTTOM_LIMIT) {
+		//printf("outside zone\n\r");
+		return 0;
+	}
+	else if (get_pixel_color2(x, y) != initialColor) {
+		//printf("not the same color as init\n\r");
+		return 0;
+	}
+	else if (get_pixel_color2(x, y) == fillColor) {
+		//printf("same as fill\n\r");
+		return 0;
+	}
+	//replace the pixel value with the fill call
+	alt_up_pixel_buffer_dma_draw(pixel_buffer, fillColor, x, y);
+
+	//call itself for the adjacent for pixel(no diagonal)
+	flood_fill_sub(x + 1, y, fillColor, initialColor, pixel_buffer);
+	flood_fill_sub(x - 1, y, fillColor, initialColor, pixel_buffer);
+	flood_fill_sub(x, y + 1, fillColor, initialColor, pixel_buffer);
+	flood_fill_sub(x, y - 1, fillColor, initialColor, pixel_buffer);
+	return 1;
 }
