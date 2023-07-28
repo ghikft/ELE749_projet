@@ -380,11 +380,11 @@ void draw_tool_bar(tool currentTool, lastDrawingVar* lastDrawingData, alt_up_pix
 }
 
 void toolSelection(Cursor* currentCursor, tool* currentTool, tool* lastTool, int startUsingTool, 
-	int* selectedColor,char left_btn, lastDrawingVar *lastDrawingData,
+	int* selectedColor,char *left_btn, lastDrawingVar *lastDrawingData,
 	alt_up_pixel_buffer_dma_dev* pixel_buffer) {
 	static int lastColor = BLACK;
 	//inside the tool bar zone and no tool currently in use
-	if (startUsingTool == 0 && currentCursor->x < DRAWING_ZONE_LEFT_LIMIT && left_btn) {
+	if (startUsingTool == 0 && currentCursor->x < DRAWING_ZONE_LEFT_LIMIT && *left_btn) {
 		//in first or second column of tool
 		if (currentCursor->x <= 29 /* && left_btn*/) {
 			if (currentCursor->y < 29) *currentTool = EMPTY_RECTANGLE;
@@ -432,12 +432,15 @@ void toolSelection(Cursor* currentCursor, tool* currentTool, tool* lastTool, int
 			draw_icon(*lastTool, TOOL_NOT_SELECTED, lastDrawingData, pixel_buffer);
 			*lastTool = *currentTool;
 			draw_icon(*currentTool, TOOL_SELECTED, lastDrawingData, pixel_buffer);
+			//*left_btn = 0;
 		}
 		if (lastColor != *selectedColor) {
 			lastColor = *selectedColor;
 			draw_color_palette(*selectedColor, lastDrawingData, pixel_buffer);
+			//*left_btn = 0;
 		}		
 	}
+
 }
 void process_cursor_pos(Cursor *currentCursor, int *x_pos, int *y_pos ) {
 	if (*x_pos > RIGHT_LIMIT * SCALE_FACTOR_INV) {
@@ -623,7 +626,7 @@ int main(void)
 			else {
 				//Check for tool selection if not using a tool and cursor inside the tool bar
 				
-				toolSelection(&currentCursor, &currentTool, &lastTool, startUsingTool, &selectedColor, left_btn, &lastDrawingData, pixel_buffer);
+				toolSelection(&currentCursor, &currentTool, &lastTool, startUsingTool, &selectedColor, &left_btn, &lastDrawingData, pixel_buffer);
 				/* process clicks */
 				//
 				if (left_btn) { //Draw during left click
