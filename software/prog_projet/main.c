@@ -529,10 +529,14 @@ int main(void)
 	char startUsingTool=0;
 	Point firstPoint, secondPoint;
 	Cursor currentCursor;
+	Cursor lastCursor;
+	int drawFirstTimeAround = 1;
 	tool currentTool = NO_TOOL;
 	tool lastTool = NO_TOOL;
 	currentCursor.x = 0;
 	currentCursor.y = 0;
+	lastCursor.x = 0;
+	lastCursor.y = 0;
 	mode programMode = DRAWING_MODE;
 	char startButtonPressed = 0; 
 	int selectedColor = BLACK;
@@ -632,9 +636,17 @@ int main(void)
 				if (left_btn) { //Draw during left click
 					//if (currentCursor.x > DRAWING_ZONE_LEFT_LIMIT) {//limit the usage of tool while in the 
 					if (currentTool == PENCIL) {
-						startUsingTool = 1;
 						lastLeft = 1;
-						alt_up_pixel_buffer_dma_draw(pixel_buffer, selectedColor, currentCursor.x, currentCursor.y);
+						//alt_up_pixel_buffer_dma_draw(pixel_buffer, selectedColor, currentCursor.x, currentCursor.y);
+						if (startUsingTool==0){
+							alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
+							lastCursor.x = currentCursor.x;
+							lastCursor.y = currentCursor.y;
+							startUsingTool = 1;
+						}
+						alt_up_pixel_buffer_dma_draw_line(pixel_buffer,lastCursor.x,lastCursor.y,currentCursor.x,currentCursor.y,selectedColor,0);
+						lastCursor.x = currentCursor.x;
+						lastCursor.y = currentCursor.y;
 						lastCursorColor = selectedColor;//was DRAW_COLOR
 					}
 					else if (currentTool == EMPTY_RECTANGLE|| currentTool == FILLED_RECTANGLE) {
@@ -701,6 +713,20 @@ int main(void)
 							}
 						}
 					}
+					else if(currentTool == LINE){
+						if (startUsingTool == 0) {
+							alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
+							firstPoint.x = currentCursor.x;
+							firstPoint.y = currentCursor.y;
+							startUsingTool = 1;
+							lastLeft = 1;
+							soft_draw_line(firstPoint.x,firstPoint.y,currentCursor.x,currentCursor.y,selectedColor,0,&lastDrawingData,pixel_buffer);
+						}
+						else{
+							lastLeft = 1;
+							soft_draw_line(firstPoint.x,firstPoint.y,currentCursor.x,currentCursor.y,selectedColor,1,&lastDrawingData,pixel_buffer);
+						}
+					}
 					else startUsingTool = 0;//for testing while some tool are not created
 				}
 				else if (right_btn) { //erase whole screen if right click
@@ -717,9 +743,11 @@ int main(void)
 						alt_putstr("left released, STOP DRAWING\n\r");
 						//rectangle
 						if (currentTool == PENCIL ) {
-							startUsingTool = 0;
-							lastLeft = 0;
-							//draw_icon(currentTool, 1, &lastDrawingData, pixel_buffer);
+							if (startUsingTool){
+								startUsingTool = 0;
+								lastLeft = 0;
+								//draw_icon(currentTool, 1, &lastDrawingData, pixel_buffer);
+							}
 						}
 						else if(currentTool==EMPTY_RECTANGLE||currentTool==FILLED_RECTANGLE){
 							if (startUsingTool == 1) {
@@ -765,6 +793,17 @@ int main(void)
 								lastLeft = 0;
 							}
 							
+						}
+						else if (currentTool == LINE){
+							//draw final line
+							if (startUsingTool == 1) {
+								startUsingTool = 0;
+								secondPoint.x = currentCursor.x;
+								secondPoint.y = currentCursor.y;
+								soft_draw_line(firstPoint.x,firstPoint.y,secondPoint.x,secondPoint.y,selectedColor,1,&lastDrawingData,pixel_buffer);
+								lastDrawingData.firstErase = 1;
+								lastLeft = 0;
+							}
 						}
 						else if (currentTool == FILLED_ELLIPSE) {
 							if (startUsingTool == 1) {

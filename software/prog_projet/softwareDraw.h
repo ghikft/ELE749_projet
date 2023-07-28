@@ -40,8 +40,8 @@ unsigned char get_pixel_color2(int x, int y);
 
 
 void soft_emptyRect_draw(int x_left, int y_top,
-    int x_right, int y_bottom,
-    int color, int erasePreviousWork, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer);
+                         int x_right, int y_bottom,
+                         int color, int erasePreviousWork, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer);
 /*unsigned int soft_recfiller_draw_rectangle(int x_left, int y_top,
     int x_right, int y_bottom,
     int color);*/
@@ -58,4 +58,8 @@ char flood_fill_sub(int x, int y, int fillColor, int initialColor, alt_up_pixel_
 void fill_to_edge_zone(int startX, int startY, int fillColor, alt_up_pixel_buffer_dma_dev* pixel_buffer);
 
 char fill_to_edge_sub(int x, int y, int fillColor, alt_up_pixel_buffer_dma_dev* pixel_buffer);
+
+void soft_draw_line(int x1, int y1,
+    				int x2, int y2,
+    				int color, int erasePreviousWork, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer);
 #endif  // SOFT_DRAW_H_

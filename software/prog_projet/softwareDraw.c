@@ -12,6 +12,15 @@
 
 //alt_u8 lastDrawnOp = lastDrawingOpp;
 
+int absoluteV(int x);
+void soft_draw_line_high(int x1, int y1,
+    				int x2, int y2,
+    				int color, int erasePreviousWork, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer);
+
+void soft_draw_line_low(int x1, int y1,
+    				int x2, int y2,
+    				int color, int erasePreviousWork, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer);
+
 //void erase_last_drawn_shape()
 void soft_emptyRect_draw(int x_left, int y_top,
 	int x_right, int y_bottom,
@@ -458,4 +467,109 @@ char fill_to_edge_sub(int x, int y, int fillColor, alt_up_pixel_buffer_dma_dev* 
 	fill_to_edge_sub(x, y + 1, fillColor, pixel_buffer);
 	fill_to_edge_sub(x, y - 1, fillColor, pixel_buffer);
 	return 1;
+}
+
+void soft_draw_line(int x1, int y1,
+    				int x2, int y2,
+    				int color, int erasePreviousWork, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer){
+	
+	//erase previous work
+	if(erasePreviousWork){
+		for (int j=0; j<lastDrawingData->numberOfPixelForLastDraw;j++){
+			alt_up_pixel_buffer_dma_draw(pixel_buffer,lastDrawingData->lastEllipse[j].color, 
+			lastDrawingData->lastEllipse[j].x ,lastDrawingData->lastEllipse[j].y); //Q3
+		}
+	}
+	
+	lastDrawingData->numberOfPixelForLastDraw=0;
+
+	if (absoluteV(y2-y1) < absoluteV(x2-x1)){
+		if(x1>x2){
+			soft_draw_line_low(x2,y2,x1,y1,color,erasePreviousWork,lastDrawingData,pixel_buffer);
+		}
+		else{
+			soft_draw_line_low(x1,y1,x2,y2,color,erasePreviousWork,lastDrawingData,pixel_buffer);
+		}
+	}
+	else{
+		if(y1>y2){
+			soft_draw_line_high(x2,y2,x1,y1,color,erasePreviousWork,lastDrawingData,pixel_buffer);
+		}
+		else{
+			soft_draw_line_high(x1,y1,x2,y2,color,erasePreviousWork,lastDrawingData,pixel_buffer);
+		}
+	}
+	
+}
+
+void soft_draw_line_low(int x1, int y1,
+    				int x2, int y2,
+    				int color, int erasePreviousWork, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer){
+	
+	int dx = x2-x1;
+	int dy = y2-y1;
+
+	int yi=1;
+	if(dy<0){
+		yi=-1;
+		dy=-dy;
+	}
+	int d = (2*dy)-dx;
+	int x,y;
+	y=y1;
+	for(x=x1;x<x2;x++){
+		lastDrawingData->lastEllipse[lastDrawingData->numberOfPixelForLastDraw].x = x;
+		lastDrawingData->lastEllipse[lastDrawingData->numberOfPixelForLastDraw].y = y;
+		lastDrawingData->lastEllipse[lastDrawingData->numberOfPixelForLastDraw].color = get_pixel_color2(x,y);
+		lastDrawingData->numberOfPixelForLastDraw++;
+		alt_up_pixel_buffer_dma_draw(pixel_buffer, color, x, y);
+		if(d>0){
+			y=y+yi;
+			d=d+(2*(dy-dx));
+		}
+		else{
+			d=d+2*dy;
+		}
+	}
+
+}
+
+void soft_draw_line_high(int x1, int y1,
+    				int x2, int y2,
+    				int color, int erasePreviousWork, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer){
+	int dx = x2-x1;
+	int dy = y2-y1;
+
+	int xi=1;
+	if(dx<0){
+		xi=-1;
+		dx=-dx;
+	}
+	int d = (2*dx)-dy;
+	int x,y;
+	x=x1;
+	for(y=y1;y<y2;y++){
+		lastDrawingData->lastEllipse[lastDrawingData->numberOfPixelForLastDraw].x = x;
+		lastDrawingData->lastEllipse[lastDrawingData->numberOfPixelForLastDraw].y = y;
+		lastDrawingData->lastEllipse[lastDrawingData->numberOfPixelForLastDraw].color = get_pixel_color2(x,y);
+		lastDrawingData->numberOfPixelForLastDraw++;
+		alt_up_pixel_buffer_dma_draw(pixel_buffer, color, x, y);
+		if(d>0){
+			x=x+xi;
+			d=d+(2*(dx-dy));
+		}
+		else{
+			d=d+2*dx;
+		}
+	}
+
+}
+
+int absoluteV(int x){
+	if(x<0){
+		return x*-1;
+	}
+	else{
+		return x;
+	}
 }
