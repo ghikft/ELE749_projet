@@ -358,6 +358,8 @@ void draw_empty_ellipse(int x_center, int y_center, int x_radius, int y_radius,
 	}
 }
 
+
+
 unsigned char get_pixel_color2(int x, int y) {
 	/**************************************************************************
 	 * Get the color value of a specific pixel
@@ -416,5 +418,44 @@ char flood_fill_sub(int x, int y, int fillColor, int initialColor, alt_up_pixel_
 	flood_fill_sub(x - 1, y, fillColor, initialColor, pixel_buffer);
 	flood_fill_sub(x, y + 1, fillColor, initialColor, pixel_buffer);
 	flood_fill_sub(x, y - 1, fillColor, initialColor, pixel_buffer);
+	return 1;
+}
+
+void fill_to_edge_zone(int startX, int startY, int fillColor, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+	//int initialColor = get_pixel_color2(startX, startY);
+	//printf("initial color %d\n\r",initialColor);
+	//if (fillColor == initialColor) {
+		//printf("FILL early exit\n\r");
+	//}
+	//else {
+		printf("lunch recursion\n\r");
+	fill_to_edge_sub(startX, startY, fillColor, pixel_buffer);
+		printf("END_FILL\n\r");
+	//}
+}
+
+char fill_to_edge_sub(int x, int y, int fillColor, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+	//check if outside drawing zone, if the current color is diffiernt from the initailColor to replace
+	//or if the currentColor is the same as the one we are filling with
+	if (x <= LEFT_LIMIT || x > RIGHT_LIMIT || y<TOP_LIMIT || y> BOTTOM_LIMIT) {
+		//printf("outside zone\n\r");
+		return 0;
+	}
+	//else if (get_pixel_color2(x, y) != initialColor) {
+		//printf("not the same color as init\n\r");
+		//return 0;
+	//}
+	else if (get_pixel_color2(x, y) == fillColor) {
+		//printf("same as fill\n\r");
+		return 0;
+	}
+	//replace the pixel value with the fill call
+	alt_up_pixel_buffer_dma_draw(pixel_buffer, fillColor, x, y);
+
+	//call itself for the adjacent for pixel(no diagonal)
+	fill_to_edge_sub(x + 1, y, fillColor, pixel_buffer);
+	fill_to_edge_sub(x - 1, y, fillColor, pixel_buffer);
+	fill_to_edge_sub(x, y + 1, fillColor, pixel_buffer);
+	fill_to_edge_sub(x, y - 1, fillColor, pixel_buffer);
 	return 1;
 }

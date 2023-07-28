@@ -275,13 +275,14 @@ void draw_icon(tool icon, char selected,
 		//draw selection perimiter
 		draw_selection_Frame(2, 31, 29, 58, selected, lastDrawingData, pixel_buffer);
 		//draw icon
-		draw_empty_ellipse(16, 45, 8, 4, BLACK, pixel_buffer, NOT_ERASE_PREVIOUS_WORK, lastDrawingData);
+		draw_empty_ellipse(16, 45, 8, 4, BLACK, pixel_buffer, NOT_ERASE_PREVIOUS_WORK, lastDrawingData);		
 		break;
 	case FILLED_ELLIPSE:
 		//draw selection perimiter
 		draw_selection_Frame(31, 31, 58, 58, selected, lastDrawingData, pixel_buffer);
 		//draw icon
 		draw_empty_ellipse(45, 45, 8, 4, BLACK, pixel_buffer, NOT_ERASE_PREVIOUS_WORK, lastDrawingData);
+		fill_to_edge_zone(45, 45, BLACK, pixel_buffer);
 		break;
 	case LINE:
 		//draw selection perimiter
@@ -633,7 +634,7 @@ int main(void)
 						alt_up_pixel_buffer_dma_draw(pixel_buffer, selectedColor, currentCursor.x, currentCursor.y);
 						lastCursorColor = selectedColor;//was DRAW_COLOR
 					}
-					else if (currentTool == EMPTY_RECTANGLE) {
+					else if (currentTool == EMPTY_RECTANGLE|| currentTool == FILLED_RECTANGLE) {
 						//alt_up_pixel_buffer_dma_draw(pixel_buffer, selectedColor, currentCursor.x, currentCursor.y);
 						//lastCursorColor = selectedColor;// DRAW_COLOR;
 						/*if (!lastLeft) {
@@ -657,7 +658,7 @@ int main(void)
 								selectedColor, 1, &lastDrawingData, pixel_buffer);
 						}
 					}
-					else if (currentTool == EMPTY_ELLIPSE) {		//elipse
+					else if (currentTool == EMPTY_ELLIPSE|| currentTool == FILLED_ELLIPSE) {		//elipse
 						if (startUsingTool == 0) {
 							alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
 							printf("first point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
@@ -717,7 +718,7 @@ int main(void)
 							lastLeft = 0;
 							//draw_icon(currentTool, 1, &lastDrawingData, pixel_buffer);
 						}
-						else if(currentTool==EMPTY_RECTANGLE){
+						else if(currentTool==EMPTY_RECTANGLE||currentTool==FILLED_RECTANGLE){
 							if (startUsingTool == 1) {
 								lastCursorColor = selectedColor;
 								startUsingTool = 0;
@@ -730,6 +731,10 @@ int main(void)
 								soft_emptyRect_draw(firstPoint.x, firstPoint.y,
 									secondPoint.x, secondPoint.y,
 									selectedColor, 0, &lastDrawingData, pixel_buffer);
+
+								if (currentTool == FILLED_RECTANGLE) {
+									alt_up_pixel_buffer_dma_draw_box(pixel_buffer, firstPoint.x, firstPoint.y, secondPoint.x, secondPoint.y, selectedColor, 0);
+								}
 								lastDrawingData.firstErase = 1;
 								lastLeft = 0;
 								//draw_icon(currentTool, 1, &lastDrawingData, pixel_buffer);
@@ -757,6 +762,28 @@ int main(void)
 								lastLeft = 0;
 							}
 							
+						}
+						else if (currentTool == FILLED_ELLIPSE) {
+							if (startUsingTool == 1) {
+								startUsingTool = 0;
+								secondPoint.x = currentCursor.x;
+								secondPoint.y = currentCursor.y;
+								printf("second point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
+								draw_empty_ellipse(firstPoint.x, firstPoint.y,
+									currentCursor.x - firstPoint.x, currentCursor.y - firstPoint.y,
+									selectedColor, pixel_buffer, 1, &lastDrawingData);
+								draw_empty_ellipse(firstPoint.x, firstPoint.y,
+									currentCursor.x - firstPoint.x, currentCursor.y - firstPoint.y,
+									selectedColor, pixel_buffer, 0, &lastDrawingData);
+								//	soft_emptyRect_draw(firstPoint.x, firstPoint.y,
+								//	secondPoint.x, secondPoint.y,
+								//	DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);
+								fill_to_edge_zone(firstPoint.x, firstPoint.y, selectedColor, pixel_buffer);
+								//draw_icon(currentTool, 1, &lastDrawingData, pixel_buffer);
+								lastDrawingData.firstErase = 1;
+								lastLeft = 0;
+							}
+
 						}
 						else if (currentTool == FILL) {
 							startUsingTool = 0;

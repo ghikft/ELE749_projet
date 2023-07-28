@@ -54,4 +54,8 @@ void draw_empty_ellipse(int x_center, int y_center, int x_radius, int y_radius,
 void flood_fill_zone(int startX, int startY, int fillColor, alt_up_pixel_buffer_dma_dev* pixel_buffer);
  
 char flood_fill_sub(int x, int y, int fillColor, int initialColor, alt_up_pixel_buffer_dma_dev* pixel_buffer);
+
+void fill_to_edge_zone(int startX, int startY, int fillColor, alt_up_pixel_buffer_dma_dev* pixel_buffer);
+
+char fill_to_edge_sub(int x, int y, int fillColor, alt_up_pixel_buffer_dma_dev* pixel_buffer);
 #endif  // SOFT_DRAW_H_
