@@ -1047,7 +1047,7 @@ int main(void)
 								//draw_icon(currentTool, 1, &lastDrawingData, pixel_buffer);
 							}
 						}
-						else if(currentTool = CPY_PASTE){
+						else if(currentTool == CPY_PASTE){
 							if (startUsingTool == 1) {
 								cpyRngSelected = 1;
 								lastCursorColor = selectedColor;
