@@ -265,7 +265,7 @@ int draw_empty_ellipse(int x_center, int y_center, int x_radius, int y_radius,
 	}
 	//Variable setup for lastDraw struct
 	lastDrawingData->numberOfPixelForLastDraw = 0;
-	if (x_radius>4 && y_radius>4){
+	if (x_radius>5 && y_radius>5){
 		//variables for drawing ellipse
 		int x,y;
 		int xChange, yChange;
@@ -586,6 +586,9 @@ int absoluteV(int x){
 
 int soft_copy_paste(int x1_copy, int y1_copy, int x2_copy, int y2_copy, int x1_paste, int y1_paste, 
 					lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer){
-	pixelValue lastPixelMemory[307200];
-	lastPixelMemory[0].color = 0;
+	
+	pixelValue copyMem[307200];
+
+
+
 }
