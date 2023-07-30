@@ -444,8 +444,12 @@ unsigned char get_pixel_color(int x, int y){
 }
 
 void cursorSave(Cursor* coordinate, cursorPixel* cursorMem) {
+	int x = coordinate->x;
+	int y = coordinate->y;
 	for (int i = 0; i < 5; i++) {
-
+		for (int j = 0; j < 5; j++) {
+			cursorMem[iter] = get_pixel_color(x + j, y + i);
+		}
 	}
 }
 
