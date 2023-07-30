@@ -8,6 +8,9 @@
 #define TRUE	1
 #define FALSE	0
 
+#define H_RES 640
+#define V_RES 480
+
 //extern alt_up_pixel_buffer_dma_dev *pixel_buffer;
 
 //alt_u8 lastDrawnOp = lastDrawingOpp;
@@ -241,7 +244,7 @@ void init_lastDrawingVar(lastDrawingVar* lastDrawingData) {
 	lastDrawingData->lastSecondPointY = 0;
 }
 
-void draw_empty_ellipse(int x_center, int y_center, int x_radius, int y_radius, 
+int draw_empty_ellipse(int x_center, int y_center, int x_radius, int y_radius, 
 						int color, alt_up_pixel_buffer_dma_dev* pixel_buffer, 
 						int erasePreviousWork, lastDrawingVar* lastDrawingData){
 	
@@ -262,110 +265,112 @@ void draw_empty_ellipse(int x_center, int y_center, int x_radius, int y_radius,
 	}
 	//Variable setup for lastDraw struct
 	lastDrawingData->numberOfPixelForLastDraw = 0;
-	if (x_radius>4){
-		if(y_radius>4){
-			//variables for drawing ellipse
-			int x,y;
-			int xChange, yChange;
-			int ellipseError;
-			int twoASquare, twoBSquare;
-			int stoppingX, stoppingY;
+	if (x_radius>4 && y_radius>4){
+		//variables for drawing ellipse
+		int x,y;
+		int xChange, yChange;
+		int ellipseError;
+		int twoASquare, twoBSquare;
+		int stoppingX, stoppingY;
 
-			//setup of work variables for first loop
-			twoASquare = 2*x_radius*x_radius;
-			twoBSquare = 2*y_radius*y_radius;
-			x = x_radius;
-			y = 0;
-			xChange = y_radius*y_radius*(1-2*x_radius);
-			yChange = x_radius*x_radius;
-			ellipseError = 0;
-			stoppingX = twoBSquare*x_radius;
-			stoppingY = 0;
+		//setup of work variables for first loop
+		twoASquare = 2*x_radius*x_radius;
+		twoBSquare = 2*y_radius*y_radius;
+		x = x_radius;
+		y = 0;
+		xChange = y_radius*y_radius*(1-2*x_radius);
+		yChange = x_radius*x_radius;
+		ellipseError = 0;
+		stoppingX = twoBSquare*x_radius;
+		stoppingY = 0;
 
-			
+		
 
-			//1st point set of the quadrant of the ellipse
-			while(stoppingX > stoppingY){
-				if ((x>0 && y>0)||erasePreviousWork==0){
-					lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].x = x_center+x;
-					lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].y = y_center+y;
-					lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].color = get_pixel_color2(x_center+x,y_center+y);
-					alt_up_pixel_buffer_dma_draw(pixel_buffer,color, x_center+x,y_center+y); //Q1
-					lastDrawingData->numberOfPixelForLastDraw ++;
-					lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].x = x_center-x;
-					lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].y = y_center+y;
-					lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].color = get_pixel_color2(x_center-x,y_center+y);
-					alt_up_pixel_buffer_dma_draw(pixel_buffer,color, x_center-x,y_center+y); //Q2
-					lastDrawingData->numberOfPixelForLastDraw ++;
-					lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].x = x_center-x;
-					lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].y = y_center-y;
-					lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].color = get_pixel_color2(x_center-x,y_center-y);
-					alt_up_pixel_buffer_dma_draw(pixel_buffer,color, x_center-x,y_center-y); //Q3
-					lastDrawingData->numberOfPixelForLastDraw ++;
-					lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].x = x_center+x;
-					lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].y = y_center-y;
-					lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].color = get_pixel_color2(x_center+x,y_center-y);
-					alt_up_pixel_buffer_dma_draw(pixel_buffer,color, x_center+x,y_center-y); //Q4
-					lastDrawingData->numberOfPixelForLastDraw ++;
-				}
-				y++;
-				stoppingY = stoppingY+twoASquare;
-				ellipseError = ellipseError+yChange;
-				yChange = yChange+twoASquare;
-				if((2*ellipseError+xChange)>0){
-					x--;
-					stoppingX = stoppingX-twoBSquare;
-					ellipseError = ellipseError+xChange;
-					xChange = xChange+twoBSquare;
-				}
+		//1st point set of the quadrant of the ellipse
+		while(stoppingX > stoppingY){
+			if ((x>0 && y>0)||erasePreviousWork==0){
+				lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].x = x_center+x;
+				lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].y = y_center+y;
+				lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].color = get_pixel_color2(x_center+x,y_center+y);
+				alt_up_pixel_buffer_dma_draw(pixel_buffer,color, x_center+x,y_center+y); //Q1
+				lastDrawingData->numberOfPixelForLastDraw ++;
+				lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].x = x_center-x;
+				lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].y = y_center+y;
+				lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].color = get_pixel_color2(x_center-x,y_center+y);
+				alt_up_pixel_buffer_dma_draw(pixel_buffer,color, x_center-x,y_center+y); //Q2
+				lastDrawingData->numberOfPixelForLastDraw ++;
+				lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].x = x_center-x;
+				lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].y = y_center-y;
+				lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].color = get_pixel_color2(x_center-x,y_center-y);
+				alt_up_pixel_buffer_dma_draw(pixel_buffer,color, x_center-x,y_center-y); //Q3
+				lastDrawingData->numberOfPixelForLastDraw ++;
+				lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].x = x_center+x;
+				lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].y = y_center-y;
+				lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].color = get_pixel_color2(x_center+x,y_center-y);
+				alt_up_pixel_buffer_dma_draw(pixel_buffer,color, x_center+x,y_center-y); //Q4
+				lastDrawingData->numberOfPixelForLastDraw ++;
 			}
-
-			//setup of work variable for second loop
-			x=0;
-			y=y_radius;
-			xChange = y_radius*y_radius;
-			yChange = x_radius*x_radius*(1-2*y_radius);
-			ellipseError = 0;
-			stoppingX=0;
-			stoppingY = twoASquare*y_radius;
-
-			//2nd point set of the quadrant of the ellipse
-			while (stoppingX < stoppingY) {
-				//printf("L2");
-				if ((x>0 && y>0)||erasePreviousWork==0){
-					lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].x = x_center+x;
-					lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].y = y_center+y;
-					lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].color = get_pixel_color2(x_center+x,y_center+y);
-					alt_up_pixel_buffer_dma_draw(pixel_buffer,color, x_center+x,y_center+y); //Q1
-					lastDrawingData->numberOfPixelForLastDraw ++;
-					lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].x = x_center-x;
-					lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].y = y_center+y;
-					lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].color = get_pixel_color2(x_center-x,y_center+y);
-					alt_up_pixel_buffer_dma_draw(pixel_buffer,color, x_center-x,y_center+y); //Q2
-					lastDrawingData->numberOfPixelForLastDraw ++;
-					lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].x = x_center-x;
-					lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].y = y_center-y;
-					lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].color = get_pixel_color2(x_center-x,y_center-y);
-					alt_up_pixel_buffer_dma_draw(pixel_buffer,color, x_center-x,y_center-y); //Q3
-					lastDrawingData->numberOfPixelForLastDraw ++;
-					lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].x = x_center+x;
-					lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].y = y_center-y;
-					lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].color = get_pixel_color2(x_center+x,y_center-y);
-					alt_up_pixel_buffer_dma_draw(pixel_buffer,color, x_center+x,y_center-y); //Q4
-					lastDrawingData->numberOfPixelForLastDraw ++;
-				}
-				x++;
-				stoppingX=stoppingX+twoBSquare;
-				ellipseError=ellipseError+xChange;
-				xChange =xChange+twoBSquare;
-				if((2*ellipseError+yChange)>0){
-					y--;
-					stoppingY=stoppingY-twoASquare;
-					ellipseError=ellipseError+yChange;
-					yChange= yChange+twoASquare;
-				}
+			y++;
+			stoppingY = stoppingY+twoASquare;
+			ellipseError = ellipseError+yChange;
+			yChange = yChange+twoASquare;
+			if((2*ellipseError+xChange)>0){
+				x--;
+				stoppingX = stoppingX-twoBSquare;
+				ellipseError = ellipseError+xChange;
+				xChange = xChange+twoBSquare;
 			}
 		}
+
+		//setup of work variable for second loop
+		x=0;
+		y=y_radius;
+		xChange = y_radius*y_radius;
+		yChange = x_radius*x_radius*(1-2*y_radius);
+		ellipseError = 0;
+		stoppingX=0;
+		stoppingY = twoASquare*y_radius;
+
+		//2nd point set of the quadrant of the ellipse
+		while (stoppingX < stoppingY) {
+			//printf("L2");
+			if ((x>0 && y>0)||erasePreviousWork==0){
+				lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].x = x_center+x;
+				lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].y = y_center+y;
+				lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].color = get_pixel_color2(x_center+x,y_center+y);
+				alt_up_pixel_buffer_dma_draw(pixel_buffer,color, x_center+x,y_center+y); //Q1
+				lastDrawingData->numberOfPixelForLastDraw ++;
+				lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].x = x_center-x;
+				lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].y = y_center+y;
+				lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].color = get_pixel_color2(x_center-x,y_center+y);
+				alt_up_pixel_buffer_dma_draw(pixel_buffer,color, x_center-x,y_center+y); //Q2
+				lastDrawingData->numberOfPixelForLastDraw ++;
+				lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].x = x_center-x;
+				lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].y = y_center-y;
+				lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].color = get_pixel_color2(x_center-x,y_center-y);
+				alt_up_pixel_buffer_dma_draw(pixel_buffer,color, x_center-x,y_center-y); //Q3
+				lastDrawingData->numberOfPixelForLastDraw ++;
+				lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].x = x_center+x;
+				lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].y = y_center-y;
+				lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].color = get_pixel_color2(x_center+x,y_center-y);
+				alt_up_pixel_buffer_dma_draw(pixel_buffer,color, x_center+x,y_center-y); //Q4
+				lastDrawingData->numberOfPixelForLastDraw ++;
+			}
+			x++;
+			stoppingX=stoppingX+twoBSquare;
+			ellipseError=ellipseError+xChange;
+			xChange =xChange+twoBSquare;
+			if((2*ellipseError+yChange)>0){
+				y--;
+				stoppingY=stoppingY-twoASquare;
+				ellipseError=ellipseError+yChange;
+				yChange= yChange+twoASquare;
+			}
+		}
+		return 1;
+	}
+	else{
+		return 0;
 	}
 }
 
@@ -577,4 +582,10 @@ int absoluteV(int x){
 	else{
 		return x;
 	}
+}
+
+int soft_copy_paste(int x1_copy, int y1_copy, int x2_copy, int y2_copy, int x1_paste, int y1_paste, 
+					lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer){
+	pixelValue lastPixelMemory[307200];
+	lastPixelMemory[0].color = 0;
 }
