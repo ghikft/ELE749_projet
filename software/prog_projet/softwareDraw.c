@@ -584,11 +584,41 @@ int absoluteV(int x){
 	}
 }
 
-int soft_copy_paste(int x1_copy, int y1_copy, int x2_copy, int y2_copy, int x1_paste, int y1_paste, 
+void soft_copy_paste(int x1_copy, int y1_copy, int x2_copy, int y2_copy, int x1_paste, int y1_paste, int cut, 
 					lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer){
 	
-	pixelValue copyMem[307200];
+	char copyMem[307200];
+	int nbPts=0;
+	nbPts = (x2_copy-x1_copy)*(y2_copy-y1_copy);
 
-
+	int x_cpy, y_cpy;
+	x_cpy = x1_copy;
+	y_cpy = y1_copy;
+	//copy pixel values to mem
+	for (int i=0;i<nbPts;i++){
+		if (x_cpy>x2_copy){
+			x_cpy = x1_copy;
+			y_cpy++;
+		}
+		copyMem[i] = get_pixel_color2(x_cpy,y_cpy);
+		//copyMem[i].x = x_cpy;
+		//copyMem[i].y = y_cpy;
+		x_cpy++;
+	}
+	//paste loop
+	int x_paste, y_paste;
+	x_paste = x1_paste;
+	y_paste = y1_paste;
+	for (int i=0;i<nbPts;i++){
+		if(x_paste>x_paste+(x2_copy-x1_copy)){
+			x_paste = x1_paste;
+			y_paste++;
+		}
+		if(x_paste < H_RES && y_paste < V_RES){
+			alt_up_pixel_buffer_dma_draw(pixel_buffer, copyMem[i],x_paste,y_paste);
+		}
+		
+		x_paste++;
+	}
 
 }

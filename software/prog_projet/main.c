@@ -797,6 +797,7 @@ int main(void)
 	mode programMode = DRAWING_MODE;
 	char startButtonPressed = 0; 
 	int selectedColor = BLACK;
+	int cpyRngSelected =0;
 
 	process_cursor_pos(&currentCursor, &x_pos, &y_pos);
 	//Stop timer and setup the interrupt, then start with 100ms period (default)
@@ -850,7 +851,6 @@ int main(void)
 	draw_color_palette(selectedColor, &lastDrawingData, pixel_buffer);
 	//draw_icon(currentTool, 1, &lastDrawingData, pixel_buffer);
 	while (1) {
-
 		// process screen drawing during vertical blank
 		if (!alt_up_pixel_buffer_dma_check_swap_buffers_status(pixel_buffer)) {
 			// process ps2 events during vertical blank
@@ -928,6 +928,25 @@ int main(void)
 							soft_emptyRect_draw(firstPoint.x, firstPoint.y,
 								currentCursor.x, currentCursor.y,
 								selectedColor, 1, &lastDrawingData, pixel_buffer);
+						}
+					}
+					else if(currentTool == CPY_PASTE){
+						if (startUsingTool == 0 && cpyRngSelected == 0) {
+							alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
+							printf("first point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
+							firstPoint.x = currentCursor.x;
+							firstPoint.y = currentCursor.y;
+							startUsingTool = 1;
+							lastLeft = 1;
+						}
+						else {
+							soft_emptyRect_draw(firstPoint.x, firstPoint.y,
+								currentCursor.x, currentCursor.y,
+								selectedColor, 1, &lastDrawingData, pixel_buffer);
+						}
+						if (cpyRngSelected){
+							cpyRngSelected = 0;
+							soft_copy_paste(firstPoint.x,firstPoint.y,secondPoint.x,secondPoint.y,currentCursor.x,currentCursor.y,0,&lastDrawingData, pixel_buffer);
 						}
 					}
 					else if (currentTool == EMPTY_ELLIPSE|| currentTool == FILLED_ELLIPSE) {		//elipse
@@ -1028,6 +1047,22 @@ int main(void)
 								//draw_icon(currentTool, 1, &lastDrawingData, pixel_buffer);
 							}
 						}
+						else if(currentTool = CPY_PASTE){
+							if (startUsingTool == 1) {
+								cpyRngSelected = 1;
+								lastCursorColor = selectedColor;
+								startUsingTool = 0;
+								secondPoint.x = currentCursor.x;
+								secondPoint.y = currentCursor.y;
+								printf("second point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
+								soft_emptyRect_draw(0, 0, 0, 0,
+									selectedColor, 1, &lastDrawingData, pixel_buffer);
+								
+								lastDrawingData.firstErase = 1;
+								lastLeft = 0;
+								//draw_icon(currentTool, 1, &lastDrawingData, pixel_buffer);
+							}
+						}
 						else if (currentTool == EMPTY_ELLIPSE) {
 							//Ellipse
 							if (startUsingTool == 1) {
@@ -1075,15 +1110,13 @@ int main(void)
 								draw_empty_ellipse(firstPoint.x, firstPoint.y,
 									currentCursor.x - firstPoint.x, currentCursor.y - firstPoint.y,
 									selectedColor, pixel_buffer, 1, &lastDrawingData);
-								//fill the elipse if the elipse is drawn otherwise do nothing
-								if (draw_empty_ellipse(firstPoint.x, firstPoint.y,
+								draw_empty_ellipse(firstPoint.x, firstPoint.y,
 									currentCursor.x - firstPoint.x, currentCursor.y - firstPoint.y,
-									selectedColor, pixel_buffer, 0, &lastDrawingData)) {
-									//	soft_emptyRect_draw(firstPoint.x, firstPoint.y,
-									//	secondPoint.x, secondPoint.y,
-									//	DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);
-									fill_to_edge_zone(firstPoint.x, firstPoint.y, selectedColor, pixel_buffer);
-								}
+									selectedColor, pixel_buffer, 0, &lastDrawingData);
+								//	soft_emptyRect_draw(firstPoint.x, firstPoint.y,
+								//	secondPoint.x, secondPoint.y,
+								//	DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);
+								fill_to_edge_zone(firstPoint.x, firstPoint.y, selectedColor, pixel_buffer);
 								//draw_icon(currentTool, 1, &lastDrawingData, pixel_buffer);
 								lastDrawingData.firstErase = 1;
 								lastLeft = 0;
