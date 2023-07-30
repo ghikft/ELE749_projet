@@ -45,7 +45,7 @@ void soft_emptyRect_draw(int x_left, int y_top,
     int x_right, int y_bottom,
     int color);*/
 
-void draw_empty_ellipse(int x_center, int y_center, int x_radius, int y_radius, 
+int draw_empty_ellipse(int x_center, int y_center, int x_radius, int y_radius, 
 						int color, alt_up_pixel_buffer_dma_dev* pixel_buffer, 
 						int erasePreviousWork, lastDrawingVar* lastDrawingData);
 
@@ -61,4 +61,7 @@ char fill_to_edge_sub(int x, int y, int fillColor, alt_up_pixel_buffer_dma_dev* 
 void soft_draw_line(int x1, int y1,
     				int x2, int y2,
     				int color, int erasePreviousWork, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer);
+
+int soft_copy_paste(int x1_copy, int y1_copy, int x2_copy, int y2_copy, int x1_paste, int y1_paste, 
+					lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer);
 #endif  // SOFT_DRAW_H_
