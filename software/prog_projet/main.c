@@ -957,6 +957,7 @@ int main(void)
 						}
 					}
 					else if(currentTool == CPY_PASTE){
+						lastCursorColor = get_pixel_color(currentCursor.x,currentCursor.y);
 						if (startUsingTool == 0 && cpyRngSelected == 0) {
 							alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
 							printf("first point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
@@ -1077,7 +1078,7 @@ int main(void)
 						else if(currentTool == CPY_PASTE){
 							if (startUsingTool == 1) {
 								cpyRngSelected = 1;
-								lastCursorColor = selectedColor;
+								//lastCursorColor = selectedColor;
 								startUsingTool = 0;
 								secondPoint.x = currentCursor.x;
 								secondPoint.y = currentCursor.y;
