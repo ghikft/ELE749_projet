@@ -957,7 +957,6 @@ int main(void)
 						}
 					}
 					else if(currentTool == CPY_PASTE){
-						lastCursorColor = get_pixel_color(currentCursor.x,currentCursor.y);
 						if (startUsingTool == 0 && cpyRngSelected == 0) {
 							alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
 							printf("first point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
@@ -965,12 +964,16 @@ int main(void)
 							firstPoint.y = currentCursor.y;
 							startUsingTool = 1;
 							lastLeft = 1;
+							soft_emptyRect_draw(firstPoint.x, firstPoint.y,
+								currentCursor.x, currentCursor.y,
+								selectedColor, 1, &lastDrawingData, pixel_buffer);
 						}
 						else if (cpyRngSelected){
 							cpyRngSelected = 0;
 							soft_copy_paste(firstPoint.x,firstPoint.y,secondPoint.x,secondPoint.y,currentCursor.x,currentCursor.y,0, pixel_buffer);
 						}
 						else {
+							lastCursorColor = get_pixel_color(currentCursor.x,currentCursor.y);
 							alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
 							soft_emptyRect_draw(firstPoint.x, firstPoint.y,
 								currentCursor.x, currentCursor.y,
