@@ -1078,7 +1078,7 @@ int main(void)
 								//fill the elipse if the elipse is drawn otherwise do nothing
 								if (draw_empty_ellipse(firstPoint.x, firstPoint.y,
 									currentCursor.x - firstPoint.x, currentCursor.y - firstPoint.y,
-									selectedColor, pixel_buffer, 0, &lastDrawingData);) {
+									selectedColor, pixel_buffer, 0, &lastDrawingData)) {
 									//	soft_emptyRect_draw(firstPoint.x, firstPoint.y,
 									//	secondPoint.x, secondPoint.y,
 									//	DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);
