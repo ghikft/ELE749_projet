@@ -524,7 +524,7 @@ void draw_icon(tool icon, char selected,
 		//draw selection perimiter
 		draw_selection_Frame(31, 31, 58, 58, selected, lastDrawingData, pixel_buffer);
 		//draw icon
-		draw_empty_ellipse(45, 45, 8, 4, BLACK, pixel_buffer, NOT_ERASE_PREVIOUS_WORK, lastDrawingData);
+		draw_empty_ellipse(45, 45, 8, 5, BLACK, pixel_buffer, NOT_ERASE_PREVIOUS_WORK, lastDrawingData);
 		fill_to_edge_zone(45, 45, BLACK, pixel_buffer);
 		break;
 	case LINE:
@@ -1112,6 +1112,12 @@ int main(void)
 									selectedColor, pixel_buffer, 1, &lastDrawingData);
 								draw_empty_ellipse(firstPoint.x, firstPoint.y,
 									currentCursor.x - firstPoint.x, currentCursor.y - firstPoint.y,
+									selectedColor, pixel_buffer, 0, &lastDrawingData);
+								draw_empty_ellipse(firstPoint.x, firstPoint.y,
+									currentCursor.x - firstPoint.x-1, currentCursor.y - firstPoint.y-1,
+									selectedColor, pixel_buffer, 0, &lastDrawingData);
+								draw_empty_ellipse(firstPoint.x, firstPoint.y,
+									currentCursor.x - firstPoint.x-2, currentCursor.y - firstPoint.y-2,
 									selectedColor, pixel_buffer, 0, &lastDrawingData);
 								//	soft_emptyRect_draw(firstPoint.x, firstPoint.y,
 								//	secondPoint.x, secondPoint.y,

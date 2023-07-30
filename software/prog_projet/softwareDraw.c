@@ -265,7 +265,7 @@ int draw_empty_ellipse(int x_center, int y_center, int x_radius, int y_radius,
 	}
 	//Variable setup for lastDraw struct
 	lastDrawingData->numberOfPixelForLastDraw = 0;
-	if (x_radius>5 && y_radius>5){
+	if (x_radius>4 && y_radius>4){
 		//variables for drawing ellipse
 		int x,y;
 		int xChange, yChange;
