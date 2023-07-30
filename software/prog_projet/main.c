@@ -284,6 +284,8 @@ typedef struct cursorPixel_S {
 	alt_u8 color;
 }cursorPixel;
 
+//cursorPixel cursorMem;
+
 typedef struct Cursor{
 	int x;
 	int y;
@@ -441,8 +443,10 @@ unsigned char get_pixel_color(int x, int y){
 	return color;
 }
 
-void cursorSave(Cursor* coordinate, cursorSave* cursorMem) {
-	
+void cursorSave(Cursor* coordinate, cursorPixel* cursorMem) {
+	for (int i = 0; i < 5; i++) {
+
+	}
 }
 
 void draw_color_palette(int selectedColor, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
