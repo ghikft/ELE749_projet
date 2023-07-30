@@ -278,6 +278,11 @@ typedef enum tool {
 	COLOR_SELECTION,
 	CLEAR
 }tool;
+typedef struct cursorPixel_S {
+	int x;
+	int y;
+	alt_u8 color;
+}cursorPixel;
 
 typedef struct Cursor{
 	int x;
@@ -434,6 +439,10 @@ unsigned char get_pixel_color(int x, int y){
 	pixel = (unsigned char *)ONCHIP_MEM_BASE +(y*640)+x;
 	color = *pixel;
 	return color;
+}
+
+void cursorSave(Cursor* coordinate, cursorSave* cursorMem) {
+	
 }
 
 void draw_color_palette(int selectedColor, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
