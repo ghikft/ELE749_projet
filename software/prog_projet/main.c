@@ -977,14 +977,14 @@ int main(void)
 							startUsingTool = 1;
 							lastLeft = 1;
 						}
+						else if (cpyRngSelected){
+							cpyRngSelected = 0;
+							soft_copy_paste(firstPoint.x,firstPoint.y,secondPoint.x,secondPoint.y,currentCursor.x,currentCursor.y,0, pixel_buffer);
+						}
 						else {
 							soft_emptyRect_draw(firstPoint.x, firstPoint.y,
 								currentCursor.x, currentCursor.y,
 								selectedColor, 1, &lastDrawingData, pixel_buffer);
-						}
-						if (cpyRngSelected){
-							cpyRngSelected = 0;
-							soft_copy_paste(firstPoint.x,firstPoint.y,secondPoint.x,secondPoint.y,currentCursor.x,currentCursor.y,0, pixel_buffer);
 						}
 					}
 					else if (currentTool == EMPTY_ELLIPSE|| currentTool == FILLED_ELLIPSE) {		//elipse
