@@ -584,11 +584,23 @@ int absoluteV(int x){
 	}
 }
 
-void soft_copy_paste(int x1_copy, int y1_copy, int x2_copy, int y2_copy, int x1_paste, int y1_paste, int cut, 
-					lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer){
+void soft_copy_paste(int x1_copy, int y1_copy, int x2_copy, int y2_copy, int x1_paste, int y1_paste, int cut, alt_up_pixel_buffer_dma_dev* pixel_buffer){
 	
 	char copyMem[307200];
 	int nbPts=0;
+
+	//flip x and y points if out of order
+	if (x1_copy>x2_copy){
+		int tempX = x2_copy;
+		x2_copy = x1_copy;
+		x1_copy = tempX;
+	}
+	if (y1_copy>y2_copy){
+		int tempY = y2_copy;
+		y2_copy = y1_copy;
+		y1_copy = tempY;
+	}
+
 	nbPts = (x2_copy-1-x1_copy+1)*(y2_copy-1-y1_copy+1);
 
 	int x_cpy, y_cpy;
