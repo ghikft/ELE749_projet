@@ -900,21 +900,6 @@ int main(void)
 			if (startUsingTool == 1) {
 				process_cursor_pos(&currentCursor, &x_pos, &y_pos);				
 			}
-			/* Manage cursor when not using tool*/
-			/*if (startUsingTool == 0) {
-				//erase old cursor
-				alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
-				
-				//Apply scaling and verify cursor is within the boundarys of the screen
-				process_cursor_pos(&currentCursor, &x_pos, &y_pos);
-				//Save the last cursor pixel color for next turn in the loop
-				lastCursorColor = get_pixel_color(currentCursor.x, currentCursor.y);
-				//Draw cursor
-				alt_up_pixel_buffer_dma_draw(pixel_buffer, CURSOR_COLOR, currentCursor.x, currentCursor.y);
-			}
-			else {//only get cursor position when using tool
-				process_cursor_pos(&currentCursor, &x_pos, &y_pos);
-			}*/
 
 			//need to press the start button before being able to do anything else
 			if (startButtonPressed == 0) {
@@ -970,7 +955,7 @@ int main(void)
 					}
 					else if(currentTool == CPY_PASTE){
 						if (startUsingTool == 0 && cpyRngSelected == 0) {
-							alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
+							//alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
 							printf("first point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
 							firstPoint.x = currentCursor.x;
 							firstPoint.y = currentCursor.y;
