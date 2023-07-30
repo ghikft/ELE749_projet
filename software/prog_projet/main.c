@@ -1034,6 +1034,7 @@ int main(void)
 								startUsingTool = 0;
 								secondPoint.x = currentCursor.x;
 								secondPoint.y = currentCursor.y;
+								lastCursorColor = get_pixel_color(secondPoint.x,secondPoint.y);
 								printf("second point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
 								draw_empty_ellipse(firstPoint.x, firstPoint.y,
 									currentCursor.x - firstPoint.x, currentCursor.y - firstPoint.y,
@@ -1041,6 +1042,7 @@ int main(void)
 								draw_empty_ellipse(firstPoint.x, firstPoint.y,
 									currentCursor.x - firstPoint.x, currentCursor.y - firstPoint.y,
 									selectedColor, pixel_buffer, 0, &lastDrawingData);
+								
 								//	soft_emptyRect_draw(firstPoint.x, firstPoint.y,
 								//	secondPoint.x, secondPoint.y,
 								//	DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);
@@ -1057,6 +1059,7 @@ int main(void)
 								startUsingTool = 0;
 								secondPoint.x = currentCursor.x;
 								secondPoint.y = currentCursor.y;
+								lastCursorColor = get_pixel_color(secondPoint.x,secondPoint.y);
 								soft_draw_line(firstPoint.x,firstPoint.y,secondPoint.x,secondPoint.y,selectedColor,1,&lastDrawingData,pixel_buffer);
 								lastDrawingData.firstErase = 1;
 								lastLeft = 0;
@@ -1067,6 +1070,7 @@ int main(void)
 								startUsingTool = 0;
 								secondPoint.x = currentCursor.x;
 								secondPoint.y = currentCursor.y;
+								lastCursorColor = get_pixel_color(secondPoint.x,secondPoint.y);
 								printf("second point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
 								draw_empty_ellipse(firstPoint.x, firstPoint.y,
 									currentCursor.x - firstPoint.x, currentCursor.y - firstPoint.y,
