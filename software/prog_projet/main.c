@@ -982,7 +982,7 @@ int main(void)
 						}
 						if (cpyRngSelected){
 							cpyRngSelected = 0;
-							soft_copy_paste(firstPoint.x,firstPoint.y,secondPoint.x,secondPoint.y,currentCursor.x,currentCursor.y,0,&lastDrawingData, pixel_buffer);
+							soft_copy_paste(firstPoint.x,firstPoint.y,secondPoint.x,secondPoint.y,currentCursor.x,currentCursor.y,0, pixel_buffer);
 						}
 					}
 					else if (currentTool == EMPTY_ELLIPSE|| currentTool == FILLED_ELLIPSE) {		//elipse
