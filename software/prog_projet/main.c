@@ -518,7 +518,7 @@ void draw_icon(tool icon, char selected,
 		//draw selection perimiter
 		draw_selection_Frame(2, 31, 29, 58, selected, lastDrawingData, pixel_buffer);
 		//draw icon
-		draw_empty_ellipse(16, 45, 8, 4, BLACK, pixel_buffer, NOT_ERASE_PREVIOUS_WORK, lastDrawingData);		
+		draw_empty_ellipse(16, 45, 8, 5, BLACK, pixel_buffer, NOT_ERASE_PREVIOUS_WORK, lastDrawingData);		
 		break;
 	case FILLED_ELLIPSE:
 		//draw selection perimiter
@@ -1075,13 +1075,15 @@ int main(void)
 								draw_empty_ellipse(firstPoint.x, firstPoint.y,
 									currentCursor.x - firstPoint.x, currentCursor.y - firstPoint.y,
 									selectedColor, pixel_buffer, 1, &lastDrawingData);
-								draw_empty_ellipse(firstPoint.x, firstPoint.y,
+								//fill the elipse if the elipse is drawn otherwise do nothing
+								if (draw_empty_ellipse(firstPoint.x, firstPoint.y,
 									currentCursor.x - firstPoint.x, currentCursor.y - firstPoint.y,
-									selectedColor, pixel_buffer, 0, &lastDrawingData);
-								//	soft_emptyRect_draw(firstPoint.x, firstPoint.y,
-								//	secondPoint.x, secondPoint.y,
-								//	DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);
-								fill_to_edge_zone(firstPoint.x, firstPoint.y, selectedColor, pixel_buffer);
+									selectedColor, pixel_buffer, 0, &lastDrawingData)) {
+									//	soft_emptyRect_draw(firstPoint.x, firstPoint.y,
+									//	secondPoint.x, secondPoint.y,
+									//	DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);
+									fill_to_edge_zone(firstPoint.x, firstPoint.y, selectedColor, pixel_buffer);
+								}
 								//draw_icon(currentTool, 1, &lastDrawingData, pixel_buffer);
 								lastDrawingData.firstErase = 1;
 								lastLeft = 0;
