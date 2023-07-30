@@ -244,13 +244,15 @@ void init_lastDrawingVar(lastDrawingVar* lastDrawingData) {
 void draw_empty_ellipse(int x_center, int y_center, int x_radius, int y_radius, 
 						int color, alt_up_pixel_buffer_dma_dev* pixel_buffer, 
 						int erasePreviousWork, lastDrawingVar* lastDrawingData){
-
+	
+	//flip the radiuses if they are negative
 	if(x_radius<0){
 		x_radius = x_radius*-1;
 	}
 	if(y_radius<0){
 		y_radius=y_radius*-1;
 	}
+
 	//Erase previous ellipse here TODO
 	if(erasePreviousWork){
 		for (int j=0; j<lastDrawingData->numberOfPixelForLastDraw;j++){
@@ -260,8 +262,8 @@ void draw_empty_ellipse(int x_center, int y_center, int x_radius, int y_radius,
 	}
 	//Variable setup for lastDraw struct
 	lastDrawingData->numberOfPixelForLastDraw = 0;
-	if (x_radius>0){
-		if(y_radius>0){
+	if (x_radius>4){
+		if(y_radius>4){
 			//variables for drawing ellipse
 			int x,y;
 			int xChange, yChange;
@@ -483,6 +485,7 @@ void soft_draw_line(int x1, int y1,
 	
 	lastDrawingData->numberOfPixelForLastDraw=0;
 
+	//logic to flip the 2 points and to call the correct function
 	if (absoluteV(y2-y1) < absoluteV(x2-x1)){
 		if(x1>x2){
 			soft_draw_line_low(x2,y2,x1,y1,color,erasePreviousWork,lastDrawingData,pixel_buffer);
@@ -518,6 +521,7 @@ void soft_draw_line_low(int x1, int y1,
 	int x,y;
 	y=y1;
 	for(x=x1;x<x2;x++){
+		//save pixel data to erase later
 		lastDrawingData->lastEllipse[lastDrawingData->numberOfPixelForLastDraw].x = x;
 		lastDrawingData->lastEllipse[lastDrawingData->numberOfPixelForLastDraw].y = y;
 		lastDrawingData->lastEllipse[lastDrawingData->numberOfPixelForLastDraw].color = get_pixel_color2(x,y);
@@ -549,6 +553,7 @@ void soft_draw_line_high(int x1, int y1,
 	int x,y;
 	x=x1;
 	for(y=y1;y<y2;y++){
+		//save pixel data to erase later
 		lastDrawingData->lastEllipse[lastDrawingData->numberOfPixelForLastDraw].x = x;
 		lastDrawingData->lastEllipse[lastDrawingData->numberOfPixelForLastDraw].y = y;
 		lastDrawingData->lastEllipse[lastDrawingData->numberOfPixelForLastDraw].color = get_pixel_color2(x,y);
