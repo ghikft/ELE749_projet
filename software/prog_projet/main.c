@@ -255,6 +255,11 @@ int clearIconBmp[729] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 							0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 							0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 							0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
+int cursorSprite[25] = {	1,1,1,1,1,
+							1,1,0,0,0,
+							1,0,1,0,0,
+							1,0,0,1,0,
+							1,0,0,0,1 };
 
 typedef enum mode {
 	DRAWING_MODE,
@@ -446,9 +451,23 @@ unsigned char get_pixel_color(int x, int y){
 void cursorSave(Cursor* coordinate, cursorPixel* cursorMem) {
 	int x = coordinate->x;
 	int y = coordinate->y;
+	int iter = 0;
 	for (int i = 0; i < 5; i++) {
 		for (int j = 0; j < 5; j++) {
-			cursorMem[iter] = get_pixel_color(x + j, y + i);
+			cursorMem[iter].color = get_pixel_color(x + j, y + i);
+			iter++;
+		}
+	}
+}
+void cursorDrawSprite(Cursor* coordinate, cursorPixel* cursorMem, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+	int x = coordinate->x;
+	int y = coordinate->y;
+	int iter = 0;
+	for (int i = 0; i < 5; i++) {
+		for (int j = 0; j < 5; j++) {
+			if (cursorSprite[iter] == 1) {
+				//alt_up_pixel_buffer_dma_draw(pixel_buffer, BLACK, start_x + i, start_y + j);
+			}
 		}
 	}
 }
