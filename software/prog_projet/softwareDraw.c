@@ -608,7 +608,7 @@ void soft_copy_paste(int x1_copy, int y1_copy, int x2_copy, int y2_copy, int x1_
 	x_paste = x1_paste;
 	y_paste = y1_paste;
 	for (int i=0;i<nbPts;i++){
-		if(x_paste>x1_paste+(x2_copy-x1_copy)){
+		if(x_paste>x1_paste+((x2_copy-1)-(x1_copy+1))){
 			x_paste = x1_paste;
 			y_paste++;
 		}
