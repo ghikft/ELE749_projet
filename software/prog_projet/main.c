@@ -836,6 +836,7 @@ int main(void)
 	char startButtonPressed = 0; 
 	int selectedColor = BLACK;
 	int cpyRngSelected =0;
+	int drawCursor = 1;
 
 	process_cursor_pos(&currentCursor, &x_pos, &y_pos);
 	//Stop timer and setup the interrupt, then start with 100ms period (default)
@@ -955,7 +956,7 @@ int main(void)
 					}
 					else if(currentTool == CPY_PASTE){
 						if (startUsingTool == 0 && cpyRngSelected == 0) {
-							//alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
+							alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
 							printf("first point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
 							firstPoint.x = currentCursor.x;
 							firstPoint.y = currentCursor.y;
@@ -967,6 +968,7 @@ int main(void)
 							soft_copy_paste(firstPoint.x,firstPoint.y,secondPoint.x,secondPoint.y,currentCursor.x,currentCursor.y,0, pixel_buffer);
 						}
 						else {
+							alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
 							soft_emptyRect_draw(firstPoint.x, firstPoint.y,
 								currentCursor.x, currentCursor.y,
 								selectedColor, 1, &lastDrawingData, pixel_buffer);
