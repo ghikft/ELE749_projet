@@ -463,10 +463,12 @@ void cursorDrawSprite(Cursor* coordinate, cursorPixel* cursorMem, alt_up_pixel_b
 	int x = coordinate->x;
 	int y = coordinate->y;
 	int iter = 0;
+
 	for (int i = 0; i < 5; i++) {
 		for (int j = 0; j < 5; j++) {
 			if (cursorSprite[iter] == 1) {
-				//alt_up_pixel_buffer_dma_draw(pixel_buffer, BLACK, start_x + i, start_y + j);
+				
+				alt_up_pixel_buffer_dma_draw(pixel_buffer, BLACK, x + j, y + i);
 			}
 		}
 	}
