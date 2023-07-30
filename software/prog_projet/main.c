@@ -1085,6 +1085,7 @@ int main(void)
 								startUsingTool = 0;
 								secondPoint.x = currentCursor.x;
 								secondPoint.y = currentCursor.y;
+								lastCursorColor = get_pixel_color(secondPoint.x,secondPoint.y);
 								printf("second point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
 								soft_emptyRect_draw(0, 0, 0, 0,
 									selectedColor, 1, &lastDrawingData, pixel_buffer);
