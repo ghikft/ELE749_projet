@@ -173,6 +173,18 @@ int draw_empty_ellipse(int x_center, int y_center, int x_radius, int y_radius,
 		y_radius=y_radius*-1;
 	}
 
+	int ratioOK = 1;
+	if (x_radius>y_radius){
+		if (x_radius/y_radius >3){
+			ratioOK = 0;
+		}
+	}
+	else{
+		if(y_radius/x_radius >3){
+			ratioOK = 0;
+		}
+	}
+
 	//Erase previous ellipse here TODO
 	if(erasePreviousWork){
 		for (int j=0; j<lastDrawingData->numberOfPixelForLastDraw;j++){
@@ -182,7 +194,7 @@ int draw_empty_ellipse(int x_center, int y_center, int x_radius, int y_radius,
 	}
 	//Variable setup for lastDraw struct
 	lastDrawingData->numberOfPixelForLastDraw = 0;
-	if (x_radius>4 && y_radius>4){
+	if (x_radius>0 && y_radius>0 && ratioOK){
 		//variables for drawing ellipse
 		int x,y;
 		int xChange, yChange;
