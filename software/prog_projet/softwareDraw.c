@@ -519,6 +519,7 @@ void soft_copy_paste(int x1_copy, int y1_copy, int x2_copy, int y2_copy, int x1_
 	}
 
 	nbPts = ((x2_copy-x1_copy-2)*(y2_copy-y1_copy-2));
+	printf("------------------SETUP-----------------\n\r");
 	printf("x1: %d, y1: %d\n\r",x1_copy,y1_copy);
 	printf("x2: %d, y2: %d\n\r",x2_copy,y2_copy);
 	printf("nbpts: %d\n\r",nbPts);
@@ -535,15 +536,15 @@ void soft_copy_paste(int x1_copy, int y1_copy, int x2_copy, int y2_copy, int x1_
 		else{
 			x_cpy++;
 		}
-		usleep(100);
 	}
-	usleep(1000);
 	//erase values if cut paste
 	x_cpy = x1_copy+1;
 	y_cpy = y1_copy+1;
 	if (cut){
+		printf("------------------CUTTING-----------------\n\r");
 		for (int i=0;i<nbPts;i++){
 			alt_up_pixel_buffer_dma_draw(pixel_buffer, color,x_cpy,y_cpy);
+			printf("x: %d, y: %d\n\r", x_cpy,y_cpy);
 			if (x_cpy == (x2_copy-1)){
 				x_cpy = x1_copy+1;
 				y_cpy++;
@@ -551,10 +552,9 @@ void soft_copy_paste(int x1_copy, int y1_copy, int x2_copy, int y2_copy, int x1_
 			else{
 				x_cpy++;
 			}
-			usleep(100);
 		}
+		printf("------------------END CUTTING-----------------\n\r");
 	}
-	usleep(1000);
 
 	//paste loop
 	int x_paste, y_paste;
