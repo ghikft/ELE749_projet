@@ -964,6 +964,7 @@ int main(void)
 							firstPoint.y = currentCursor.y;
 							startUsingTool = 1;
 							lastLeft = 1;
+							drawCursor = 0;
 							soft_emptyRect_draw(firstPoint.x, firstPoint.y,
 								currentCursor.x, currentCursor.y,
 								selectedColor, 1, &lastDrawingData, pixel_buffer);
@@ -1093,6 +1094,7 @@ int main(void)
 								//alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
 								lastDrawingData.firstErase = 1;
 								lastLeft = 0;
+								drawCursor = 1;
 								//draw_icon(currentTool, 1, &lastDrawingData, pixel_buffer);
 							}
 						}
@@ -1188,9 +1190,10 @@ int main(void)
 				}
 			}
 			
-
-			//draw the cursor on top of everithing (last drawing operation)
-			cursor_draw(startUsingTool, &lastCursorColor, &currentCursor, &x_pos, &y_pos, pixel_buffer);
+			if(drawCursor){
+				//draw the cursor on top of everithing (last drawing operation)
+				cursor_draw(startUsingTool, &lastCursorColor, &currentCursor, &x_pos, &y_pos, pixel_buffer);
+			}
 			// vertical refresh
 			alt_up_pixel_buffer_dma_swap_buffers(pixel_buffer);
 		}
