@@ -1187,12 +1187,15 @@ int main(void)
 								cpyRngSelected = 0;
 								if (currentTool == CUT_PASTE){
 									soft_copy_paste(firstPoint.x,firstPoint.y,secondPoint.x,secondPoint.y,currentCursor.x,currentCursor.y,1,selectedColor, pixel_buffer);
+									soft_empty_rectangle_draw(0, 0, 0, 0,1, 1, &lastDrawingData, pixel_buffer);
 								}
 								else{
 									soft_copy_paste(firstPoint.x,firstPoint.y,secondPoint.x,secondPoint.y,currentCursor.x,currentCursor.y,0,0, pixel_buffer);
+									soft_empty_rectangle_draw(0, 0, 0, 0,1, 1, &lastDrawingData, pixel_buffer);
 								}
 								while(left_btn){
 									ps2_process(&left_btn, &right_btn, &x_mov, &y_mov);
+									process_cursor_pos(&currentCursor, &x_pos, &y_pos);	
 								}
 								startUsingTool = 0;
 							}
