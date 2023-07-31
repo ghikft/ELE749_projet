@@ -471,7 +471,22 @@ unsigned char get_pixel_color(int x, int y){
 	return color;
 }
 
-void cursorSave(Cursor* coordinate, alt_u8 *cursorMem) {
+void cursor_save(Cursor* coordinate, alt_u8 *cursorMem) {
+	/**************************************************************************
+	 * cursor_save
+	 **************************************************************************
+	 * Parametres
+	 * coordinate	: structure that contain the x and y coordinate of the point of the cursor
+	 * cursorMem	: Array where to save the pixel value 
+	 *
+	 * Return
+	 * None
+	 *
+	 * Side effects
+	 * save pixel value in a 5x5 square starting at the x and y coordiante from the
+	 * parameter coordinate
+	 *
+	 *************************************************************************/
 	int x = coordinate->x;
 	int y = coordinate->y;
 	int iter = 0;
@@ -483,29 +498,66 @@ void cursorSave(Cursor* coordinate, alt_u8 *cursorMem) {
 	}
 }
 
-void cursorErase(Cursor* coordinate, alt_u8 *cursorMem, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+void cursor_erase(Cursor* coordinate, alt_u8 *cursorMem, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+	/**************************************************************************
+	 * cursor_erase
+	 **************************************************************************
+	 * Parametres
+	 * coordinate	: structure that contain the x and y coordinate of the point of the cursor
+	 * cursorMem	: Array where to save the pixel value
+	 * pixel_buffer : is the pointer used to write in the pixel_buffer of the video pipeline
+	 *
+	 * Return
+	 * None
+	 *
+	 * Side effects
+	 * Draw the content of the cursorMem starting at the x and y coordiante from the
+	 * parameter coordinate
+	 *
+	 *************************************************************************/
 	int x = coordinate->x;
 	int y = coordinate->y;
 	int iter = 0;
 	for (int i = 0; i < 5; i++) {
-		for (int j = 0; j < 5; j++) {
-			//cursorMem[iter].color = get_pixel_color(x + j, y + i);			
+		for (int j = 0; j < 5; j++) {			
 			alt_up_pixel_buffer_dma_draw(pixel_buffer, cursorMem[iter], x + j, y + i);
 			iter++;
 		}
 	}
 }
 
-void cursorDrawSprite(Cursor* coordinate, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+void cursor_draw_sprite(Cursor* coordinate, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+	/**************************************************************************
+	 * cursor_draw_sprite
+	 **************************************************************************
+	 * Parametres
+	 * coordinate	: structure that contain the x and y coordinate of the point of the cursor
+	 * pixel_buffer : is the pointer used to write in the pixel_buffer of the video pipeline
+	 *
+	 * Return
+	 * None
+	 *
+	 * Side effects
+	 * Draw the cursor 5x5 cursor using the globalVariable cursorSprite starting at 
+	 * the x and y coordiante from the parameter coordinate
+	 * 
+	 * Each picel of the cursor is black or white depending on the background color
+	 * to enhence the visibility
+	 *
+	 *************************************************************************/
 	int x = coordinate->x;
 	int y = coordinate->y;
 	int iter = 0;
-	int color = get_pixel_color(x, y);
-	if (color > 128)color = 0;
-	else color = 255;
+	int color;
 	for (int i = 0; i < 5; i++) {
 		for (int j = 0; j < 5; j++) {
+			//test the sprite mask
 			if (cursorSprite[iter] == 1) {
+				//check back ground color
+				color = get_pixel_color(x+j, y+i);
+				if (color > 128)color = 0;
+				else color = 255;
+				//draw the pixel
 				alt_up_pixel_buffer_dma_draw(pixel_buffer, color, x + j, y + i);
 				iter++;
 			}
@@ -819,7 +871,7 @@ void process_cursor_pos(Cursor *currentCursor, int *x_pos, int *y_pos ) {
 	}
 }
 
-void start_button(tool currentTool, char* startButtonPressed,unsigned char* left_btn, unsigned char* lastLeft, int* lastCursorColor,
+void start_button(tool currentTool, char* startButtonPressed,unsigned char* left_btn, unsigned char* lastLeft, /*int* lastCursorColor*/alt_u8 *cursorMem,
 	Cursor* currentCursor, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
 	
 	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 290, 220, 350, 260, 16, 0);
@@ -841,7 +893,8 @@ void start_button(tool currentTool, char* startButtonPressed,unsigned char* left
 			alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 62, 0, 640, 480, BACKGROUD_COLOR, 0);
 			draw_tool_bar(currentTool, lastDrawingData, pixel_buffer);
 			//alt_up_pixel_buffer_dma_draw(pixel_buffer, BACKGROUD_COLOR, currentCursor.x, currentCursor.y);
-			*lastCursorColor = BACKGROUD_COLOR;
+			//*lastCursorColor = BACKGROUD_COLOR;
+			cursor_save(currentCursor, cursorMem);
 		}
 	}
 	
@@ -852,16 +905,16 @@ void cursor_draw(char startUsingTool, int *lastCursorColor, Cursor *currentCurso
 	if (startUsingTool == 0) {
 		//erase old cursor
 		//alt_up_pixel_buffer_dma_draw(pixel_buffer, *lastCursorColor, currentCursor->x, currentCursor->y);
-		cursorErase(currentCursor, cursorMem, pixel_buffer);
+		cursor_erase(currentCursor, cursorMem, pixel_buffer);
 		//Apply scaling and verify cursor is within the boundarys of the screen
 		process_cursor_pos(currentCursor, x_pos, y_pos);
 		//Save the last cursor pixel color for next turn in the loop
 		//*lastCursorColor = get_pixel_color(currentCursor->x, currentCursor->y);
-		cursorSave(currentCursor, cursorMem);
+		cursor_save(currentCursor, cursorMem);
 		
 		//Draw cursor
 		//alt_up_pixel_buffer_dma_draw(pixel_buffer, CURSOR_COLOR, currentCursor->x, currentCursor->y);
-		cursorDrawSprite(currentCursor,pixel_buffer);
+		cursor_draw_sprite(currentCursor,pixel_buffer);
 	}
 }
 int main(void)
@@ -969,7 +1022,7 @@ int main(void)
 
 			//need to press the start button before being able to do anything else
 			if (startButtonPressed == 0) {
-				start_button(currentTool, &startButtonPressed,&left_btn, &lastLeft, &lastCursorColor, &currentCursor, &lastDrawingData, pixel_buffer);
+				start_button(currentTool, &startButtonPressed,&left_btn, &lastLeft, &cursorMem/*&lastCursorColor*/, &currentCursor, &lastDrawingData, pixel_buffer);
 				//draw_icon(currentTool, 1, &lastDrawingData, pixel_buffer);
 				draw_color_palette(selectedColor, &lastDrawingData, pixel_buffer);
 			}
