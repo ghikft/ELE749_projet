@@ -1150,8 +1150,10 @@ int main(void)
 					if (currentTool == PENCIL) {
 						lastLeft = 1;
 						//alt_up_pixel_buffer_dma_draw(pixel_buffer, selectedColor, currentCursor.x, currentCursor.y);
+						
 						if (startUsingTool==0){
-							alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
+							cursor_erase(&currentCursor, cursorMem, pixel_buffer);
+							//alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
 							lastCursor.x = currentCursor.x;
 							lastCursor.y = currentCursor.y;
 							startUsingTool = 1;
@@ -1162,18 +1164,10 @@ int main(void)
 						lastCursorColor = selectedColor;//was DRAW_COLOR
 					}
 					else if (currentTool == EMPTY_RECTANGLE|| currentTool == FILLED_RECTANGLE) {
-						//alt_up_pixel_buffer_dma_draw(pixel_buffer, selectedColor, currentCursor.x, currentCursor.y);
-						//lastCursorColor = selectedColor;// DRAW_COLOR;
-						/*if (!lastLeft) {
-							alt_putstr("left clik, DRAWING\n\r");
-							printf("Drawing at: X:%d Y:%d\n\r",currentCursor.x, currentCursor.y);
-						}else{
-							printf("Drawing at: X:%d Y:%d\n\r",currentCursor.x, currentCursor.y);
-						}*/
-						//rectangle
 						if (startUsingTool == 0) {
-							alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
-							printf("first point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
+							//alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
+							cursor_erase(&currentCursor, cursorMem, pixel_buffer);
+							//printf("first point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
 							firstPoint.x = currentCursor.x;
 							firstPoint.y = currentCursor.y;
 							startUsingTool = 1;
@@ -1251,10 +1245,9 @@ int main(void)
 							lastLeft = 1;
 							firstPoint.x = currentCursor.x;
 							firstPoint.y = currentCursor.y;
-							printf("\n\n\nSTART_FILL first click\n\r");
-							printf("selected color: %d\n\r", selectedColor);
-							
-							
+							cursor_erase(&currentCursor, cursorMem, pixel_buffer);
+							//printf("\n\n\nSTART_FILL first click\n\r");
+							//printf("selected color: %d\n\r", selectedColor);						
 						}
 					}
 					//}//clear in an exception it only activable when cursor is on the icon
@@ -1300,7 +1293,7 @@ int main(void)
 							if (startUsingTool){
 								startUsingTool = 0;
 								lastLeft = 0;
-								//draw_icon(currentTool, 1, &lastDrawingData, pixel_buffer);
+								cursor_save(&currentCursor, cursorMem);
 							}
 						}
 						else if(currentTool==EMPTY_RECTANGLE||currentTool==FILLED_RECTANGLE){
@@ -1309,20 +1302,20 @@ int main(void)
 								startUsingTool = 0;
 								secondPoint.x = currentCursor.x;
 								secondPoint.y = currentCursor.y;
-								printf("second point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
+
 								soft_empty_rectangle_draw(firstPoint.x, firstPoint.y,
 									secondPoint.x, secondPoint.y,
 									selectedColor, 1, &lastDrawingData, pixel_buffer);
-								soft_empty_rectangle_draw(firstPoint.x, firstPoint.y,
-									secondPoint.x, secondPoint.y,
-									selectedColor, 0, &lastDrawingData, pixel_buffer);
+								//soft_empty_rectangle_draw(firstPoint.x, firstPoint.y,
+								//	secondPoint.x, secondPoint.y,
+								//	selectedColor, 0, &lastDrawingData, pixel_buffer);
 
 								if (currentTool == FILLED_RECTANGLE) {
 									alt_up_pixel_buffer_dma_draw_box(pixel_buffer, firstPoint.x, firstPoint.y, secondPoint.x, secondPoint.y, selectedColor, 0);
 								}
+								cursor_save(&currentCursor, cursorMem);
 								lastDrawingData.firstErase = 1;
 								lastLeft = 0;
-								//draw_icon(currentTool, 1, &lastDrawingData, pixel_buffer);
 							}
 						}
 						else if(currentTool == CPY_PASTE || currentTool == CUT_PASTE){
