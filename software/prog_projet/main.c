@@ -910,25 +910,19 @@ void tool_selection(Cursor* currentCursor, tool* currentTool, int startUsingTool
 }
 void process_cursor_pos(Cursor *currentCursor, int *x_pos, int *y_pos ) {
 	/**************************************************************************
-	 * tool_selection
+	 * process_cursor_pos
 	 **************************************************************************
 	 * Parameters
-	 * currentCursor	: containt the actual cursor coordinate
-	 * currentTool		: current tool selected
-	 * startUsingTool	: varaiable that indicate a tool is in use to avoid switching tool
-	 *					  while the user is using one
-	 * selectedColor	: current selected color for the drawing
-	 * left_btn			: variable that indicate a left button press on the mouse
-	 * lastDrawingData  : Structure that save multiple variable used to keep track of previous
-	 *					  shape drawn during the interactive draw
-	 * pixel_buffer		: is the pointer used to write in the pixel_buffer of the video pipeline
+	 * currentCursor: containt the actual cursor coordinate
+	 * x_pos		: varable used by ps2_process to update the x position of the cursor 
+	 * y_pos		: varable used by ps2_process to update the y position of the cursor 
 	 *
 	 * Return value
 	 * none
 	 *
 	 * Side effects
-	 * use the cursor coordinate and the left button of the ouse to detect the selection
-	 * of different tools and colors
+	 * Apply a scaling and hard limite the range on the x_pos and y_pos  variable
+	 * then store the result in the currentCursor structure
 	 *
 	 *************************************************************************/
 	if (*x_pos > RIGHT_LIMIT * SCALE_FACTOR_INV) {
