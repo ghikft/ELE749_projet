@@ -36,6 +36,6 @@ void start_button(tool currentTool, char* startButtonPressed, unsigned char* lef
 
 void process_cursor_pos(Cursor* currentCursor, int* x_pos, int* y_pos);
 
-
+void nios_draw(alt_up_pixel_buffer_dma_dev* pixel_buffer);
 
 #endif /* NIOS_DRAW_H_ */
