@@ -1300,7 +1300,7 @@ int main(void)
 								//lastCursorColor = selectedColor;
 								//alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
 								lastDrawingData.firstErase = 1;
-								lastLeft = 0;
+								
 								drawCursor = 1;
 								//draw_icon(currentTool, 1, &lastDrawingData, pixel_buffer);
 							}
@@ -1311,6 +1311,7 @@ int main(void)
 								printf("x: %d y: %d\n\r", rngX,rngY);
 								soft_empty_rectangle_draw(currentCursor.x, currentCursor.y, rngX, rngY,
 								BLACK, 1, &lastDrawingData, pixel_buffer);
+								lastLeft = 0;
 							}
 						}
 						else if (currentTool == EMPTY_ELLIPSE) {
