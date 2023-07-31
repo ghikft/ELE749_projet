@@ -968,7 +968,9 @@ void start_button(tool currentTool, char* startButtonPressed,unsigned char* left
 	 * none
 	 *
 	 * Side effects
-	 * Draw a start button at in the middle of the screen. If
+	 * Draw a start button at in the middle of the screen. If it is clicked reset the 
+	 * drawing app screen (draw tool bar and drawing zone, update the cursor memory
+	 * of the newly drawn screen)
 	 *
 	 *************************************************************************/
 	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 290, 220, 350, 260, 16, 0);
@@ -995,20 +997,36 @@ void start_button(tool currentTool, char* startButtonPressed,unsigned char* left
 	
 }
 
-void cursor_draw(char startUsingTool, int *lastCursorColor, Cursor *currentCursor, alt_u8 *cursorMem, int* x_pos, int* y_pos, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+void cursor_draw(char startUsingTool, Cursor *currentCursor, alt_u8 *cursorMem, int* x_pos, int* y_pos, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+	/**************************************************************************
+	 * cursor_draw
+	 **************************************************************************
+	 * Parameters
+	 * startUsingTool	: varaiable that indicate a tool is in use to avoid switching tool
+	 *					  while the user is using one
+	 * currentCursor	: containt the actual cursor coordinate
+	 * cursorMem		: Array where to save the pixel value
+	 * x_pos			: varable used by ps2_process to update the x position of the cursor 
+	 * y_pos			: varable used by ps2_process to update the y position of the cursor 
+	 * pixel_buffer		: is the pointer used to write in the pixel_buffer of the video pipeline
+	 *
+	 * Return value
+	 * none
+	 *
+	 * Side effects
+	 * When no tool are in use, erase the cursor, update the cursor positiion,
+	 * save the pixel value where the new cursor will be, then draw the new cursor
+	 *
+	 *************************************************************************/
 	/* Manage cursor when not using tool*/
 	if (startUsingTool == 0) {
 		//erase old cursor
-		//alt_up_pixel_buffer_dma_draw(pixel_buffer, *lastCursorColor, currentCursor->x, currentCursor->y);
 		cursor_erase(currentCursor, cursorMem, pixel_buffer);
 		//Apply scaling and verify cursor is within the boundarys of the screen
 		process_cursor_pos(currentCursor, x_pos, y_pos);
 		//Save the last cursor pixel color for next turn in the loop
-		//*lastCursorColor = get_pixel_color(currentCursor->x, currentCursor->y);
-		cursor_save(currentCursor, cursorMem);
-		
+		cursor_save(currentCursor, cursorMem);		
 		//Draw cursor
-		//alt_up_pixel_buffer_dma_draw(pixel_buffer, CURSOR_COLOR, currentCursor->x, currentCursor->y);
 		cursor_draw_sprite(currentCursor,pixel_buffer);
 	}
 }
@@ -1430,7 +1448,7 @@ int main(void)
 			
 			if(drawCursor){
 				//draw the cursor on top of everithing (last drawing operation)
-				cursor_draw(startUsingTool, &lastCursorColor, &currentCursor,cursorMem, &x_pos, &y_pos, pixel_buffer);
+				cursor_draw(startUsingTool, &currentCursor,cursorMem, &x_pos, &y_pos, pixel_buffer);
 			}
 			// vertical refresh
 			alt_up_pixel_buffer_dma_swap_buffers(pixel_buffer);
