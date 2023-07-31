@@ -955,8 +955,10 @@ void start_button(tool currentTool, char* startButtonPressed,unsigned char* left
 	 * start_button
 	 **************************************************************************
 	 * Parameters
+	 * currentTool			: current tool selected
+	 * startButtonPressed	:
 	 * currentCursor	: containt the actual cursor coordinate
-	 * currentTool		: current tool selected
+	 
 	 * startUsingTool	: varaiable that indicate a tool is in use to avoid switching tool
 	 *					  while the user is using one
 	 * selectedColor	: current selected color for the drawing
