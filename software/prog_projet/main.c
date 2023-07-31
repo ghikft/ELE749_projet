@@ -1165,6 +1165,7 @@ int main(void)
 							if (startUsingTool == 0){
 								cursor_erase(&currentCursor, cursorMem, pixel_buffer);
 								selectedColor = (currentCursor.x,currentCursor.y);
+								printf("COLOR PICKER: %d", selectedColor);
 							}
 						}
 					}
