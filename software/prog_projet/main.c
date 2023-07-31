@@ -1288,8 +1288,10 @@ int main(void)
 								//draw_icon(currentTool, 1, &lastDrawingData, pixel_buffer);
 							}
 							if(cpyRngSelected){
+								printf("entered condition \n\r");
 								int rngX = currentCursor.x+(secondPoint.x-firstPoint.x);
 								int rngY = currentCursor.y+(secondPoint.y-secondPoint.y);
+								prinft("x: %d y: %d\n\r", rngX,rngY);
 								soft_empty_rectangle_draw(currentCursor.x, currentCursor.y, rngX, rngY,
 								BLACK, 1, &lastDrawingData, pixel_buffer);
 							}
