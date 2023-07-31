@@ -285,10 +285,10 @@ int startIconBmp[1458] = {	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 							0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
 int cursorSprite[25] = {	1,1,1,1,1,
-							1,1,0,0,0,
-							1,0,1,0,0,
-							1,0,0,1,0,
-							1,0,0,0,1 };
+							1,1,1,0,0,
+							1,0,1,1,0,
+							1,0,0,1,1,
+							0,0,0,0,1 };
 
 typedef enum mode {
 	DRAWING_MODE,
@@ -477,18 +477,32 @@ unsigned char get_pixel_color(int x, int y){
 	return color;
 }
 
-void cursorSave(Cursor* coordinate, cursorPixel* cursorMem) {
+void cursorSave(Cursor* coordinate, alt_u8 *cursorMem) {
 	int x = coordinate->x;
 	int y = coordinate->y;
 	int iter = 0;
 	for (int i = 0; i < 5; i++) {
 		for (int j = 0; j < 5; j++) {
-			cursorMem[iter].color = get_pixel_color(x + j, y + i);
+			cursorMem[iter] = get_pixel_color(x + j, y + i);
 			iter++;
 		}
 	}
 }
-void cursorDrawSprite(Cursor* coordinate, cursorPixel* cursorMem, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+
+void cursorErase(Cursor* coordinate, alt_u8 *cursorMem, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+	int x = coordinate->x;
+	int y = coordinate->y;
+	int iter = 0;
+	for (int i = 0; i < 5; i++) {
+		for (int j = 0; j < 5; j++) {
+			//cursorMem[iter].color = get_pixel_color(x + j, y + i);			
+			alt_up_pixel_buffer_dma_draw(pixel_buffer, cursorMem[iter], x + j, y + i);
+			iter++;
+		}
+	}
+}
+
+void cursorDrawSprite(Cursor* coordinate, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
 	int x = coordinate->x;
 	int y = coordinate->y;
 	int iter = 0;
@@ -497,9 +511,9 @@ void cursorDrawSprite(Cursor* coordinate, cursorPixel* cursorMem, alt_up_pixel_b
 	else color = 255;
 	for (int i = 0; i < 5; i++) {
 		for (int j = 0; j < 5; j++) {
-			if (cursorSprite[iter] == 1) {
-				
+			if (cursorSprite[iter] == 1) {				
 				alt_up_pixel_buffer_dma_draw(pixel_buffer, color, x + j, y + i);
+				iter++;
 			}
 		}
 	}
@@ -838,18 +852,21 @@ void start_button(tool currentTool, char* startButtonPressed,unsigned char* left
 	
 }
 
-void cursor_draw(char startUsingTool, int *lastCursorColor, Cursor *currentCursor, int* x_pos, int* y_pos, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+void cursor_draw(char startUsingTool, int *lastCursorColor, Cursor *currentCursor, alt_u8 *cursorMem, int* x_pos, int* y_pos, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
 	/* Manage cursor when not using tool*/
 	if (startUsingTool == 0) {
 		//erase old cursor
-		alt_up_pixel_buffer_dma_draw(pixel_buffer, *lastCursorColor, currentCursor->x, currentCursor->y);
-
+		//alt_up_pixel_buffer_dma_draw(pixel_buffer, *lastCursorColor, currentCursor->x, currentCursor->y);
+		cursorErase(currentCursor, cursorMem, pixel_buffer);
 		//Apply scaling and verify cursor is within the boundarys of the screen
 		process_cursor_pos(currentCursor, x_pos, y_pos);
 		//Save the last cursor pixel color for next turn in the loop
-		*lastCursorColor = get_pixel_color(currentCursor->x, currentCursor->y);
+		//*lastCursorColor = get_pixel_color(currentCursor->x, currentCursor->y);
+		cursorSave(currentCursor, cursorMem);
+		
 		//Draw cursor
-		alt_up_pixel_buffer_dma_draw(pixel_buffer, CURSOR_COLOR, currentCursor->x, currentCursor->y);
+		//alt_up_pixel_buffer_dma_draw(pixel_buffer, CURSOR_COLOR, currentCursor->x, currentCursor->y);
+		cursorDrawSprite(currentCursor,pixel_buffer);
 	}
 }
 int main(void)
@@ -876,15 +893,16 @@ int main(void)
 	int drawFirstTimeAround = 1;
 	tool currentTool = NO_TOOL;
 	tool lastTool = NO_TOOL;
-	currentCursor.x = 0;
-	currentCursor.y = 0;
-	lastCursor.x = 0;
-	lastCursor.y = 0;
+	currentCursor.x = 100;
+	currentCursor.y = 100;
+	lastCursor.x = 100;
+	lastCursor.y = 100;
 	mode programMode = DRAWING_MODE;
 	char startButtonPressed = 0; 
 	int selectedColor = BLACK;
 	int cpyRngSelected =0;
 	int drawCursor = 1;
+	cursorPixel cursorMem[25];
 
 	process_cursor_pos(&currentCursor, &x_pos, &y_pos);
 	//Stop timer and setup the interrupt, then start with 100ms period (default)
@@ -936,7 +954,7 @@ int main(void)
 	draw_tool_bar(currentTool , &lastDrawingData, pixel_buffer);
 	draw_color_palette(selectedColor, &lastDrawingData, pixel_buffer);
 	init_last_drawing_Var(&lastDrawingData);
-	
+	cursorSave(&currentCursor, &cursorMem);
 	/* main loop */
 	while (1) {
 		// process screen drawing during vertical blank
@@ -1247,7 +1265,7 @@ int main(void)
 			
 			if(drawCursor){
 				//draw the cursor on top of everithing (last drawing operation)
-				cursor_draw(startUsingTool, &lastCursorColor, &currentCursor, &x_pos, &y_pos, pixel_buffer);
+				cursor_draw(startUsingTool, &lastCursorColor, &currentCursor,&cursorMem, &x_pos, &y_pos, pixel_buffer);
 			}
 			// vertical refresh
 			alt_up_pixel_buffer_dma_swap_buffers(pixel_buffer);
