@@ -1161,9 +1161,11 @@ int main(void)
 						lastCursorColor = selectedColor;//was DRAW_COLOR
 					}
 					else if(currentTool == COLOR_SAMPLE){
-						if (startUsingTool == 0){
-							cursor_erase(&currentCursor, cursorMem, pixel_buffer);
-							selectedColor = (currentCursor.x,currentCursor.y);
+						if(currentCursor.x>DRAWING_ZONE_LEFT_LIMIT){
+							if (startUsingTool == 0){
+								cursor_erase(&currentCursor, cursorMem, pixel_buffer);
+								selectedColor = (currentCursor.x,currentCursor.y);
+							}
 						}
 					}
 					else if (currentTool == EMPTY_RECTANGLE|| currentTool == FILLED_RECTANGLE) {
