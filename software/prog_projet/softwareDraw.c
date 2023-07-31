@@ -614,11 +614,19 @@ void soft_copy_paste(int x1_copy, int y1_copy, int x2_copy, int y2_copy, int x1_
 		}
 		copyMem[i] = get_pixel_color2(x_cpy,y_cpy);
 		x_cpy++;
-		//replace with color if cut
-		if (cut){
-			alt_up_pixel_buffer_dma_draw(pixel_buffer, color ,x_cpy,y_cpy);
+	}
+	//erase values if cut paste
+	if (cut){
+		for (int i=0;i<nbPts;i++){
+			if (x_cpy>x2_copy-1){
+				x_cpy = x1_copy+1;
+				y_cpy++;
+			}
+			alt_up_pixel_buffer_dma_draw(pixel_buffer, color,x_cpy,y_cpy);
+			x_cpy++;
 		}
 	}
+
 	//paste loop
 	int x_paste, y_paste;
 	x_paste = x1_paste;

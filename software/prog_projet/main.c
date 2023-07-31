@@ -972,7 +972,7 @@ int main(void)
 						else if (cpyRngSelected){
 							cpyRngSelected = 0;
 							if (currentTool == CUT_PASTE){
-								soft_copy_paste(firstPoint.x,firstPoint.y,secondPoint.x,secondPoint.y,currentCursor.x,currentCursor.y,1,selectedColor, pixel_buffer);
+								soft_copy_paste(firstPoint.x,firstPoint.y,secondPoint.x,secondPoint.y,currentCursor.x,currentCursor.y,1,0, pixel_buffer);
 							}
 							else{
 								soft_copy_paste(firstPoint.x,firstPoint.y,secondPoint.x,secondPoint.y,currentCursor.x,currentCursor.y,0,0, pixel_buffer);
