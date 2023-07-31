@@ -145,9 +145,9 @@ void init_last_drawing_Var(lastDrawingVar* lastDrawingData) {
 	 * init_last_drawing_Var
 	 **************************************************************************
 	 * Parameters
-	 *lastDrawingData		: Structure that save multiple variable used to keep track of previous
+	 * lastDrawingData		: Structure that save multiple variable used to keep track of previous
 	 *						  shape drawn during the interactive draw
-	  *
+	 *
 	 * Return value
 	 * none
 	 *
@@ -164,6 +164,26 @@ void init_last_drawing_Var(lastDrawingVar* lastDrawingData) {
 int draw_empty_ellipse(int x_center, int y_center, int x_radius, int y_radius, 
 						int color, alt_up_pixel_buffer_dma_dev* pixel_buffer, 
 						int erasePreviousWork, lastDrawingVar* lastDrawingData){
+	/**************************************************************************
+	 * draw_empty_ellipse
+	 **************************************************************************
+	 * Parameters
+	 * x_center				: x component of the center of the ellipse
+	 * y_center				: y component of the center of the ellipse
+	 * x_radius				: radius of the ellipse in the X direction
+	 * y_radius				: radius of the ellipse in the Y direction
+	 * color				: color of the ellipse
+	 * pixel_buffer			: pointer to the pixel buffer
+	 * erasePreviousWork	: 1 to erase the previously drawn ellipse, 0 to keep it
+	 * lastDrawingData		: Structure that save multiple variable used to keep track of previous
+	 *						  shape drawn during the interactive draw
+	 *
+	 * Return value
+	 * return 1 if the ellipse was drawn 0 if not
+	 *
+	 * Side effects
+	 * lastDrawingData will be modified
+	 *************************************************************************/
 	
 	//flip the radiuses if they are negative
 	if(x_radius<0){
@@ -396,6 +416,27 @@ char fill_to_edge_sub(int x, int y, int fillColor, alt_up_pixel_buffer_dma_dev* 
 void soft_draw_line(int x1, int y1,
     				int x2, int y2,
     				int color, int erasePreviousWork, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer){
+
+	/**************************************************************************
+	 * soft_draw_line
+	 **************************************************************************
+	 * Parameters
+	 * x1		: x coordinate of the first point of the line
+	 * y1		: y coordinate of the first point of the line
+	 * x2		: x coordinate of the second point of the line
+	 * y2		: y coordinate of the second point of the line
+	 * color	: color to dra the line
+	 * erasePreviousWork	: Delete the previous line stored in lastDrawingData 1=erase 0 = not erase
+	 * lastDrawingData		: Structure that save multiple variable used to keep track of previous 
+	 *						  shape drawn during the interactive draw
+	 * pixel_buffer is the pointer used to write in the pixel_buffer of the video pipeline
+	 *
+	 * Return value
+	 * none
+	 *
+	 * Side effects
+	 * lastDrawingData is modified
+	 *************************************************************************/
 	
 	//erase previous work
 	if(erasePreviousWork){
@@ -502,7 +543,25 @@ int absoluteV(int x){
 }
 
 void soft_copy_paste(int x1_copy, int y1_copy, int x2_copy, int y2_copy, int x1_paste, int y1_paste, int cut, char color, alt_up_pixel_buffer_dma_dev* pixel_buffer){
-	
+	/**************************************************************************
+	 * soft_copy_paste
+	 **************************************************************************
+	 * Parameters
+	 * x1_copy		: x coordinate of the top left corner
+	 * y1_copy		: y coordinate of the top left corner
+	 * x2_copy		: x coordinate of the bottom right corner
+	 * y2_copy 		: y coordinate of the botom right corner
+	 * x1_paste		: x coordinate of top right corner of the paste location
+	 * y1_paste		: y coordinate of the top right corner of the paste location
+	 * color		: color to draw the empty rectangle
+	 * pixel_buffer	: pointer to the pixel buffer
+	 *
+	 * Return value
+	 * none
+	 *
+	 * Side effects
+	 * none
+	 *************************************************************************/
 	char copyMem[307200];
 	int nbPts=0;
 
