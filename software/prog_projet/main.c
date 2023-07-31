@@ -823,7 +823,7 @@ void draw_tool_bar(tool currentTool, lastDrawingVar* lastDrawingData, alt_up_pix
 	draw_icon(currentTool, 1, lastDrawingData, pixel_buffer);
 }
 
-void tool_selection(Cursor* currentCursor, tool* currentTool, tool* lastTool, int startUsingTool, 	
+void tool_selection(Cursor* currentCursor, tool* currentTool, int startUsingTool, 	
 	int* selectedColor,char *left_btn, lastDrawingVar *lastDrawingData,
 	alt_up_pixel_buffer_dma_dev* pixel_buffer) {
 	/**************************************************************************
@@ -850,6 +850,7 @@ void tool_selection(Cursor* currentCursor, tool* currentTool, tool* lastTool, in
 	 *
 	 *************************************************************************/
 	static int lastColor = BLACK;
+	static tool lastTool = NO_TOOL;
 	//inside the tool bar zone and no tool currently in use
 	if (startUsingTool == 0 && currentCursor->x < DRAWING_ZONE_LEFT_LIMIT && *left_btn) {
 		//in first or second column of tool
@@ -899,16 +900,15 @@ void tool_selection(Cursor* currentCursor, tool* currentTool, tool* lastTool, in
 			else if (currentCursor->y < 435 && currentCursor->y > 408) *currentTool = SNAKE;
 		}
 		//clear old selection and select the new tool
-		if (*lastTool != *currentTool) {
-			draw_icon(*lastTool, TOOL_NOT_SELECTED, lastDrawingData, pixel_buffer);
-			*lastTool = *currentTool;
+		if (lastTool != *currentTool) {
+			draw_icon(lastTool, TOOL_NOT_SELECTED, lastDrawingData, pixel_buffer);
+			lastTool = *currentTool;
 			draw_icon(*currentTool, TOOL_SELECTED, lastDrawingData, pixel_buffer);
-			//*left_btn = 0;
 		}
+		//clear old selection and select the new color
 		if (lastColor != *selectedColor) {
 			lastColor = *selectedColor;
 			draw_color_palette(*selectedColor, lastDrawingData, pixel_buffer);
-			//*left_btn = 0;
 		}		
 	}
 
@@ -1094,7 +1094,7 @@ int main(void)
 			else {
 				//Check for tool selection if not using a tool and cursor inside the tool bar
 				
-				tool_selection(&currentCursor, &currentTool, &lastTool, startUsingTool, &selectedColor, &left_btn, &lastDrawingData, pixel_buffer);
+				tool_selection(&currentCursor, &currentTool, startUsingTool, &selectedColor, &left_btn, &lastDrawingData, pixel_buffer);
 				/* process clicks */
 				//
 				if (left_btn) { //Draw during left click
@@ -1291,7 +1291,7 @@ int main(void)
 								printf("entered condition \n\r");
 								int rngX = currentCursor.x+(secondPoint.x-firstPoint.x);
 								int rngY = currentCursor.y+(secondPoint.y-secondPoint.y);
-								prinft("x: %d y: %d\n\r", rngX,rngY);
+								printf("x: %d y: %d\n\r", rngX,rngY);
 								soft_empty_rectangle_draw(currentCursor.x, currentCursor.y, rngX, rngY,
 								BLACK, 1, &lastDrawingData, pixel_buffer);
 								lastLeft = 0;
