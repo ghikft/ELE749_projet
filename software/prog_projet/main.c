@@ -1210,7 +1210,8 @@ int main(void)
 					}
 					else if(currentTool == LINE){
 						if (startUsingTool == 0) {
-							alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
+							//alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
+							cursor_erase(&currentCursor, &cursorMem, pixel_buffer);
 							firstPoint.x = currentCursor.x;
 							firstPoint.y = currentCursor.y;
 							startUsingTool = 1;
