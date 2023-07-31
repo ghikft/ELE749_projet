@@ -1294,19 +1294,11 @@ int main(void)
 								//lastCursorColor = selectedColor;
 								//alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
 								lastDrawingData.firstErase = 1;
-								
+								lastLeft = 0;
 								drawCursor = 1;
 								//draw_icon(currentTool, 1, &lastDrawingData, pixel_buffer);
 							}
-							if(cpyRngSelected){
-								printf("entered condition \n\r");
-								int rngX = currentCursor.x+(secondPoint.x-firstPoint.x);
-								int rngY = currentCursor.y+(secondPoint.y-secondPoint.y);
-								printf("x: %d y: %d\n\r", rngX,rngY);
-								soft_empty_rectangle_draw(currentCursor.x, currentCursor.y, rngX, rngY,
-								BLACK, 1, &lastDrawingData, pixel_buffer);
-								lastLeft = 0;
-							}
+							
 						}
 						else if (currentTool == EMPTY_ELLIPSE) {
 							//Ellipse
@@ -1394,7 +1386,17 @@ int main(void)
 						draw_color_palette(selectedColor, &lastDrawingData, pixel_buffer);
 						//lastLeft = 0;
 					}
-					
+					if(currentTool == CPY_PASTE || currentTool == CUT_PASTE){
+						if(cpyRngSelected){
+							printf("entered condition \n\r");
+							int rngX = currentCursor.x+(secondPoint.x-firstPoint.x);
+							int rngY = currentCursor.y+(secondPoint.y-secondPoint.y);
+							printf("x: %d y: %d\n\r", rngX,rngY);
+							soft_empty_rectangle_draw(currentCursor.x, currentCursor.y, rngX, rngY,
+							BLACK, 1, &lastDrawingData, pixel_buffer);
+							
+						}	
+					}
 					//lastLeft = 0;
 					lastRight = 0;
 				}
