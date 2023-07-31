@@ -1410,6 +1410,7 @@ int main(void)
 							//alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, firstPoint.x, firstPoint.y);
 							cursor_erase(&firstPoint, cursorMem,pixel_buffer);
 							flood_fill_zone(firstPoint.x, firstPoint.y, selectedColor, pixel_buffer);
+							cursor_save(&firstPoint, cursorMem);
 							//update the last cursor color beacause of the fill
 							lastCursorColor = selectedColor;
 						}
