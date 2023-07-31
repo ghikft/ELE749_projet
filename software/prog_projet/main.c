@@ -1388,13 +1388,13 @@ int main(void)
 					}
 					if(currentTool == CPY_PASTE || currentTool == CUT_PASTE){
 						if(cpyRngSelected){
+							cursor_erase(&currentCursor, &cursorMem, pixel_buffer);
 							printf("entered condition \n\r");
 							int rngX = currentCursor.x+(secondPoint.x-firstPoint.x);
 							int rngY = currentCursor.y+(secondPoint.y-firstPoint.y);
 							printf("x: %d y: %d\n\r", rngX,rngY);
 							soft_empty_rectangle_draw(currentCursor.x, currentCursor.y, rngX, rngY,
 							BLACK, 1, &lastDrawingData, pixel_buffer);
-							
 						}	
 					}
 					//lastLeft = 0;
