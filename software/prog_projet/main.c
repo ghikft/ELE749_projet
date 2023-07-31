@@ -702,7 +702,8 @@ void draw_icon(tool icon, char selected,
 	 * none
 	 *
 	 * Side effects
-	 * Draw the
+	 * Draw the chosen icon then draw a the frame around. The frame color depend of the
+	 * selected parameter
 	 * If icon argument is invalid, the function draw nothing
 	 * 
 	 *************************************************************************/
@@ -783,7 +784,24 @@ void draw_icon(tool icon, char selected,
 	}
 }
 void draw_tool_bar(tool currentTool, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
-	
+	/**************************************************************************
+	 * draw_tool_bar
+	 **************************************************************************
+	 * Parameters
+	 * currentTool		: 1 = selected (draw a red frame around the icon if 0 the frame is black
+	 * lastDrawingData	: Structure that save multiple variable used to keep track of previous
+	 *					  shape drawn during the interactive draw
+	 * pixel_buffer		: is the pointer used to write in the pixel_buffer of the video pipeline
+	 *
+	 * Return value
+	 * none
+	 *
+	 * Side effects
+	 * Draw the chosen icon then draw a the frame around. The frame color depend of the
+	 * selected parameter
+	 * If icon argument is invalid, the function draw nothing
+	 *
+	 *************************************************************************/
 	//draw tool bar background
 	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, LEFT_LIMIT, TOP_LIMIT, DRAWING_ZONE_LEFT_LIMIT, BOTTOM_LIMIT, TOOL_BOX_BACKGROUND_COLOR, 0);
 	//Draw frame
