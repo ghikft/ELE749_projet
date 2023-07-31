@@ -1175,35 +1175,37 @@ int main(void)
 						}
 					}
 					else if(currentTool == CPY_PASTE || currentTool == CUT_PASTE){
-						if (startUsingTool == 0 && cpyRngSelected == 0) {
-							//alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
-							cursor_erase(&currentCursor, &cursorMem, pixel_buffer);
-							printf("first point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
-							firstPoint.x = currentCursor.x;
-							firstPoint.y = currentCursor.y;
-							startUsingTool = 1;
-							lastLeft = 1;
-							drawCursor = 0;
-							soft_empty_rectangle_draw(firstPoint.x, firstPoint.y,
-								currentCursor.x, currentCursor.y,
-								0, 1, &lastDrawingData, pixel_buffer);
-						}
-						else if (cpyRngSelected){
-							cpyRngSelected = 0;
-							if (currentTool == CUT_PASTE){
-								soft_copy_paste(firstPoint.x,firstPoint.y,secondPoint.x,secondPoint.y,currentCursor.x,currentCursor.y,1,selectedColor, pixel_buffer);
+						if(currentCursor.x>DRAWING_ZONE_LEFT_LIMIT){
+							if (startUsingTool == 0 && cpyRngSelected == 0) {
+								//alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
+								cursor_erase(&currentCursor, &cursorMem, pixel_buffer);
+								printf("first point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
+								firstPoint.x = currentCursor.x;
+								firstPoint.y = currentCursor.y;
+								startUsingTool = 1;
+								lastLeft = 1;
+								drawCursor = 0;
+								soft_empty_rectangle_draw(firstPoint.x, firstPoint.y,
+									currentCursor.x, currentCursor.y,
+									0, 1, &lastDrawingData, pixel_buffer);
 							}
-							else{
-								soft_copy_paste(firstPoint.x,firstPoint.y,secondPoint.x,secondPoint.y,currentCursor.x,currentCursor.y,0,0, pixel_buffer);
+							else if (cpyRngSelected){
+								cpyRngSelected = 0;
+								if (currentTool == CUT_PASTE){
+									soft_copy_paste(firstPoint.x,firstPoint.y,secondPoint.x,secondPoint.y,currentCursor.x,currentCursor.y,1,selectedColor, pixel_buffer);
+								}
+								else{
+									soft_copy_paste(firstPoint.x,firstPoint.y,secondPoint.x,secondPoint.y,currentCursor.x,currentCursor.y,0,0, pixel_buffer);
+								}
+								startUsingTool = 0;
 							}
-							startUsingTool = 0;
-						}
-						else {
-							lastCursorColor = get_pixel_color(currentCursor.x,currentCursor.y);
-							alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
-							soft_empty_rectangle_draw(firstPoint.x, firstPoint.y,
-								currentCursor.x, currentCursor.y,
-								0, 1, &lastDrawingData, pixel_buffer);
+							else {
+								lastCursorColor = get_pixel_color(currentCursor.x,currentCursor.y);
+								alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
+								soft_empty_rectangle_draw(firstPoint.x, firstPoint.y,
+									currentCursor.x, currentCursor.y,
+									0, 1, &lastDrawingData, pixel_buffer);
+							}
 						}
 					}
 					else if (currentTool == EMPTY_ELLIPSE|| currentTool == FILLED_ELLIPSE) {		//elipse
@@ -1413,7 +1415,7 @@ int main(void)
 					}
 					if(currentTool == CPY_PASTE || currentTool == CUT_PASTE){
 						if(cpyRngSelected){
-							cursor_erase(&currentCursor, &cursorMem, pixel_buffer);
+							//cursor_erase(&currentCursor, &cursorMem, pixel_buffer);
 							printf("entered condition \n\r");
 							int rngX = currentCursor.x+(secondPoint.x-firstPoint.x);
 							int rngY = currentCursor.y+(secondPoint.y-firstPoint.y);
