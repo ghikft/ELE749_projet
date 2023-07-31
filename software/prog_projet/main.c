@@ -1140,7 +1140,8 @@ int main(void)
 					}
 					else if(currentTool == CPY_PASTE || currentTool == CUT_PASTE){
 						if (startUsingTool == 0 && cpyRngSelected == 0) {
-							alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
+							//alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
+							cursor_erase(&currentCursor, &cursorMem, pixel_buffer);
 							printf("first point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
 							firstPoint.x = currentCursor.x;
 							firstPoint.y = currentCursor.y;
@@ -1170,7 +1171,8 @@ int main(void)
 					}
 					else if (currentTool == EMPTY_ELLIPSE|| currentTool == FILLED_ELLIPSE) {		//elipse
 						if (startUsingTool == 0) {
-							alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
+							//alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
+							cursor_erase(&currentCursor, &cursorMem, pixel_buffer);
 							printf("first point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
 							firstPoint.x = currentCursor.x;
 							firstPoint.y = currentCursor.y;
