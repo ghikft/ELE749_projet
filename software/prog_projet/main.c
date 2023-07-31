@@ -860,7 +860,8 @@ void tool_selection(Cursor* currentCursor, tool* currentTool, tool* lastTool, in
 			else if (currentCursor->y < 116) *currentTool = COLOR_SAMPLE;
 			else if (currentCursor->y < 145) *currentTool = CUT_PASTE;
 			//color selection
-			else if (currentCursor->y < 145 && currentCursor->y > 203);//selected color dead zone
+			else if (currentCursor->y < 203 && currentCursor->y > 174) {//selected color dead zone
+			}
 			else if (currentCursor->y < 203 && currentCursor->y > 176) *selectedColor = BLACK;
 			else if (currentCursor->y < 232) *selectedColor = LILLA;
 			else if (currentCursor->y < 261) *selectedColor = RED;
@@ -884,7 +885,8 @@ void tool_selection(Cursor* currentCursor, tool* currentTool, tool* lastTool, in
 			else if (currentCursor->y < 116) *currentTool = CPY_PASTE;
 			else if (currentCursor->y < 145) *currentTool = PENCIL;
 			//color selection
-			else if (currentCursor->y < 145 && currentCursor->y > 203);//selected color dead zone
+			else if (currentCursor->y < 203 && currentCursor->y > 174) {//selected color dead zone
+			}
 			else if (currentCursor->y < 203 && currentCursor->y > 176) *selectedColor = WHITE;
 			else if (currentCursor->y < 232) *selectedColor = PURPLE;
 			else if (currentCursor->y < 261) *selectedColor = BROWN;
@@ -923,7 +925,6 @@ void process_cursor_pos(Cursor *currentCursor, int *x_pos, int *y_pos ) {
 	else {
 		currentCursor->x = *x_pos * SCALE_FACTOR;
 	}
-	//printf("4\n");
 	if (*y_pos > BOTTOM_LIMIT * SCALE_FACTOR_INV) {
 		currentCursor->y = BOTTOM_LIMIT;
 		*y_pos = BOTTOM_LIMIT * SCALE_FACTOR_INV;
@@ -937,7 +938,7 @@ void process_cursor_pos(Cursor *currentCursor, int *x_pos, int *y_pos ) {
 	}
 }
 
-void start_button(tool currentTool, char* startButtonPressed,unsigned char* left_btn, unsigned char* lastLeft, /*int* lastCursorColor*/alt_u8 *cursorMem,
+void start_button(tool currentTool, char* startButtonPressed,unsigned char* left_btn, unsigned char* lastLeft, alt_u8 *cursorMem,
 	Cursor* currentCursor, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
 	
 	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 290, 220, 350, 260, 16, 0);
@@ -958,8 +959,6 @@ void start_button(tool currentTool, char* startButtonPressed,unsigned char* left
 			*lastLeft = 0;
 			alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 62, 0, 640, 480, BACKGROUD_COLOR, 0);
 			draw_tool_bar(currentTool, lastDrawingData, pixel_buffer);
-			//alt_up_pixel_buffer_dma_draw(pixel_buffer, BACKGROUD_COLOR, currentCursor.x, currentCursor.y);
-			//*lastCursorColor = BACKGROUD_COLOR;
 			cursor_save(currentCursor, cursorMem);
 		}
 	}
