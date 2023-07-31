@@ -1148,12 +1148,9 @@ int main(void)
 				if (left_btn) { //Draw during left click
 					//if (currentCursor.x > DRAWING_ZONE_LEFT_LIMIT) {//limit the usage of tool while in the 
 					if (currentTool == PENCIL) {
-						lastLeft = 1;
-						//alt_up_pixel_buffer_dma_draw(pixel_buffer, selectedColor, currentCursor.x, currentCursor.y);
-						
+						lastLeft = 1;						
 						if (startUsingTool==0){
 							cursor_erase(&currentCursor, cursorMem, pixel_buffer);
-							//alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
 							lastCursor.x = currentCursor.x;
 							lastCursor.y = currentCursor.y;
 							startUsingTool = 1;
@@ -1165,9 +1162,7 @@ int main(void)
 					}
 					else if (currentTool == EMPTY_RECTANGLE|| currentTool == FILLED_RECTANGLE) {
 						if (startUsingTool == 0) {
-							//alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
 							cursor_erase(&currentCursor, cursorMem, pixel_buffer);
-							//printf("first point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
 							firstPoint.x = currentCursor.x;
 							firstPoint.y = currentCursor.y;
 							startUsingTool = 1;
@@ -1303,16 +1298,17 @@ int main(void)
 								secondPoint.x = currentCursor.x;
 								secondPoint.y = currentCursor.y;
 
+								//draw the last rectangle
 								soft_empty_rectangle_draw(firstPoint.x, firstPoint.y,
 									secondPoint.x, secondPoint.y,
 									selectedColor, 1, &lastDrawingData, pixel_buffer);
 								//soft_empty_rectangle_draw(firstPoint.x, firstPoint.y,
 								//	secondPoint.x, secondPoint.y,
 								//	selectedColor, 0, &lastDrawingData, pixel_buffer);
-
 								if (currentTool == FILLED_RECTANGLE) {
 									alt_up_pixel_buffer_dma_draw_box(pixel_buffer, firstPoint.x, firstPoint.y, secondPoint.x, secondPoint.y, selectedColor, 0);
 								}
+								//save the background at new position to avoid missing a pixel
 								cursor_save(&currentCursor, cursorMem);
 								lastDrawingData.firstErase = 1;
 								lastLeft = 0;
@@ -1407,7 +1403,8 @@ int main(void)
 							startUsingTool = 0;
 							lastLeft = 0;
 							//clear the cursor and launch the fill operation
-							alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, firstPoint.x, firstPoint.y);
+							//alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, firstPoint.x, firstPoint.y);
+							cursor_erase(&firstPoint, cursorMem,pixel_buffer);
 							flood_fill_zone(firstPoint.x, firstPoint.y, selectedColor, pixel_buffer);
 							//update the last cursor color beacause of the fill
 							lastCursorColor = selectedColor;
