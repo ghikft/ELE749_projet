@@ -1387,12 +1387,12 @@ int main(void)
 								draw_empty_ellipse(firstPoint.x, firstPoint.y,
 									currentCursor.x - firstPoint.x, currentCursor.y - firstPoint.y,
 									selectedColor, pixel_buffer, 0, &lastDrawingData);
-								draw_empty_ellipse(firstPoint.x, firstPoint.y,
+								/* draw_empty_ellipse(firstPoint.x, firstPoint.y,
 									currentCursor.x - firstPoint.x-1, currentCursor.y - firstPoint.y-1,
 									selectedColor, pixel_buffer, 0, &lastDrawingData);
 								draw_empty_ellipse(firstPoint.x, firstPoint.y,
 									currentCursor.x - firstPoint.x-2, currentCursor.y - firstPoint.y-2,
-									selectedColor, pixel_buffer, 0, &lastDrawingData);
+									selectedColor, pixel_buffer, 0, &lastDrawingData); */
 								//	soft_empty_rectangle_draw(firstPoint.x, firstPoint.y,
 								//	secondPoint.x, secondPoint.y,
 								//	DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);
