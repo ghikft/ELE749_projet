@@ -41,9 +41,7 @@ unsigned char get_pixel_color2(int x, int y);
 void soft_empty_rectangle_draw(int x_left, int y_top,
                          int x_right, int y_bottom,
                          int color, int erasePreviousWork, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer);
-/*unsigned int soft_recfiller_draw_rectangle(int x_left, int y_top,
-    int x_right, int y_bottom,
-    int color);*/
+
 
 int draw_empty_ellipse(int x_center, int y_center, int x_radius, int y_radius, 
 						int color, alt_up_pixel_buffer_dma_dev* pixel_buffer, 

@@ -1002,7 +1002,7 @@ int main(void)
 	draw_tool_bar(currentTool , &lastDrawingData, pixel_buffer);
 	draw_color_palette(selectedColor, &lastDrawingData, pixel_buffer);
 	init_last_drawing_Var(&lastDrawingData);
-	cursorSave(&currentCursor, &cursorMem);
+	cursor_save(&currentCursor, cursorMem);
 	/* main loop */
 	while (1) {
 		// process screen drawing during vertical blank
@@ -1022,7 +1022,7 @@ int main(void)
 
 			//need to press the start button before being able to do anything else
 			if (startButtonPressed == 0) {
-				start_button(currentTool, &startButtonPressed,&left_btn, &lastLeft, &cursorMem/*&lastCursorColor*/, &currentCursor, &lastDrawingData, pixel_buffer);
+				start_button(currentTool, &startButtonPressed,&left_btn, &lastLeft, cursorMem/*&lastCursorColor*/, &currentCursor, &lastDrawingData, pixel_buffer);
 				//draw_icon(currentTool, 1, &lastDrawingData, pixel_buffer);
 				draw_color_palette(selectedColor, &lastDrawingData, pixel_buffer);
 			}
@@ -1313,7 +1313,7 @@ int main(void)
 			
 			if(drawCursor){
 				//draw the cursor on top of everithing (last drawing operation)
-				cursor_draw(startUsingTool, &lastCursorColor, &currentCursor,&cursorMem, &x_pos, &y_pos, pixel_buffer);
+				cursor_draw(startUsingTool, &lastCursorColor, &currentCursor,cursorMem, &x_pos, &y_pos, pixel_buffer);
 			}
 			// vertical refresh
 			alt_up_pixel_buffer_dma_swap_buffers(pixel_buffer);
