@@ -616,6 +616,8 @@ void soft_copy_paste(int x1_copy, int y1_copy, int x2_copy, int y2_copy, int x1_
 		x_cpy++;
 	}
 	//erase values if cut paste
+	x_cpy = x1_copy+1;
+	y_cpy = y1_copy+1;
 	if (cut){
 		for (int i=0;i<nbPts;i++){
 			if (x_cpy>x2_copy-1){
