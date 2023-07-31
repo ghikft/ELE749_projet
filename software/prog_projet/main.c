@@ -702,7 +702,8 @@ void draw_icon(tool icon, char selected,
 	 * none
 	 *
 	 * Side effects
-	 * Draw the
+	 * Draw the chosen icon then draw a the frame around. The frame color depend of the
+	 * selected parameter
 	 * If icon argument is invalid, the function draw nothing
 	 * 
 	 *************************************************************************/
@@ -783,10 +784,26 @@ void draw_icon(tool icon, char selected,
 	}
 }
 void draw_tool_bar(tool currentTool, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
-	
+	/**************************************************************************
+	 * draw_tool_bar
+	 **************************************************************************
+	 * Parameters
+	 * currentTool		: This parameter allow to know wich tool need a red selection frame
+	 * lastDrawingData	: Structure that save multiple variable used to keep track of previous
+	 *					  shape drawn during the interactive draw
+	 * pixel_buffer		: is the pointer used to write in the pixel_buffer of the video pipeline
+	 *
+	 * Return value
+	 * none
+	 *
+	 * Side effects
+	 * Draw all the icon in the tool bar. Then draw a red selection frame around the 
+	 * currentTool parameter.
+	 *
+	 *************************************************************************/
 	//draw tool bar background
 	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, LEFT_LIMIT, TOP_LIMIT, DRAWING_ZONE_LEFT_LIMIT, BOTTOM_LIMIT, TOOL_BOX_BACKGROUND_COLOR, 0);
-	//Draw frame
+	//Draw all icon of the tool bar
 	soft_empty_rectangle_draw(LEFT_LIMIT, TOP_LIMIT, DRAWING_ZONE_LEFT_LIMIT, BOTTOM_LIMIT,NOT_ERASE_PREVIOUS_WORK, BLACK, lastDrawingData, pixel_buffer);
 	soft_empty_rectangle_draw(LEFT_LIMIT+1, TOP_LIMIT+1, DRAWING_ZONE_LEFT_LIMIT-1, BOTTOM_LIMIT-1, NOT_ERASE_PREVIOUS_WORK, BLACK, lastDrawingData, pixel_buffer);
 	draw_icon(EMPTY_RECTANGLE, 0, lastDrawingData, pixel_buffer);
@@ -806,14 +823,37 @@ void draw_tool_bar(tool currentTool, lastDrawingVar* lastDrawingData, alt_up_pix
 	draw_icon(currentTool, 1, lastDrawingData, pixel_buffer);
 }
 
-void toolSelection(Cursor* currentCursor, tool* currentTool, tool* lastTool, int startUsingTool, 
+void tool_selection(Cursor* currentCursor, tool* currentTool, tool* lastTool, int startUsingTool, 	
 	int* selectedColor,char *left_btn, lastDrawingVar *lastDrawingData,
 	alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+	/**************************************************************************
+	 * tool_selection
+	 **************************************************************************
+	 * Parameters
+	 * currentCursor	: containt the actual cursor coordinate
+	 * currentTool		: current tool selected
+	 * lastTool			: memory of the last tool used
+	 * startUsingTool	: varaiable that indicate a tool is in use to avoid switching tool
+	 *					  while the user is using one
+	 * selectedColor	: current selected color for the drawing
+	 * left_btn			: variable that indicate a left button press on the mouse
+	 * lastDrawingData  : Structure that save multiple variable used to keep track of previous
+	 *					  shape drawn during the interactive draw
+	 * pixel_buffer		: is the pointer used to write in the pixel_buffer of the video pipeline
+	 *
+	 * Return value
+	 * none
+	 *
+	 * Side effects
+	 * use the cursor coordinate and the left button of the ouse to detect the selection
+	 * of different tools and colors
+	 *
+	 *************************************************************************/
 	static int lastColor = BLACK;
 	//inside the tool bar zone and no tool currently in use
 	if (startUsingTool == 0 && currentCursor->x < DRAWING_ZONE_LEFT_LIMIT && *left_btn) {
 		//in first or second column of tool
-		if (currentCursor->x <= 29 /* && left_btn*/) {
+		if (currentCursor->x <= 29) {
 			if (currentCursor->y < 29) *currentTool = EMPTY_RECTANGLE;
 			else if (currentCursor->y < 58) *currentTool = EMPTY_ELLIPSE;
 			else if (currentCursor->y < 87) *currentTool = LINE;
@@ -836,7 +876,7 @@ void toolSelection(Cursor* currentCursor, tool* currentTool, tool* lastTool, int
 
 		}
 		//second column
-		else if (currentCursor->x >= 32 /* && left_btn*/) {
+		else if (currentCursor->x >= 32) {
 			if (currentCursor->y < 29) *currentTool = FILLED_RECTANGLE;
 			else if (currentCursor->y < 58) *currentTool = FILLED_ELLIPSE;
 			else if (currentCursor->y < 87) *currentTool = FILL;
@@ -1053,7 +1093,7 @@ int main(void)
 			else {
 				//Check for tool selection if not using a tool and cursor inside the tool bar
 				
-				toolSelection(&currentCursor, &currentTool, &lastTool, startUsingTool, &selectedColor, &left_btn, &lastDrawingData, pixel_buffer);
+				tool_selection(&currentCursor, &currentTool, &lastTool, startUsingTool, &selectedColor, &left_btn, &lastDrawingData, pixel_buffer);
 				/* process clicks */
 				//
 				if (left_btn) { //Draw during left click
