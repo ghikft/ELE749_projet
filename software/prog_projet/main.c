@@ -1375,24 +1375,26 @@ int main(void)
 								startUsingTool = 0;
 								secondPoint.x = currentCursor.x;
 								secondPoint.y = currentCursor.y;
-								lastCursorColor = get_pixel_color(secondPoint.x,secondPoint.y);
+								lastCursorColor = get_pixel_color(secondPoint.x, secondPoint.y);
 								printf("second point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
 								draw_empty_ellipse(firstPoint.x, firstPoint.y,
 									currentCursor.x - firstPoint.x, currentCursor.y - firstPoint.y,
 									selectedColor, pixel_buffer, 1, &lastDrawingData);
-								draw_empty_ellipse(firstPoint.x, firstPoint.y,
+								if (draw_empty_ellipse(firstPoint.x, firstPoint.y,
 									currentCursor.x - firstPoint.x, currentCursor.y - firstPoint.y,
-									selectedColor, pixel_buffer, 0, &lastDrawingData);
+									selectedColor, pixel_buffer, 0, &lastDrawingData)) {
+								
 								/* draw_empty_ellipse(firstPoint.x, firstPoint.y,
 									currentCursor.x - firstPoint.x-1, currentCursor.y - firstPoint.y-1,
 									selectedColor, pixel_buffer, 0, &lastDrawingData);
 								draw_empty_ellipse(firstPoint.x, firstPoint.y,
 									currentCursor.x - firstPoint.x-2, currentCursor.y - firstPoint.y-2,
 									selectedColor, pixel_buffer, 0, &lastDrawingData); */
-								//	soft_empty_rectangle_draw(firstPoint.x, firstPoint.y,
-								//	secondPoint.x, secondPoint.y,
-								//	DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);
-								fill_to_edge_zone(firstPoint.x, firstPoint.y, selectedColor, pixel_buffer);
+									//	soft_empty_rectangle_draw(firstPoint.x, firstPoint.y,
+									//	secondPoint.x, secondPoint.y,
+									//	DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);
+									fill_to_edge_zone(firstPoint.x, firstPoint.y, selectedColor, pixel_buffer);
+								}
 								//draw_icon(currentTool, 1, &lastDrawingData, pixel_buffer);
 								lastDrawingData.firstErase = 1;
 								lastLeft = 0;
