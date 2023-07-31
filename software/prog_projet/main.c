@@ -541,7 +541,7 @@ void cursor_draw_sprite(Cursor* coordinate, alt_up_pixel_buffer_dma_dev* pixel_b
 	 * Draw the cursor 5x5 cursor using the globalVariable cursorSprite starting at 
 	 * the x and y coordiante from the parameter coordinate
 	 * 
-	 * Each picel of the cursor is black or white depending on the background color
+	 * Each pixel of the cursor is black or white depending on the background color
 	 * to enhence the visibility
 	 *
 	 *************************************************************************/
@@ -572,15 +572,15 @@ void draw_color_palette(int selectedColor, lastDrawingVar* lastDrawingData, alt_
 	 **************************************************************************
 	 * Parameters
 	 * selectedColor	: 8 bit RGB color value to draw in the selected color Box in the tool bar
-	 * lastDrawingData		: Structure that save multiple variable used to keep track of previous
-	 *						  shape drawn during the interactive draw
-	 * pixel_buffer is the pointer used to write in the pixel_buffer of the video pipeline
+	 * lastDrawingData	: Structure that save multiple variable used to keep track of previous
+	 *					  shape drawn during the interactive draw
+	 * pixel_buffer		: is the pointer used to write in the pixel_buffer of the video pipeline
 	 *
 	 * Return value
 	 * none
 	 *
 	 * Side effects
-	 * none
+	 * Draw the color palette in the tool bar
 	 *************************************************************************/
 	//draw the selected color
 	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 3, 147, SECOND_COLUMN_X_END, 174, selectedColor, 0);
@@ -619,20 +619,22 @@ void draw_selection_Frame(int x1, int y1, int x2, int y2, char selected,
 	 * draw_selection_Frame
 	 **************************************************************************
 	 * Parameters
-	 * x1	: x coordinate of top left corner of the selection frame
-	 * y1	: y coordinate of the top left corner of the selection frame
-	 * x2	: x coordinate of the bottom right corner of the selection frame
-	 * y2	: y coordinate of the botom right corner of the selection frame
-	 * selected	: if = 1 the frame is red if = 0 the frame is black
-	 * lastDrawingData		: Structure that save multiple variable used to keep track of previous
+	 * x1				: x coordinate of top left corner of the selection frame
+	 * y1				: y coordinate of the top left corner of the selection frame
+	 * x2				: x coordinate of the bottom right corner of the selection frame
+	 * y2				: y coordinate of the botom right corner of the selection frame
+	 * selected			: if = 1 the frame is red if = 0 the frame is black
+	 * lastDrawingData	: Structure that save multiple variable used to keep track of previous
 	 *						  shape drawn during the interactive draw
-	 * pixel_buffer is the pointer used to write in the pixel_buffer of the video pipeline
+	 * pixel_buffer		: is the pointer used to write in the pixel_buffer of the video pipeline
 	 *
 	 * Return value
 	 * none
 	 *
 	 * Side effects
-	 * none
+	 * Draw a selection frame with the two pointe x1,y1 and x2,y2. if selected ==1
+	 * the frame is Red if selected ==0 the frame is black
+	 * 
 	 *************************************************************************/
 	//draw selection perimiter 2 pixel wide
 	if (selected) {
@@ -646,6 +648,24 @@ void draw_selection_Frame(int x1, int y1, int x2, int y2, char selected,
 }
 
 void draw_icon_array(int start_x, int start_y, int row, int col, int *image, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+	/**************************************************************************
+	 * draw_icon_array
+	 **************************************************************************
+	 * Parametres
+	 * start_x	: structure that contain the x and y coordinate of the point of the cursor
+	 * start_y	: Array where to save the pixel value
+	 * row		:
+	 * col		:
+	 * 
+	 *
+	 * Return
+	 * None
+	 *
+	 * Side effects
+	 * save pixel value in a 5x5 square starting at the x and y coordiante from the
+	 * parameter coordinate
+	 *
+	 *************************************************************************/
 	int iter = 0;
 	for (unsigned char j = 0; j < col; j++) {
 		for (unsigned char i = 0; i < row; i++) {
