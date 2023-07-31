@@ -1163,8 +1163,9 @@ int main(void)
 					else if(currentTool == COLOR_SAMPLE){
 						if(currentCursor.x>DRAWING_ZONE_LEFT_LIMIT){
 							if (startUsingTool == 0){
+								lastLeft = 1;
 								cursor_erase(&currentCursor, cursorMem, pixel_buffer);
-								selectedColor = (currentCursor.x,currentCursor.y);
+								selectedColor = get_pixel_color(currentCursor.x,currentCursor.y);
 								printf("COLOR PICKER: %d", selectedColor);
 							}
 						}
