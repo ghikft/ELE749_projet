@@ -219,7 +219,7 @@ int main(void)
 	printf("start ps2\n");
 	ps2_init(); 		// from ps2_mouse.h
 	printf("init complete\n");
-	//recfiller_draw_rectangle(0, 0, 40, 60, 0);
+	//recfiller_draw_rectangle(10, 10, 40, 60, 128);
 	
 	//TBD probablu useless
 	firstPoint.x = 100;
