@@ -951,7 +951,28 @@ void process_cursor_pos(Cursor *currentCursor, int *x_pos, int *y_pos ) {
 
 void start_button(tool currentTool, char* startButtonPressed,unsigned char* left_btn, unsigned char* lastLeft, alt_u8 *cursorMem,
 	Cursor* currentCursor, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
-	
+	/**************************************************************************
+	 * start_button
+	 **************************************************************************
+	 * Parameters
+	 * currentCursor	: containt the actual cursor coordinate
+	 * currentTool		: current tool selected
+	 * startUsingTool	: varaiable that indicate a tool is in use to avoid switching tool
+	 *					  while the user is using one
+	 * selectedColor	: current selected color for the drawing
+	 * left_btn			: variable that indicate a left button press on the mouse
+	 * lastDrawingData  : Structure that save multiple variable used to keep track of previous
+	 *					  shape drawn during the interactive draw
+	 * pixel_buffer		: is the pointer used to write in the pixel_buffer of the video pipeline
+	 *
+	 * Return value
+	 * none
+	 *
+	 * Side effects
+	 * use the cursor coordinate and the left button of the ouse to detect the selection
+	 * of different tools and colors
+	 *
+	 *************************************************************************/
 	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 290, 220, 350, 260, 16, 0);
 	draw_icon_array(293, 227, 54, 27, startIconBmp, pixel_buffer);
 	//if cursor over the button
