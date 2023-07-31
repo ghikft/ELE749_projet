@@ -860,7 +860,7 @@ void tool_selection(Cursor* currentCursor, tool* currentTool, tool* lastTool, in
 			else if (currentCursor->y < 116) *currentTool = COLOR_SAMPLE;
 			else if (currentCursor->y < 145) *currentTool = CUT_PASTE;
 			//color selection
-			else if (currentCursor->y < 203 && currentCursor->y > 174) {//selected color dead zone
+			else if (currentCursor->y < 174 && currentCursor->y > 145) {//selected color dead zone
 			}
 			else if (currentCursor->y < 203 && currentCursor->y > 176) *selectedColor = BLACK;
 			else if (currentCursor->y < 232) *selectedColor = LILLA;
@@ -885,7 +885,7 @@ void tool_selection(Cursor* currentCursor, tool* currentTool, tool* lastTool, in
 			else if (currentCursor->y < 116) *currentTool = CPY_PASTE;
 			else if (currentCursor->y < 145) *currentTool = PENCIL;
 			//color selection
-			else if (currentCursor->y < 203 && currentCursor->y > 174) {//selected color dead zone
+			else if (currentCursor->y < 174 && currentCursor->y > 145) {//selected color dead zone
 			}
 			else if (currentCursor->y < 203 && currentCursor->y > 176) *selectedColor = WHITE;
 			else if (currentCursor->y < 232) *selectedColor = PURPLE;
