@@ -832,7 +832,6 @@ void tool_selection(Cursor* currentCursor, tool* currentTool, int startUsingTool
 	 * Parameters
 	 * currentCursor	: containt the actual cursor coordinate
 	 * currentTool		: current tool selected
-	 * lastTool			: memory of the last tool used
 	 * startUsingTool	: varaiable that indicate a tool is in use to avoid switching tool
 	 *					  while the user is using one
 	 * selectedColor	: current selected color for the drawing
@@ -874,9 +873,6 @@ void tool_selection(Cursor* currentCursor, tool* currentTool, int startUsingTool
 			//game and clear selection
 			else if (currentCursor->y < 435 && currentCursor->y > 408) *currentTool = PONG;
 			else if (currentCursor->y < 464 && currentCursor->y > 437) *currentTool = CLEAR;
-
-			
-
 		}
 		//second column
 		else if (currentCursor->x >= 32) {
@@ -911,9 +907,30 @@ void tool_selection(Cursor* currentCursor, tool* currentTool, int startUsingTool
 			draw_color_palette(*selectedColor, lastDrawingData, pixel_buffer);
 		}		
 	}
-
 }
 void process_cursor_pos(Cursor *currentCursor, int *x_pos, int *y_pos ) {
+	/**************************************************************************
+	 * tool_selection
+	 **************************************************************************
+	 * Parameters
+	 * currentCursor	: containt the actual cursor coordinate
+	 * currentTool		: current tool selected
+	 * startUsingTool	: varaiable that indicate a tool is in use to avoid switching tool
+	 *					  while the user is using one
+	 * selectedColor	: current selected color for the drawing
+	 * left_btn			: variable that indicate a left button press on the mouse
+	 * lastDrawingData  : Structure that save multiple variable used to keep track of previous
+	 *					  shape drawn during the interactive draw
+	 * pixel_buffer		: is the pointer used to write in the pixel_buffer of the video pipeline
+	 *
+	 * Return value
+	 * none
+	 *
+	 * Side effects
+	 * use the cursor coordinate and the left button of the ouse to detect the selection
+	 * of different tools and colors
+	 *
+	 *************************************************************************/
 	if (*x_pos > RIGHT_LIMIT * SCALE_FACTOR_INV) {
 		currentCursor->x = RIGHT_LIMIT;
 		*x_pos = RIGHT_LIMIT * SCALE_FACTOR_INV;
