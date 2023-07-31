@@ -312,13 +312,7 @@ typedef enum tool {
 	COLOR_SELECTION,
 	CLEAR
 }tool;
-typedef struct cursorPixel_S {
-	int x;
-	int y;
-	alt_u8 color;
-}cursorPixel;
 
-//cursorPixel cursorMem;
 
 typedef struct Cursor{
 	int x;
@@ -511,10 +505,11 @@ void cursorDrawSprite(Cursor* coordinate, alt_up_pixel_buffer_dma_dev* pixel_buf
 	else color = 255;
 	for (int i = 0; i < 5; i++) {
 		for (int j = 0; j < 5; j++) {
-			if (cursorSprite[iter] == 1) {				
+			if (cursorSprite[iter] == 1) {
 				alt_up_pixel_buffer_dma_draw(pixel_buffer, color, x + j, y + i);
 				iter++;
 			}
+			else iter++;
 		}
 	}
 }
@@ -902,7 +897,7 @@ int main(void)
 	int selectedColor = BLACK;
 	int cpyRngSelected =0;
 	int drawCursor = 1;
-	cursorPixel cursorMem[25];
+	alt_u8 cursorMem[25];
 
 	process_cursor_pos(&currentCursor, &x_pos, &y_pos);
 	//Stop timer and setup the interrupt, then start with 100ms period (default)
