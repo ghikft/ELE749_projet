@@ -957,12 +957,15 @@ void start_button(tool currentTool, char* startButtonPressed,unsigned char* left
 	 * Parameters
 	 * currentTool			: current tool selected
 	 * startButtonPressed	:
+	 * left_btn			: variable that indicate a left button press on the mouse
+	 * 
+	 * cursorMem	: Array where to save the pixel value
 	 * currentCursor	: containt the actual cursor coordinate
 	 
 	 * startUsingTool	: varaiable that indicate a tool is in use to avoid switching tool
 	 *					  while the user is using one
 	 * selectedColor	: current selected color for the drawing
-	 * left_btn			: variable that indicate a left button press on the mouse
+	 
 	 * lastDrawingData  : Structure that save multiple variable used to keep track of previous
 	 *					  shape drawn during the interactive draw
 	 * pixel_buffer		: is the pointer used to write in the pixel_buffer of the video pipeline
