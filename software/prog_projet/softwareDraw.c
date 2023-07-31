@@ -175,12 +175,12 @@ int draw_empty_ellipse(int x_center, int y_center, int x_radius, int y_radius,
 
 	int ratioOK = 1;
 	if (x_radius>y_radius){
-		if (x_radius/y_radius >5){
+		if (x_radius/y_radius >3){
 			ratioOK = 0;
 		}
 	}
 	else{
-		if(y_radius/x_radius >5){
+		if(y_radius/x_radius >3){
 			ratioOK = 0;
 		}
 	}
