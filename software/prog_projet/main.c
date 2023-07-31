@@ -1160,6 +1160,12 @@ int main(void)
 						lastCursor.y = currentCursor.y;
 						lastCursorColor = selectedColor;//was DRAW_COLOR
 					}
+					else if(currentTool == COLOR_SAMPLE){
+						if (startUsingTool == 0){
+							cursor_erase(&currentCursor, cursorMem, pixel_buffer);
+							selectedColor = (currentCursor.x,currentCursor.y);
+						}
+					}
 					else if (currentTool == EMPTY_RECTANGLE|| currentTool == FILLED_RECTANGLE) {
 						if (startUsingTool == 0) {
 							cursor_erase(&currentCursor, cursorMem, pixel_buffer);
@@ -1291,6 +1297,12 @@ int main(void)
 								startUsingTool = 0;
 								lastLeft = 0;
 								cursor_save(&currentCursor, cursorMem);
+							}
+						}
+						else if(currentTool == COLOR_SAMPLE){
+							if (startUsingTool){
+								startUsingTool = 0;
+								lastLeft = 0;
 							}
 						}
 						else if(currentTool==EMPTY_RECTANGLE||currentTool==FILLED_RECTANGLE){
