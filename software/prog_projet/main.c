@@ -652,32 +652,34 @@ void draw_icon_array(int start_x, int start_y, int row, int col, int *image, alt
 	 * draw_icon_array
 	 **************************************************************************
 	 * Parametres
-	 * start_x	: structure that contain the x and y coordinate of the point of the cursor
-	 * start_y	: Array where to save the pixel value
-	 * row		:
-	 * col		:
+	 * start_x	: x coordinate of top left corner of the icon
+	 * start_y	: y coordinate of the top left corner of the icon
+	 * row		: number of pixel in the vertical orientation
+	 * col		: number of pixel in the horizontal orientation
+	 * image	: array containting the icon PixelMask to draw the image
+	 * pixel_buffer : is the pointer used to write in the pixel_buffer of the video pipeline
 	 * 
 	 *
 	 * Return
 	 * None
 	 *
 	 * Side effects
-	 * save pixel value in a 5x5 square starting at the x and y coordiante from the
-	 * parameter coordinate
+	 * Draw the content of an array of a specified size starting at a specified x and y 
+	 * coordinate
+	 * 
+	 * Draw in BLACK
 	 *
 	 *************************************************************************/
 	int iter = 0;
 	for (unsigned char j = 0; j < col; j++) {
 		for (unsigned char i = 0; i < row; i++) {
-			
+			//test the icon mask
 			if (image[iter] == 1) {
 				alt_up_pixel_buffer_dma_draw(pixel_buffer, BLACK, start_x + i, start_y + j);
 				iter++;
-				//printf("(x: %d  y: %d) iter: %d val: %d\n\r", start_x + i, start_y + j, iter, image[iter]);
 			}
 			else {
 				iter++;
-				//printf("0\n\r");
 			}
 		}
 	}
@@ -700,7 +702,9 @@ void draw_icon(tool icon, char selected,
 	 * none
 	 *
 	 * Side effects
+	 * If the icon is valid
 	 * If icon argument is invalid, the function draw nothing
+	 * 
 	 *************************************************************************/
 	//Switch case to chose the icon to draw
 	switch (icon) {
