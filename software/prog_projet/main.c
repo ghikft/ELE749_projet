@@ -1089,8 +1089,8 @@ int main(void)
 								printf("second point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
 								soft_emptyRect_draw(0, 0, 0, 0,
 									selectedColor, 1, &lastDrawingData, pixel_buffer);
-								lastCursorColor = selectedColor;
-								alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
+								//lastCursorColor = selectedColor;
+								//alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
 								lastDrawingData.firstErase = 1;
 								lastLeft = 0;
 								//draw_icon(currentTool, 1, &lastDrawingData, pixel_buffer);
