@@ -1170,7 +1170,7 @@ int main(void)
 					}
 					else if(currentTool == CPY_PASTE || currentTool == CUT_PASTE){
 						if(currentCursor.x>DRAWING_ZONE_LEFT_LIMIT){
-							if (startUsingTool == 0 && cpyRngSelected == 0 && lastLeft == 0) {
+							if (startUsingTool == 0 && cpyRngSelected == 0) {
 								//alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
 								cursor_erase(&currentCursor, &cursorMem, pixel_buffer);
 								printf("first point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
@@ -1190,6 +1190,9 @@ int main(void)
 								}
 								else{
 									soft_copy_paste(firstPoint.x,firstPoint.y,secondPoint.x,secondPoint.y,currentCursor.x,currentCursor.y,0,0, pixel_buffer);
+								}
+								while(left_btn){
+									ps2_process(&left_btn, &right_btn, &x_mov, &y_mov);
 								}
 								startUsingTool = 0;
 							}
