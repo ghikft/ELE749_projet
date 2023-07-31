@@ -968,8 +968,7 @@ void start_button(tool currentTool, char* startButtonPressed,unsigned char* left
 	 * none
 	 *
 	 * Side effects
-	 * use the cursor coordinate and the left button of the ouse to detect the selection
-	 * of different tools and colors
+	 * Draw a start button at in the middle of the screen. If
 	 *
 	 *************************************************************************/
 	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 290, 220, 350, 260, 16, 0);
