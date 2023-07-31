@@ -1280,6 +1280,12 @@ int main(void)
 								printf("second point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
 								soft_empty_rectangle_draw(0, 0, 0, 0,
 									selectedColor, 1, &lastDrawingData, pixel_buffer);
+								if(cpyRngSelected){
+									int rngX = currentCursor.x+(secondPoint.x-firstPoint.x);
+									int rngY = currentCursor.y+(secondPoint.y-secondPoint.y);
+									soft_empty_rectangle_draw(currentCursor.x, currentCursor.y, rngX, rngY,
+									BLACK, 1, &lastDrawingData, pixel_buffer);
+								}
 								//lastCursorColor = selectedColor;
 								//alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
 								lastDrawingData.firstErase = 1;
