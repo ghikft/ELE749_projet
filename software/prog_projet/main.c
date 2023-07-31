@@ -1191,6 +1191,7 @@ int main(void)
 							else{
 								soft_copy_paste(firstPoint.x,firstPoint.y,secondPoint.x,secondPoint.y,currentCursor.x,currentCursor.y,0,0, pixel_buffer);
 							}
+							startUsingTool = 0;
 						}
 						else {
 							lastCursorColor = get_pixel_color(currentCursor.x,currentCursor.y);
@@ -1303,8 +1304,6 @@ int main(void)
 						else if(currentTool == CPY_PASTE || currentTool == CUT_PASTE){
 							if (startUsingTool == 1) {
 								cpyRngSelected = 1;
-								
-								startUsingTool = 0;
 								secondPoint.x = currentCursor.x;
 								secondPoint.y = currentCursor.y;
 								//lastCursorColor = get_pixel_color(secondPoint.x,secondPoint.y);
