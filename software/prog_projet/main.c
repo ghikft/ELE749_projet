@@ -1081,7 +1081,7 @@ int main(void)
 						else if(currentTool == CPY_PASTE){
 							if (startUsingTool == 1) {
 								cpyRngSelected = 1;
-								//lastCursorColor = selectedColor;
+								
 								startUsingTool = 0;
 								secondPoint.x = currentCursor.x;
 								secondPoint.y = currentCursor.y;
@@ -1089,6 +1089,7 @@ int main(void)
 								printf("second point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
 								soft_emptyRect_draw(0, 0, 0, 0,
 									selectedColor, 1, &lastDrawingData, pixel_buffer);
+								lastCursorColor = selectedColor;
 								alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
 								lastDrawingData.firstErase = 1;
 								lastLeft = 0;
