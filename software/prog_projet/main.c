@@ -956,7 +956,7 @@ int main(void)
 								selectedColor, 1, &lastDrawingData, pixel_buffer);
 						}
 					}
-					else if(currentTool == CPY_PASTE){
+					else if(currentTool == CPY_PASTE || currentTool == CUT_PASTE){
 						if (startUsingTool == 0 && cpyRngSelected == 0) {
 							alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
 							printf("first point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
@@ -971,7 +971,12 @@ int main(void)
 						}
 						else if (cpyRngSelected){
 							cpyRngSelected = 0;
-							soft_copy_paste(firstPoint.x,firstPoint.y,secondPoint.x,secondPoint.y,currentCursor.x,currentCursor.y,0, pixel_buffer);
+							if (currentTool == CUT_PASTE){
+								soft_copy_paste(firstPoint.x,firstPoint.y,secondPoint.x,secondPoint.y,currentCursor.x,currentCursor.y,1,selectedColor, pixel_buffer);
+							}
+							else{
+								soft_copy_paste(firstPoint.x,firstPoint.y,secondPoint.x,secondPoint.y,currentCursor.x,currentCursor.y,0,0, pixel_buffer);
+							}
 						}
 						else {
 							lastCursorColor = get_pixel_color(currentCursor.x,currentCursor.y);

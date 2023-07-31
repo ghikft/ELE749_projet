@@ -62,5 +62,5 @@ void soft_draw_line(int x1, int y1,
     				int x2, int y2,
     				int color, int erasePreviousWork, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer);
 
-void soft_copy_paste(int x1_copy, int y1_copy, int x2_copy, int y2_copy, int x1_paste, int y1_paste, int cut, alt_up_pixel_buffer_dma_dev* pixel_buffer);
+void soft_copy_paste(int x1_copy, int y1_copy, int x2_copy, int y2_copy, int x1_paste, int y1_paste, int cut, char color, alt_up_pixel_buffer_dma_dev* pixel_buffer);
 #endif  // SOFT_DRAW_H_

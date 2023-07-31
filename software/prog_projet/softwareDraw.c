@@ -584,7 +584,7 @@ int absoluteV(int x){
 	}
 }
 
-void soft_copy_paste(int x1_copy, int y1_copy, int x2_copy, int y2_copy, int x1_paste, int y1_paste, int cut, alt_up_pixel_buffer_dma_dev* pixel_buffer){
+void soft_copy_paste(int x1_copy, int y1_copy, int x2_copy, int y2_copy, int x1_paste, int y1_paste, int cut, char color, alt_up_pixel_buffer_dma_dev* pixel_buffer){
 	
 	char copyMem[307200];
 	int nbPts=0;
@@ -614,6 +614,10 @@ void soft_copy_paste(int x1_copy, int y1_copy, int x2_copy, int y2_copy, int x1_
 		}
 		copyMem[i] = get_pixel_color2(x_cpy,y_cpy);
 		x_cpy++;
+		//replace with color if cut
+		if (cut){
+			alt_up_pixel_buffer_dma_draw(pixel_buffer, color ,x_cpy,y_cpy);
+		}
 	}
 	//paste loop
 	int x_paste, y_paste;
