@@ -692,17 +692,17 @@ void draw_icon(tool icon, char selected,
 	 * draw_icon
 	 **************************************************************************
 	 * Parameters
-	 * icon	: name of the icon to draw
-	 * selected	: 1 = selected (draw a red frame around the icon if 0 the frame is black	 
-	 * lastDrawingData		: Structure that save multiple variable used to keep track of previous
-	 *						  shape drawn during the interactive draw
-	 * pixel_buffer			: is the pointer used to write in the pixel_buffer of the video pipeline
+	 * icon				: name of the icon to draw
+	 * selected			: 1 = selected (draw a red frame around the icon if 0 the frame is black	 
+	 * lastDrawingData	: Structure that save multiple variable used to keep track of previous
+	 *					  shape drawn during the interactive draw
+	 * pixel_buffer		: is the pointer used to write in the pixel_buffer of the video pipeline
 	 *
 	 * Return value
 	 * none
 	 *
 	 * Side effects
-	 * If the icon is valid
+	 * Draw the
 	 * If icon argument is invalid, the function draw nothing
 	 * 
 	 *************************************************************************/
