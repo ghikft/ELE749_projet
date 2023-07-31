@@ -520,7 +520,9 @@ void soft_copy_paste(int x1_copy, int y1_copy, int x2_copy, int y2_copy, int x1_
 
 	//nbPts = ((x2_copy-1)-(x1_copy+1))*((y2_copy-1)-(y1_copy+1));
 	nbPts = ((x2_copy-x1_copy-2)*(y2_copy-y1_copy-2));
-
+	printf("x1: %d, y1: %d\n\r",x1_copy,y1_copy);
+	printf("x2: %d, y2: %d\n\r",x2_copy,y2_copy);
+	printf("nbpts: %d\n\r",nbPts);
 	int x_cpy, y_cpy;
 	x_cpy = x1_copy+1;
 	y_cpy = y1_copy+1;
