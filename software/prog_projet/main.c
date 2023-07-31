@@ -255,6 +255,35 @@ int clearIconBmp[729] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 							0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 							0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 							0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
+
+int startIconBmp[1458] = {	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+							0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+							0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+							0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,
+							0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,
+							0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,
+							0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,
+							0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,
+							0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,
+							0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,
+							0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,1,0,0,0,0,
+							0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,
+							0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,
+							0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,
+							0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,
+							0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,
+							0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,
+							0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,
+							0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,
+							0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,
+							0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,
+							0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,
+							0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,
+							0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+							0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+							0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+							0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+
 int cursorSprite[25] = {	1,1,1,1,1,
 							1,1,0,0,0,
 							1,0,1,0,0,
@@ -506,18 +535,18 @@ void draw_color_palette(int selectedColor, lastDrawingVar* lastDrawingData, alt_
 	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, SECOND_COLUMN_X_START, 379, SECOND_COLUMN_X_END, 406, DARK_BLUE, 0);
 
 	//draw frame around the current color
-	soft_emptyRect_draw(3, 147, SECOND_COLUMN_X_END, 174, NOT_ERASE_PREVIOUS_WORK, BLACK, lastDrawingData, pixel_buffer);
+	soft_empty_rectangle_draw(3, 147, SECOND_COLUMN_X_END, 174, NOT_ERASE_PREVIOUS_WORK, BLACK, lastDrawingData, pixel_buffer);
 }
 void draw_selection_Frame(int x1, int y1, int x2, int y2, char selected,
 	lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
 	//draw selection perimiter
 	if (selected) {
-		soft_emptyRect_draw(x1, y1, x2, y2, SELECTION_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
-		soft_emptyRect_draw(x1+1, y1+1, x2-1, y2-1, SELECTION_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
+		soft_empty_rectangle_draw(x1, y1, x2, y2, SELECTION_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
+		soft_empty_rectangle_draw(x1+1, y1+1, x2-1, y2-1, SELECTION_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
 	}
 	else {
-		soft_emptyRect_draw(x1, y1, x2, y2, TOOL_BOX_BACKGROUND_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
-		soft_emptyRect_draw(x1 + 1, y1 + 1, x2 -1, y2 -1, BLACK, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
+		soft_empty_rectangle_draw(x1, y1, x2, y2, TOOL_BOX_BACKGROUND_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
+		soft_empty_rectangle_draw(x1 + 1, y1 + 1, x2 -1, y2 -1, BLACK, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
 	}
 }
 
@@ -547,7 +576,7 @@ void draw_icon(tool icon, char selected,
 	case EMPTY_RECTANGLE:
 		draw_selection_Frame(2, 2, 29, 29, selected, lastDrawingData, pixel_buffer);
 		//draw icon
-		soft_emptyRect_draw(6, 11, 25, 20, BLACK, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
+		soft_empty_rectangle_draw(6, 11, 25, 20, BLACK, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
 		break;
 	case FILLED_RECTANGLE:
 		draw_selection_Frame(31, 2, 58, 29, selected, lastDrawingData, pixel_buffer);
@@ -645,8 +674,8 @@ void draw_tool_bar(tool currentTool, lastDrawingVar* lastDrawingData, alt_up_pix
 	//draw tool bar background
 	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, LEFT_LIMIT, TOP_LIMIT, DRAWING_ZONE_LEFT_LIMIT, BOTTOM_LIMIT, TOOL_BOX_BACKGROUND_COLOR, 0);
 	//Draw frame
-	soft_emptyRect_draw(LEFT_LIMIT, TOP_LIMIT, DRAWING_ZONE_LEFT_LIMIT, BOTTOM_LIMIT,NOT_ERASE_PREVIOUS_WORK, BLACK, lastDrawingData, pixel_buffer);
-	soft_emptyRect_draw(LEFT_LIMIT+1, TOP_LIMIT+1, DRAWING_ZONE_LEFT_LIMIT-1, BOTTOM_LIMIT-1, NOT_ERASE_PREVIOUS_WORK, BLACK, lastDrawingData, pixel_buffer);
+	soft_empty_rectangle_draw(LEFT_LIMIT, TOP_LIMIT, DRAWING_ZONE_LEFT_LIMIT, BOTTOM_LIMIT,NOT_ERASE_PREVIOUS_WORK, BLACK, lastDrawingData, pixel_buffer);
+	soft_empty_rectangle_draw(LEFT_LIMIT+1, TOP_LIMIT+1, DRAWING_ZONE_LEFT_LIMIT-1, BOTTOM_LIMIT-1, NOT_ERASE_PREVIOUS_WORK, BLACK, lastDrawingData, pixel_buffer);
 	draw_icon(EMPTY_RECTANGLE, 0, lastDrawingData, pixel_buffer);
 	draw_icon(FILLED_RECTANGLE, 0, lastDrawingData, pixel_buffer);
 	draw_icon(EMPTY_ELLIPSE, 0, lastDrawingData, pixel_buffer);
@@ -769,6 +798,7 @@ void start_button(tool currentTool, char* startButtonPressed,unsigned char* left
 	Cursor* currentCursor, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
 	
 	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 290, 220, 350, 260, 16, 0);
+	draw_icon_array(293, 227, 54, 27, startIconBmp, pixel_buffer);
 	//if cursor over the button
 	if (*left_btn) {
 		//if cursor over the start button while left clic register the clic
@@ -876,21 +906,22 @@ int main(void)
 	ps2_init(); 		// from ps2_mouse.h
 	printf("init complete\n");
 	//recfiller_draw_rectangle(0, 0, 40, 60, 0);
+	
+	//TBD probablu useless
 	firstPoint.x = 100;
 	firstPoint.y = 100;
 	secondPoint.x = 110;
 	secondPoint.y = 110;
-	//soft_emptyRect_draw(firstPoint.x, firstPoint.y,
-	//					secondPoint.x, secondPoint.y,
-	//					DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);
-	//printf("recfill %d\n", recfiller_draw_rectangle(1, 1, 10, 10, 44));
-	/* main loop */
+	
+	
 
 	//initiate the drawing zone and tool bar
 	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 62, 0, 640, 480, BACKGROUD_COLOR, 0);
 	draw_tool_bar(currentTool , &lastDrawingData, pixel_buffer);
 	draw_color_palette(selectedColor, &lastDrawingData, pixel_buffer);
-	//draw_icon(currentTool, 1, &lastDrawingData, pixel_buffer);
+	init_last_drawing_Var(&lastDrawingData);
+	
+	/* main loop */
 	while (1) {
 		// process screen drawing during vertical blank
 		if (!alt_up_pixel_buffer_dma_check_swap_buffers_status(pixel_buffer)) {
@@ -902,6 +933,9 @@ int main(void)
 			//if using tool only get the new cursor position
 			if (startUsingTool == 1) {
 				process_cursor_pos(&currentCursor, &x_pos, &y_pos);				
+			}
+			else {
+				//cursor updated at the end of the loop
 			}
 
 			//need to press the start button before being able to do anything else
@@ -951,7 +985,7 @@ int main(void)
 							lastLeft = 1;
 						}
 						else {
-							soft_emptyRect_draw(firstPoint.x, firstPoint.y,
+							soft_empty_rectangle_draw(firstPoint.x, firstPoint.y,
 								currentCursor.x, currentCursor.y,
 								selectedColor, 1, &lastDrawingData, pixel_buffer);
 						}
@@ -965,7 +999,7 @@ int main(void)
 							startUsingTool = 1;
 							lastLeft = 1;
 							drawCursor = 0;
-							soft_emptyRect_draw(firstPoint.x, firstPoint.y,
+							soft_empty_rectangle_draw(firstPoint.x, firstPoint.y,
 								currentCursor.x, currentCursor.y,
 								0, 1, &lastDrawingData, pixel_buffer);
 						}
@@ -981,7 +1015,7 @@ int main(void)
 						else {
 							lastCursorColor = get_pixel_color(currentCursor.x,currentCursor.y);
 							alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
-							soft_emptyRect_draw(firstPoint.x, firstPoint.y,
+							soft_empty_rectangle_draw(firstPoint.x, firstPoint.y,
 								currentCursor.x, currentCursor.y,
 								0, 1, &lastDrawingData, pixel_buffer);
 						}
@@ -1069,10 +1103,10 @@ int main(void)
 								secondPoint.x = currentCursor.x;
 								secondPoint.y = currentCursor.y;
 								printf("second point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
-								soft_emptyRect_draw(firstPoint.x, firstPoint.y,
+								soft_empty_rectangle_draw(firstPoint.x, firstPoint.y,
 									secondPoint.x, secondPoint.y,
 									selectedColor, 1, &lastDrawingData, pixel_buffer);
-								soft_emptyRect_draw(firstPoint.x, firstPoint.y,
+								soft_empty_rectangle_draw(firstPoint.x, firstPoint.y,
 									secondPoint.x, secondPoint.y,
 									selectedColor, 0, &lastDrawingData, pixel_buffer);
 
@@ -1093,7 +1127,7 @@ int main(void)
 								secondPoint.y = currentCursor.y;
 								//lastCursorColor = get_pixel_color(secondPoint.x,secondPoint.y);
 								printf("second point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
-								soft_emptyRect_draw(0, 0, 0, 0,
+								soft_empty_rectangle_draw(0, 0, 0, 0,
 									selectedColor, 1, &lastDrawingData, pixel_buffer);
 								//lastCursorColor = selectedColor;
 								//alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
@@ -1118,7 +1152,7 @@ int main(void)
 									currentCursor.x - firstPoint.x, currentCursor.y - firstPoint.y,
 									selectedColor, pixel_buffer, 0, &lastDrawingData);
 								
-								//	soft_emptyRect_draw(firstPoint.x, firstPoint.y,
+								//	soft_empty_rectangle_draw(firstPoint.x, firstPoint.y,
 								//	secondPoint.x, secondPoint.y,
 								//	DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);
 
@@ -1159,7 +1193,7 @@ int main(void)
 								draw_empty_ellipse(firstPoint.x, firstPoint.y,
 									currentCursor.x - firstPoint.x-2, currentCursor.y - firstPoint.y-2,
 									selectedColor, pixel_buffer, 0, &lastDrawingData);
-								//	soft_emptyRect_draw(firstPoint.x, firstPoint.y,
+								//	soft_empty_rectangle_draw(firstPoint.x, firstPoint.y,
 								//	secondPoint.x, secondPoint.y,
 								//	DRAW_COLOR, 0, &lastDrawingData, pixel_buffer);
 								fill_to_edge_zone(firstPoint.x, firstPoint.y, selectedColor, pixel_buffer);

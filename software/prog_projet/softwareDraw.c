@@ -24,20 +24,27 @@ void soft_draw_line_low(int x1, int y1,
     				int x2, int y2,
     				int color, int erasePreviousWork, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer);
 
-//void erase_last_drawn_shape()
-void soft_emptyRect_draw(int x_left, int y_top,
+
+void soft_empty_rectangle_draw(int x_left, int y_top,
 	int x_right, int y_bottom,
 	int color, int erasePreviousWork, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer)
 {
 	/**************************************************************************
-	 * Get the color value of a specific pixel
+	 * soft_empty_rectangle_draw
 	 **************************************************************************
 	 * Parameters
-	 * x : x coordinate of the pixel
-	 * y : y coordinate of the pixel
+	 * x_left	: x coordinate of the top left corner
+	 * y_top	: y coordinate of the top left corner
+	 * x_right	: x coordinate of the bottom right corner
+	 * y_bottom : y coordinate of the botom right corner
+	 * color	: color to dra the empty rectangle
+	 * erasePreviousWork	: Delete the previous rectangle stored in lastDrawingData 1=erase 0 = not erase
+	 * lastDrawingData		: Structure that save multiple variable used to keep track of previous 
+	 *						  shape drawn during the interactive draw
+	 * pixel_buffer is the pointer used to write in the pixel_buffer of the video pipeline
 	 *
-	 * Valeur de retour
-	 * specified pixel color
+	 * Return value
+	 * none
 	 *
 	 * Side effects
 	 * none
@@ -46,6 +53,8 @@ void soft_emptyRect_draw(int x_left, int y_top,
 	int tempReorder;
 	int x;
 	int y;
+	//check if it is required to erase the rectangle but avoid doing so
+	//if it it the first time de rectangle is drawn with (firstErase)
 	if (erasePreviousWork == TRUE) {
 		if (lastDrawingData->firstErase == TRUE) {
 			lastDrawingData->firstErase = FALSE;
@@ -56,14 +65,18 @@ void soft_emptyRect_draw(int x_left, int y_top,
 		}
 		x = lastDrawingData->lastFirstPointX;
 		y = lastDrawingData->lastFirstPointY;
+		//erase the rectangle with stored pixel value under it
 		for (int j = 0; j < lastDrawingData->numberOfPixelForLastDraw; j++) {
 			alt_up_pixel_buffer_dma_draw(pixel_buffer, lastDrawingData->lastPixelMemory[j].color,
 				lastDrawingData->lastPixelMemory[j].x, lastDrawingData->lastPixelMemory[j].y); 
 		}
 	}
 	lastDrawingData->numberOfPixelForLastDraw = 0;
-	//reorder point so the x_left coordinate are always smaller than x_right and y_top smaller than y_bottom
+	
+	//only draw the rectangle if the dimension are 2 or greater for horizontal and vertical
 	if ((x_left != x_right) && (y_top != y_bottom)) {
+		//reorder point so the x_left coordinate are always smaller 
+		//than x_right and y_top smaller than y_bottom
 		if (x_left > x_right) {
 			tempReorder = x_left;
 			x_left = x_right;
@@ -81,12 +94,11 @@ void soft_emptyRect_draw(int x_left, int y_top,
 		lastDrawingData->lastSecondPointY = y_bottom;
 
 		//Draw the new rectangle
-		//if (erasePreviousWork == FALSE) {
-			//printf("draw rect\n\r");
+		//Start by saving the pixel where the rectangle will be drawn then draw the pixel.
+		//It is done clock-wise from left-top corner
 		x = x_left;
 		y = y_top;
-		//Start by saving the pixel where the rectangle will be drawn clock wise from left-top corner
-		//then draw right after saving the pixel.
+		
 		lastDrawingData->numberOfPixelForLastDraw = 0;
 
 		//draw top line
@@ -95,148 +107,53 @@ void soft_emptyRect_draw(int x_left, int y_top,
 			lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].x = x;
 			lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].y = y; 
 			alt_up_pixel_buffer_dma_draw(pixel_buffer, color, x, y);
-			//printf("loop1 %d\n\r", x);
 			x++;
 			lastDrawingData->numberOfPixelForLastDraw++;
 		}
-		//printf("loop1 end x %d\n\r",x);
 		//draw right veritcal line
 		while (y < y_bottom) {
 			lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].color = get_pixel_color2(x, y);
 			lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].x = x;
 			lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].y = y;
 			alt_up_pixel_buffer_dma_draw(pixel_buffer, color, x, y);
-			//printf("loop2 %d\n\r", y);
 			y++;
 			lastDrawingData->numberOfPixelForLastDraw++;
 		}
-		//printf("loop2 end y %d\n\r", y);
 		//draw bottom line
 		while (x > x_left) {
 			lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].color = get_pixel_color2(x, y);
 			lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].x = x;
 			lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].y = y;
 			alt_up_pixel_buffer_dma_draw(pixel_buffer, color, x, y);
-			//printf("loop3 %d\n\r", x);
 			x--;
 			lastDrawingData->numberOfPixelForLastDraw++;
 		}
-		//printf("loop3 end x %d\n\r", x);
 		//draw left line
 		while (y > y_top) {
 			lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].color = get_pixel_color2(x, y);
 			lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].x = x;
 			lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].y = y;
 			alt_up_pixel_buffer_dma_draw(pixel_buffer, color, x, y);
-			//printf("loop4 %d\n\r", y);
 			y--;
 			lastDrawingData->numberOfPixelForLastDraw++;
 		}
-		//printf("loop4 end y %d\n\r", y);
-	}
-
-	/*
-
-	//if in process of dragging the rectangle to desired size, supress the old rectangle first
-	if (erasePreviousWork == TRUE) {
-		if (lastDrawingData->firstErase == TRUE) {
-			lastDrawingData->firstErase = FALSE;
-			lastDrawingData->lastFirstPointX = x_left;
-			lastDrawingData->lastSecondPointX = x_left;
-			lastDrawingData->lastFirstPointY = y_top;
-			lastDrawingData->lastSecondPointY = y_top;
-		}
-		x = lastDrawingData->lastFirstPointX;
-		y = lastDrawingData->lastFirstPointY;
-
-		int iter = 0;
-		while (x < lastDrawingData->lastSecondPointX) {
-			alt_up_pixel_buffer_dma_draw(pixel_buffer, lastDrawingData->lastDrawnPixelMemory[iter], x, y);
-			x++;
-			iter++;
-		}
-		while (y < lastDrawingData->lastSecondPointY) {
-			alt_up_pixel_buffer_dma_draw(pixel_buffer, lastDrawingData->lastDrawnPixelMemory[iter], x, y);
-			y++;
-			iter++;
-		}			
-		while (x > lastDrawingData->lastFirstPointX) {
-			alt_up_pixel_buffer_dma_draw(pixel_buffer, lastDrawingData->lastDrawnPixelMemory[iter], x, y);
-			x--;
-			iter++;
-		}			
-		while (y > lastDrawingData->lastFirstPointY) {
-			alt_up_pixel_buffer_dma_draw(pixel_buffer, lastDrawingData->lastDrawnPixelMemory[iter], x, y);
-			y--;
-			iter++;
-		}
-	}
-	
-	//reorder point so the x_left coordinate are always smaller than x_right and y_top smaller than y_bottom
-	if((x_left!=x_right)&&(y_top!=y_bottom)){
-		if (x_left > x_right) {
-			tempReorder = x_left;
-			x_left = x_right;
-			x_right = tempReorder;
-		}	
-		lastDrawingData->lastFirstPointX = x_left;
-		lastDrawingData->lastSecondPointX = x_right;
-	
-		if (y_top > y_bottom) {
-			tempReorder = y_top;
-			y_top = y_bottom;
-			y_bottom = tempReorder;
-		}
-		lastDrawingData->lastFirstPointY = y_top;
-		lastDrawingData->lastSecondPointY = y_bottom;
-	
-	//Draw the new rectangle
-	//if (erasePreviousWork == FALSE) {
-		//printf("draw rect\n\r");
-		x = x_left;
-		y = y_top;
-		//Start by saving the pixel where the rectangle will be drawn clock wise from left-top corner
-		//then draw right after saving the pixel.
-		lastDrawingData->numberOfPixelForLastDraw = 0;
-		
-		while (x < x_right) {
-			lastDrawingData->lastDrawnPixelMemory[lastDrawingData->numberOfPixelForLastDraw] = get_pixel_color2(x, y);
-			alt_up_pixel_buffer_dma_draw(pixel_buffer, color, x, y);
-			//printf("loop1 %d\n\r", x);
-			x++;
-			lastDrawingData->numberOfPixelForLastDraw++;
-		}
-		//printf("loop1 end x %d\n\r",x);
-		while (y < y_bottom) {
-			lastDrawingData->lastDrawnPixelMemory[lastDrawingData->numberOfPixelForLastDraw] = get_pixel_color2(x, y);
-			alt_up_pixel_buffer_dma_draw(pixel_buffer, color, x, y);
-			//printf("loop2 %d\n\r", y);
-			y++;
-			lastDrawingData->numberOfPixelForLastDraw++;
-		}
-		//printf("loop2 end y %d\n\r", y);
-		while (x > x_left) {			
-			lastDrawingData->lastDrawnPixelMemory[lastDrawingData->numberOfPixelForLastDraw] = get_pixel_color2(x, y);			
-			alt_up_pixel_buffer_dma_draw(pixel_buffer, color, x, y);			
-				//printf("loop3 %d\n\r", x);
-			x--;
-			lastDrawingData->numberOfPixelForLastDraw++;
-		}
-		//printf("loop3 end x %d\n\r", x);
-		while (y > y_top) {			
-			lastDrawingData->lastDrawnPixelMemory[lastDrawingData->numberOfPixelForLastDraw] = get_pixel_color2(x, y);			
-			alt_up_pixel_buffer_dma_draw(pixel_buffer, color, x, y);			
-				//printf("loop4 %d\n\r", y);
-			y--;
-			lastDrawingData->numberOfPixelForLastDraw++;
-		}
-		//printf("loop4 end y %d\n\r", y);
-	}
-	
-	//printf("nb pixel %d\n\r", lastDrawingData->numberOfPixelForLastDraw++);*/
+	}	
 }
 
-void init_lastDrawingVar(lastDrawingVar* lastDrawingData) {
+void init_last_drawing_Var(lastDrawingVar* lastDrawingData) {
+	/**************************************************************************
+	 * init_last_drawing_Var
+	 **************************************************************************
+	 * Parameters
+	 *lastDrawingData		: Structure that save multiple variable used to keep track of previous
+	 *						  shape drawn during the interactive draw
+	  *
+	 * Return value
+	 * none
+	 *
+	 * Side effects
+	 * none
+	 *************************************************************************/
 	lastDrawingData->firstErase = TRUE;
 	lastDrawingData->lastFirstPointX = 0;
 	lastDrawingData->lastFirstPointY = 0;

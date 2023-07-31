@@ -38,7 +38,7 @@ void soft_recfiller_init(int x_size, int y_size);
 unsigned char get_pixel_color2(int x, int y);
 
 
-void soft_emptyRect_draw(int x_left, int y_top,
+void soft_empty_rectangle_draw(int x_left, int y_top,
                          int x_right, int y_bottom,
                          int color, int erasePreviousWork, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer);
 /*unsigned int soft_recfiller_draw_rectangle(int x_left, int y_top,
@@ -63,4 +63,6 @@ void soft_draw_line(int x1, int y1,
     				int color, int erasePreviousWork, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer);
 
 void soft_copy_paste(int x1_copy, int y1_copy, int x2_copy, int y2_copy, int x1_paste, int y1_paste, int cut, char color, alt_up_pixel_buffer_dma_dev* pixel_buffer);
+
+void init_last_drawing_Var(lastDrawingVar* lastDrawingData);
 #endif  // SOFT_DRAW_H_
