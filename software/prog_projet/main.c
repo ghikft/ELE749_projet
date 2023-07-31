@@ -506,7 +506,21 @@ void cursorDrawSprite(Cursor* coordinate, cursorPixel* cursorMem, alt_up_pixel_b
 }
 
 void draw_color_palette(int selectedColor, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
-	
+	/**************************************************************************
+	 * draw_color_palette
+	 **************************************************************************
+	 * Parameters
+	 * selectedColor	: 8 bit RGB color value to draw in the selected color Box in the tool bar
+	 * lastDrawingData		: Structure that save multiple variable used to keep track of previous
+	 *						  shape drawn during the interactive draw
+	 * pixel_buffer is the pointer used to write in the pixel_buffer of the video pipeline
+	 *
+	 * Return value
+	 * none
+	 *
+	 * Side effects
+	 * none
+	 *************************************************************************/
 	//draw the selected color
 	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 3, 147, SECOND_COLUMN_X_END, 174, selectedColor, 0);
 	//draw the color palette
@@ -537,9 +551,29 @@ void draw_color_palette(int selectedColor, lastDrawingVar* lastDrawingData, alt_
 	//draw frame around the current color
 	soft_empty_rectangle_draw(3, 147, SECOND_COLUMN_X_END, 174, NOT_ERASE_PREVIOUS_WORK, BLACK, lastDrawingData, pixel_buffer);
 }
+
 void draw_selection_Frame(int x1, int y1, int x2, int y2, char selected,
 	lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
-	//draw selection perimiter
+	/**************************************************************************
+	 * draw_selection_Frame
+	 **************************************************************************
+	 * Parameters
+	 * x1	: x coordinate of top left corner of the selection frame
+	 * y1	: y coordinate of the top left corner of the selection frame
+	 * x2	: x coordinate of the bottom right corner of the selection frame
+	 * y2	: y coordinate of the botom right corner of the selection frame
+	 * selected	: if = 1 the frame is red if = 0 the frame is black
+	 * lastDrawingData		: Structure that save multiple variable used to keep track of previous
+	 *						  shape drawn during the interactive draw
+	 * pixel_buffer is the pointer used to write in the pixel_buffer of the video pipeline
+	 *
+	 * Return value
+	 * none
+	 *
+	 * Side effects
+	 * none
+	 *************************************************************************/
+	//draw selection perimiter 2 pixel wide
 	if (selected) {
 		soft_empty_rectangle_draw(x1, y1, x2, y2, SELECTION_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
 		soft_empty_rectangle_draw(x1+1, y1+1, x2-1, y2-1, SELECTION_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
@@ -571,7 +605,23 @@ void draw_icon(tool icon, char selected,
 	lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer);
 void draw_icon(tool icon, char selected,
 	lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
-
+	/**************************************************************************
+	 * draw_icon
+	 **************************************************************************
+	 * Parameters
+	 * icon	: name of the icon to draw
+	 * selected	: 1 = selected (draw a red frame around the icon if 0 the frame is black	 
+	 * lastDrawingData		: Structure that save multiple variable used to keep track of previous
+	 *						  shape drawn during the interactive draw
+	 * pixel_buffer			: is the pointer used to write in the pixel_buffer of the video pipeline
+	 *
+	 * Return value
+	 * none
+	 *
+	 * Side effects
+	 * If icon argument is invalid, the function draw nothing
+	 *************************************************************************/
+	//Switch case to chose the icon to draw
 	switch (icon) {
 	case EMPTY_RECTANGLE:
 		draw_selection_Frame(2, 2, 29, 29, selected, lastDrawingData, pixel_buffer);
@@ -583,94 +633,72 @@ void draw_icon(tool icon, char selected,
 		//draw icon
 		alt_up_pixel_buffer_dma_draw_box(pixel_buffer,35 ,11, 55, 20, BLACK, 0);
 		break;
-	case EMPTY_ELLIPSE:
-		//draw selection perimiter
+	case EMPTY_ELLIPSE:		
 		draw_selection_Frame(2, 31, 29, 58, selected, lastDrawingData, pixel_buffer);
 		//draw icon
 		draw_empty_ellipse(16, 45, 8, 5, BLACK, pixel_buffer, NOT_ERASE_PREVIOUS_WORK, lastDrawingData);		
 		break;
 	case FILLED_ELLIPSE:
-		//draw selection perimiter
 		draw_selection_Frame(31, 31, 58, 58, selected, lastDrawingData, pixel_buffer);
 		//draw icon
 		draw_empty_ellipse(45, 45, 8, 5, BLACK, pixel_buffer, NOT_ERASE_PREVIOUS_WORK, lastDrawingData);
 		fill_to_edge_zone(45, 45, BLACK, pixel_buffer);
 		break;
 	case LINE:
-		//draw selection perimiter
 		draw_selection_Frame(2, 60, 29, 87, selected, lastDrawingData, pixel_buffer);
 		//draw icon
 		soft_draw_line(8, 70, 20, 78, BLACK, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
 		break;	
 	case FILL:
-		//draw selection perimiter
 		draw_selection_Frame(31, 60, 58, 87, selected, lastDrawingData, pixel_buffer);
 		//draw icon		
 		draw_icon_array(31,60,27,27, fillIconBmp, pixel_buffer);
 		break;
 	case COLOR_SAMPLE:
-		//draw selection perimiter
 		draw_selection_Frame(2, 89, 29, 116, selected, lastDrawingData, pixel_buffer);
 		//draw icon
-		
-		//draw_icon_array(8, 89, colorSampleIConBmp[27][27]);
 		draw_icon_array(2, 89,27,27, colorSampleIConBmp, pixel_buffer);
 		break;
 	case CPY_PASTE:
-		//draw selection perimiter
 		draw_selection_Frame(31, 89, 58, 116, selected, lastDrawingData, pixel_buffer);
-		//draw icon
-		//draw_empty_ellipse(45, 103, 8, 4, BLACK, pixel_buffer, NOT_ERASE_PREVIOUS_WORK, lastDrawingData);
-		//draw_icon_array(31, 89, cpyIconBmp[27][27]);
+		//draw icon		
 		draw_icon_array(31, 89, 27, 27, cpyIconBmp, pixel_buffer);
 		break;	
 	case CUT_PASTE:
-		//draw selection perimiter
 		draw_selection_Frame(2, 118, 29, 145, selected, lastDrawingData, pixel_buffer);
-		//draw icon
-		//draw_empty_ellipse(16, 132, 8, 4, BLACK, pixel_buffer, NOT_ERASE_PREVIOUS_WORK, lastDrawingData);
-		//draw_icon_array(8, 118, cutIconBmp[27][27]);
+		//draw icon		
 		draw_icon_array(2, 118, 27, 27, cutIconBmp, pixel_buffer);
 		break;
 	case PENCIL:
 		//draw selection perimiter
 		draw_selection_Frame(31, 118, 58, 145, selected, lastDrawingData, pixel_buffer);
-		//draw icon
-		//draw_empty_ellipse(45, 132, 8, 4, BLACK, pixel_buffer, NOT_ERASE_PREVIOUS_WORK, lastDrawingData);
-		//draw_icon_array(31, 118, pencilIconBmp[27][27]);
+		//draw icon		
 		draw_icon_array(31, 118, 27, 27, pencilIconBmp, pixel_buffer);
 		break;	
 	case PONG:
 		//draw selection perimiter
 		draw_selection_Frame(2, 408, 29, 435, selected, lastDrawingData, pixel_buffer);
-		//draw icon
-		//draw_empty_ellipse(16, 422, 8, 4, BLACK, pixel_buffer, NOT_ERASE_PREVIOUS_WORK, lastDrawingData);
-		//draw_icon_array(8, 408, pongIconBmp[27][27]);
+		//draw icon		
 		draw_icon_array(3, 408, 27, 27, pongIconBmp, pixel_buffer);
 		break;
 	case SNAKE:
 		//draw selection perimiter
 		draw_selection_Frame(31, 408, 58, 435, selected, lastDrawingData, pixel_buffer);
 		//draw icon
-		//draw_empty_ellipse(45, 422, 8, 4, BLACK, pixel_buffer, NOT_ERASE_PREVIOUS_WORK, lastDrawingData);
-		//draw_icon_array(31, 89, snakeIconBmp[27][27]);
 		draw_icon_array(32, 408, 27, 27, snakeIconBmp, pixel_buffer);
 		break;
 	case CLEAR:
 		//draw selection perimiter
 		draw_selection_Frame(2, 437, 29, 464, selected, lastDrawingData, pixel_buffer);
-		//draw icon
-		//draw_empty_ellipse(16, 451, 8, 4, BLACK, pixel_buffer, NOT_ERASE_PREVIOUS_WORK, lastDrawingData);
-		//draw_icon_array(8, 437, clearIconBmp[27][27]);
+		//draw icon		
 		draw_icon_array(2, 437, 27, 27, clearIconBmp, pixel_buffer);
 		break;
 	default:
 		break;
 	}
-	
-
 }
 void draw_tool_bar(tool currentTool, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+	
 	//draw tool bar background
 	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, LEFT_LIMIT, TOP_LIMIT, DRAWING_ZONE_LEFT_LIMIT, BOTTOM_LIMIT, TOOL_BOX_BACKGROUND_COLOR, 0);
 	//Draw frame
@@ -689,18 +717,6 @@ void draw_tool_bar(tool currentTool, lastDrawingVar* lastDrawingData, alt_up_pix
 	draw_icon(PONG, 0, lastDrawingData, pixel_buffer);
 	draw_icon(SNAKE, 0, lastDrawingData, pixel_buffer);
 	draw_icon(CLEAR, 0, lastDrawingData, pixel_buffer);
-	//draw_selection_Frame(2, 147, 29, 174, 0, lastDrawingData, pixel_buffer);//current color
-	//draw_selection_Frame(2, 176, 29, 203, 0, lastDrawingData, pixel_buffer);
-	//draw_selection_Frame(2, 205, 29, 232, 0, lastDrawingData, pixel_buffer);
-	//draw_selection_Frame(2, 234, 29, 261, 0, lastDrawingData, pixel_buffer);
-	//draw_selection_Frame(2, 263, 29, 290, 0, lastDrawingData, pixel_buffer);
-	//draw_selection_Frame(2, 292, 29, 319, 0, lastDrawingData, pixel_buffer);
-	//draw_selection_Frame(2, 321, 29, 348, 0, lastDrawingData, pixel_buffer);
-	//draw_selection_Frame(2, 350, 29, 377, 0, lastDrawingData, pixel_buffer);
-	//draw_selection_Frame(2, 379, 29, 406, 0, lastDrawingData, pixel_buffer);
-	//draw_selection_Frame(2, 408, 29, 435, 0, lastDrawingData, pixel_buffer);//hauteur pour snake et pong
-	//draw_selection_Frame(2, 437, 29, 464, 0, lastDrawingData, pixel_buffer);//position clear
-
 	//Draw the current selected tool
 	draw_icon(currentTool, 1, lastDrawingData, pixel_buffer);
 }
