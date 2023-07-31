@@ -967,12 +967,12 @@ int main(void)
 							drawCursor = 0;
 							soft_emptyRect_draw(firstPoint.x, firstPoint.y,
 								currentCursor.x, currentCursor.y,
-								selectedColor, 1, &lastDrawingData, pixel_buffer);
+								0, 1, &lastDrawingData, pixel_buffer);
 						}
 						else if (cpyRngSelected){
 							cpyRngSelected = 0;
 							if (currentTool == CUT_PASTE){
-								soft_copy_paste(firstPoint.x,firstPoint.y,secondPoint.x,secondPoint.y,currentCursor.x,currentCursor.y,1,0, pixel_buffer);
+								soft_copy_paste(firstPoint.x,firstPoint.y,secondPoint.x,secondPoint.y,currentCursor.x,currentCursor.y,1,selectedColor, pixel_buffer);
 							}
 							else{
 								soft_copy_paste(firstPoint.x,firstPoint.y,secondPoint.x,secondPoint.y,currentCursor.x,currentCursor.y,0,0, pixel_buffer);
@@ -983,7 +983,7 @@ int main(void)
 							alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
 							soft_emptyRect_draw(firstPoint.x, firstPoint.y,
 								currentCursor.x, currentCursor.y,
-								selectedColor, 1, &lastDrawingData, pixel_buffer);
+								0, 1, &lastDrawingData, pixel_buffer);
 						}
 					}
 					else if (currentTool == EMPTY_ELLIPSE|| currentTool == FILLED_ELLIPSE) {		//elipse
