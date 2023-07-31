@@ -601,14 +601,14 @@ void soft_copy_paste(int x1_copy, int y1_copy, int x2_copy, int y2_copy, int x1_
 		y1_copy = tempY;
 	}
 
-	nbPts = (x2_copy-1-x1_copy+1)*(y2_copy-1-y1_copy+1);
+	nbPts = ((x2_copy-1)-(x1_copy+1))*((y2_copy-1)-(y1_copy+1));
 
 	int x_cpy, y_cpy;
 	x_cpy = x1_copy+1;
 	y_cpy = y1_copy+1;
 	//copy pixel values to mem
 	for (int i=0;i<nbPts;i++){
-		if (x_cpy>x2_copy-1){
+		if (x_cpy>(x2_copy-1)){
 			x_cpy = x1_copy+1;
 			y_cpy++;
 		}
@@ -620,7 +620,7 @@ void soft_copy_paste(int x1_copy, int y1_copy, int x2_copy, int y2_copy, int x1_
 	y_cpy = y1_copy+1;
 	if (cut){
 		for (int i=0;i<nbPts;i++){
-			if (x_cpy>x2_copy-1){
+			if (x_cpy>(x2_copy-1)){
 				x_cpy = x1_copy+1;
 				y_cpy++;
 			}
