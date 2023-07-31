@@ -37,7 +37,7 @@
    {
       datum baseAddress
       {
-         value = "134754440";
+         value = "134754504";
          type = "String";
       }
    }
@@ -78,6 +78,22 @@
          type = "int";
       }
    }
+   element hwellipse_0
+   {
+      datum _sortIndex
+      {
+         value = "15";
+         type = "int";
+      }
+   }
+   element hwellipse_0.avalon_slave
+   {
+      datum baseAddress
+      {
+         value = "134754304";
+         type = "String";
+      }
+   }
    element jtag_uart
    {
       datum _sortIndex
@@ -90,7 +106,7 @@
    {
       datum baseAddress
       {
-         value = "134754432";
+         value = "134754496";
          type = "String";
       }
    }
@@ -122,7 +138,7 @@
    {
       datum baseAddress
       {
-         value = "134754400";
+         value = "134754464";
          type = "String";
       }
    }
@@ -138,7 +154,7 @@
    {
       datum baseAddress
       {
-         value = "134754424";
+         value = "134754488";
          type = "String";
       }
    }
@@ -154,7 +170,7 @@
    {
       datum baseAddress
       {
-         value = "134754304";
+         value = "134754368";
          type = "String";
       }
    }
@@ -202,7 +218,7 @@
    {
       datum baseAddress
       {
-         value = "134754416";
+         value = "134754480";
          type = "String";
       }
    }
@@ -210,7 +226,7 @@
    {
       datum _sortIndex
       {
-         value = "15";
+         value = "16";
          type = "int";
       }
    }
@@ -218,7 +234,7 @@
    {
       datum baseAddress
       {
-         value = "134754368";
+         value = "134754432";
          type = "String";
       }
    }
@@ -320,7 +336,7 @@
   <parameter name="cpuReset" value="false" />
   <parameter name="customInstSlavesSystemInfo" value="&lt;info/&gt;" />
   <parameter name="dataAddrWidth" value="28" />
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='sdram.s1' start='0x4000000' end='0x8000000' /><slave name='onchip_mem.s1' start='0x8000000' end='0x804B000' /><slave name='character_buffer_with_dma.avalon_char_buffer_slave' start='0x8080000' end='0x8082000' /><slave name='cpu.jtag_debug_module' start='0x8082800' end='0x8083000' /><slave name='recfiller_0.avalon_slave' start='0x8083000' end='0x8083040' /><slave name='timer_0.s1' start='0x8083040' end='0x8083060' /><slave name='pixel_buffer_dma_0.avalon_control_slave' start='0x8083060' end='0x8083070' /><slave name='sysid.control_slave' start='0x8083070' end='0x8083078' /><slave name='ps2_0.avalon_ps2_slave' start='0x8083078' end='0x8083080' /><slave name='jtag_uart.avalon_jtag_slave' start='0x8083080' end='0x8083088' /><slave name='character_buffer_with_dma.avalon_char_control_slave' start='0x8083088' end='0x8083090' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='sdram.s1' start='0x4000000' end='0x8000000' /><slave name='onchip_mem.s1' start='0x8000000' end='0x804B000' /><slave name='character_buffer_with_dma.avalon_char_buffer_slave' start='0x8080000' end='0x8082000' /><slave name='cpu.jtag_debug_module' start='0x8082800' end='0x8083000' /><slave name='hwellipse_0.avalon_slave' start='0x8083000' end='0x8083040' /><slave name='recfiller_0.avalon_slave' start='0x8083040' end='0x8083080' /><slave name='timer_0.s1' start='0x8083080' end='0x80830A0' /><slave name='pixel_buffer_dma_0.avalon_control_slave' start='0x80830A0' end='0x80830B0' /><slave name='sysid.control_slave' start='0x80830B0' end='0x80830B8' /><slave name='ps2_0.avalon_ps2_slave' start='0x80830B8' end='0x80830C0' /><slave name='jtag_uart.avalon_jtag_slave' start='0x80830C0' end='0x80830C8' /><slave name='character_buffer_with_dma.avalon_char_control_slave' start='0x80830C8' end='0x80830D0' /></address-map>]]></parameter>
   <parameter name="dcache_bursts" value="false" />
   <parameter name="dcache_lineSize" value="32" />
   <parameter name="dcache_numTCDM" value="0" />
@@ -448,6 +464,7 @@
   <parameter name="color_bits" value="10" />
   <parameter name="color_planes" value="3" />
  </module>
+ <module name="hwellipse_0" kind="hwellipse" version="1.0" enabled="1" />
  <module
    name="jtag_uart"
    kind="altera_avalon_jtag_uart"
@@ -618,6 +635,15 @@
  <connection
    kind="avalon"
    version="18.1"
+   start="hwellipse_0.avalon_master"
+   end="onchip_mem.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x08000000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="18.1"
    start="pixel_buffer_dma_0.avalon_pixel_dma_master"
    end="onchip_mem.s1">
   <parameter name="arbitrationPriority" value="1" />
@@ -639,7 +665,7 @@
    start="cpu.data_master"
    end="character_buffer_with_dma.avalon_char_control_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08083088" />
+  <parameter name="baseAddress" value="0x080830c8" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -648,7 +674,7 @@
    start="cpu.data_master"
    end="pixel_buffer_dma_0.avalon_control_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08083060" />
+  <parameter name="baseAddress" value="0x080830a0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -657,7 +683,7 @@
    start="cpu.data_master"
    end="jtag_uart.avalon_jtag_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08083080" />
+  <parameter name="baseAddress" value="0x080830c0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -666,7 +692,7 @@
    start="cpu.data_master"
    end="ps2_0.avalon_ps2_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08083078" />
+  <parameter name="baseAddress" value="0x080830b8" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -674,6 +700,15 @@
    version="18.1"
    start="cpu.data_master"
    end="recfiller_0.avalon_slave">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x08083040" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="18.1"
+   start="cpu.data_master"
+   end="hwellipse_0.avalon_slave">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x08083000" />
   <parameter name="defaultConnection" value="false" />
@@ -684,7 +719,7 @@
    start="cpu.data_master"
    end="sysid.control_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08083070" />
+  <parameter name="baseAddress" value="0x080830b0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -712,7 +747,7 @@
  </connection>
  <connection kind="avalon" version="18.1" start="cpu.data_master" end="timer_0.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08083040" />
+  <parameter name="baseAddress" value="0x08083080" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -798,6 +833,11 @@
    version="18.1"
    start="clocks.sys_clk"
    end="recfiller_0.clock" />
+ <connection
+   kind="clock"
+   version="18.1"
+   start="clocks.sys_clk"
+   end="hwellipse_0.clock" />
  <connection
    kind="clock"
    version="18.1"
@@ -891,6 +931,11 @@
    version="18.1"
    start="clocks.reset_source"
    end="timer_0.reset" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="clocks.reset_source"
+   end="hwellipse_0.reset" />
  <connection
    kind="reset"
    version="18.1"
