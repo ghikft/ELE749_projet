@@ -166,6 +166,7 @@ void init_last_drawing_Var(lastDrawingVar* lastDrawingData) {
 	lastDrawingData->lastFirstPointY = 0;
 	lastDrawingData->lastSecondPointX = 0;
 	lastDrawingData->lastSecondPointY = 0;
+	lastDrawingData->numberOfPixelForLastDraw = 0;
 }
 
 int draw_empty_ellipse(int x_center, int y_center, int x_radius, int y_radius, 
