@@ -7,6 +7,10 @@
 /* C Library */
 #include <stdio.h>		// printf()
 #include <string.h> 	// sprintf()
+#include <time.h> 		// time(NULL)
+#include <stdlib.h> 	// srand, rand
+#include <stdint.h>
+#include <time.h> 		// time(NULL)
 
 
 /* Altera-specific */
@@ -16,6 +20,7 @@
 #include "altera_up_avalon_video_pixel_buffer_dma.h"
 #include "alt_types.h"
 #include "sys/alt_irq.h"
+#include "sys/alt_timestamp.h"
 
 # include "sys/alt_stdio.h"
 /*Module Hardware*/
@@ -47,101 +52,184 @@
 //#define BOTTOM_LIMIT 479
 //#define DRAWING_ZONE_LEFT_LIMIT 61
 
+#define NUMBER_OF_TEST_LOOP 1000
+void empty_software_rectangle_test(int numberIter,alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+	uint32_t nbPixels = 0;
+	lastDrawingVar lastDrawingData;
+	uint32_t temp0 = alt_timestamp();
+	int nbDrawMiss = 0;
+	uint32_t intermediatePixelCount = 0;
+	for (int j = 0; j < numberIter; j++) {
+		//generate random number
+		int x1 = rand() % 640;
+		int y1 = rand() % 480;
+		int x2 = rand() % 640;
+		int y2 = rand() % 480;
+		int color = rand() % 255;
+		intermediatePixelCount = soft_empty_rectangle_draw(x1, y1, x2, y2, color, NOT_ERASE_PREVIOUS_WORK, &lastDrawingData, pixel_buffer);
+		if (intermediatePixelCount == 0) {
+			j--;//make the test draw another rectangle since the dimension where invalid
+			nbDrawMiss++;
+		}
+		else nbPixels += intermediatePixelCount;
+	}
+	
+	uint32_t temp1 = alt_timestamp();
+	uint32_t numberOfCycle = temp1 - temp0;
+	float totalTime = (float)numberOfCycle * 2.0e-8;
+	//print Result
+	printf("t0: %lu    t1: %lu\n\r", temp0, temp1);
+	printf("Random EMPTY RECTANGLE test: Number of draw missed %d\n\r",nbDrawMiss);
+	printf("NUmber of rectangle: %d   |   number of cycle: %lu   |   Total time(s): %.2f  |   Pixel/s: %0.1f   |   cycle/pixel : %.2f\n\n\r",
+		numberIter, numberOfCycle, totalTime, (float)nbPixels/ totalTime, (float)numberOfCycle /nbPixels);
+}
 
-
+void filled_software_rectangle_test(int numberIter, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+	uint32_t nbPixels = 0;
+	lastDrawingVar lastDrawingData;
+	int nbDrawMiss = 0;
+	uint32_t temp0 = alt_timestamp();
+	for (int j = 0; j < numberIter; j++) {
+		//generate random number
+		int x1 = rand() % 640;
+		int y1 = rand() % 480;
+		int x2 = rand() % 640;
+		int y2 = rand() % 480;
+		int color = rand() % 255;
+		int width;
+		int lenght;
+		
+		int fill_x;
+		int fill_y;
+		if (x1 > x2) {
+			width = x1 - x2;
+			fill_x = x1 - 1;
+		}
+		else {
+			width = x2 - x1;
+			fill_x = x1 + 1;
+		}
+		if (y1 > y2) {
+			lenght = y1 - y2;
+			fill_y = y1 - 1;
+		}
+		else {
+			lenght = y2 - y1;
+			fill_y = y1 + 1;
+		}
+			//fill the rectangle if drawn the our fill zone function
+		if (soft_empty_rectangle_draw(x1, y1, x2, y2, color, NOT_ERASE_PREVIOUS_WORK, &lastDrawingData, pixel_buffer)) {
+			fill_to_edge_zone(fill_x,fill_y, color, pixel_buffer);
+			nbPixels = nbPixels + (lenght * width);
+		}
+		else {
+			j--;//make the test draw another rectangle since the dimension where invalid
+			nbDrawMiss ++;
+		}
+			
+		
+	}
+	uint32_t temp1 = alt_timestamp();
+	uint32_t numberOfCycle = temp1 - temp0;
+	float totalTime = (float)numberOfCycle * 2.0e-8;;
+	//print Result
+	printf("Random FILLED RECTANGLE test:  Number of draw missed %d\n\r", nbDrawMiss);
+	printf("NUmber of rectangle: %d   |   number of cycle: %lu   |   Total time(s): %.2f  |   Pixel/s: %0.1f   |   cycle/pixel : %.2f\n\n\r",
+		numberIter, numberOfCycle, totalTime, (float)nbPixels / totalTime, (float)numberOfCycle / nbPixels);
+}
 context_t timer_context;
 alt_up_ps2_dev* tim;
-void timer_write_period(alt_u32 timerBase, alt_u32 period)
-{
-	/**************************************************************************
-	 * start the timer in continuous mode with interrupts
-	 **************************************************************************
-	 * Parametres
-	 * timerBase: Base address of timer
-	 * period: desired period in ms
-	 *
-	 * Return
-	 * None
-	 *
-	 * Side effects
-	 * None
-	 *
-	 *************************************************************************/
-	period = period * TIMER_CONVERSION;
-	alt_u16 high, low;
-	/* split 32 bits period into two 16 bits */
-	high = (alt_u16)(period >> 16);
-	low = (alt_u16)(period & 0x0000FFFF);
-	/* write period */
-	IOWR(timerBase, TIMER_PERIODH_REG_OFT, high);
-	IOWR(timerBase, TIMER_PERIODL_REG_OFT, low);
-	/* setup timer for start in continuous mode w/ interrupt */
-	IOWR(timerBase, TIMER_CTRL_REG_OFT, 0x0007); // bits 0, 1, 2 actives
-}
-static void timer_0_ISR(void* context, alt_u32 id) 
-//void timer_0_ISR(void* context)
-{
-	/**************************************************************************
-	 * Interrupt handler for timer 0, flashes the LEDs at the timer period
-	 **************************************************************************
-	 * Parametres
-	 * *context: conext of ISR
-	 *
-	 * Return
-	 * None
-	 *
-	 * Side effects
-	 * None
-	 *
-	 *************************************************************************/
-	//tim = alt_up_ps2_open_dev(TIMER_0_NAME);		//Connexion au module PS/2
-	context_t* ctxt = context;					//Structure qui contient le contexte pour
-												//communiquer avec l'interruption
-	 
-
-	///static alt_u8 ledPattern = 0x01; // intial template
-
-	
-}
-
-void start_timer(alt_u32 timerBase)
-{
-	/**************************************************************************
-	 * start the timer in continuous mode with interrupts
-	 **************************************************************************
-	 * Parametres
-	 * timerBase: Base address of timer
-	 *
-	 * Return
-	 * None
-	 *
-	 * Side effects
-	 * None
-	 *
-	 *************************************************************************/
-
-	IOWR(timerBase, TIMER_CTRL_REG_OFT, 0b0111);
-}
-
-void stop_timer(alt_u32 timerBase)
-{
-	/**************************************************************************
-	 * Stop the timer
-	 **************************************************************************
-	 * Parametres
-	 * timerBase: Base address of timer
-	 *
-	 * Return
-	 * None
-	 *
-	 * Side effects
-	 * turns off the interrupt,
-	 * turns off continuous
-	 *
-	 *************************************************************************/
-
-	IOWR(timerBase, TIMER_CTRL_REG_OFT, 0b1000);
-}
+//void timer_write_period(alt_u32 timerBase, alt_u32 period)
+//{
+//	/**************************************************************************
+//	 * start the timer in continuous mode with interrupts
+//	 **************************************************************************
+//	 * Parametres
+//	 * timerBase: Base address of timer
+//	 * period: desired period in ms
+//	 *
+//	 * Return
+//	 * None
+//	 *
+//	 * Side effects
+//	 * None
+//	 *
+//	 *************************************************************************/
+//	period = period * TIMER_CONVERSION;
+//	alt_u16 high, low;
+//	/* split 32 bits period into two 16 bits */
+//	high = (alt_u16)(period >> 16);
+//	low = (alt_u16)(period & 0x0000FFFF);
+//	/* write period */
+//	IOWR(timerBase, TIMER_PERIODH_REG_OFT, high);
+//	IOWR(timerBase, TIMER_PERIODL_REG_OFT, low);
+//	/* setup timer for start in continuous mode w/ interrupt */
+//	IOWR(timerBase, TIMER_CTRL_REG_OFT, 0x0007); // bits 0, 1, 2 actives
+//}
+//static void timer_0_ISR(void* context, alt_u32 id) 
+////void timer_0_ISR(void* context)
+//{
+//	/**************************************************************************
+//	 * Interrupt handler for timer 0, flashes the LEDs at the timer period
+//	 **************************************************************************
+//	 * Parametres
+//	 * *context: conext of ISR
+//	 *
+//	 * Return
+//	 * None
+//	 *
+//	 * Side effects
+//	 * None
+//	 *
+//	 *************************************************************************/
+//	//tim = alt_up_ps2_open_dev(TIMER_0_NAME);		//Connexion au module PS/2
+//	context_t* ctxt = context;					//Structure qui contient le contexte pour
+//												//communiquer avec l'interruption
+//	 
+//
+//	///static alt_u8 ledPattern = 0x01; // intial template
+//
+//	
+//}
+//
+//void start_timer(alt_u32 timerBase)
+//{
+//	/**************************************************************************
+//	 * start the timer in continuous mode with interrupts
+//	 **************************************************************************
+//	 * Parametres
+//	 * timerBase: Base address of timer
+//	 *
+//	 * Return
+//	 * None
+//	 *
+//	 * Side effects
+//	 * None
+//	 *
+//	 *************************************************************************/
+//
+//	IOWR(timerBase, TIMER_CTRL_REG_OFT, 0b0111);
+//}
+//
+//void stop_timer(alt_u32 timerBase)
+//{
+//	/**************************************************************************
+//	 * Stop the timer
+//	 **************************************************************************
+//	 * Parametres
+//	 * timerBase: Base address of timer
+//	 *
+//	 * Return
+//	 * None
+//	 *
+//	 * Side effects
+//	 * turns off the interrupt,
+//	 * turns off continuous
+//	 *
+//	 *************************************************************************/
+//
+//	IOWR(timerBase, TIMER_CTRL_REG_OFT, 0b1000);
+//}
 
 
 
@@ -186,7 +274,7 @@ int main(void)
 
 	process_cursor_pos(&currentCursor, &x_pos, &y_pos);
 	//Stop timer and setup the interrupt, then start with 100ms period (default)
-	stop_timer(TIMER_0_BASE);
+	//stop_timer(TIMER_0_BASE);
 	//timer_write_period(TIMER_0_BASE, period);
 	//start_timer(TIMER_0_BASE);
 	//alt_ic_isr_register(TIMER_0_IRQ_INTERRUPT_CONTROLLER_ID, TIMER_0_IRQ, timer_0_ISR, 0x0, 0x0);
@@ -194,13 +282,13 @@ int main(void)
 	//	alt_putstr("ISR REGISTERED\n\r");
 	//}
 	//alt_irq_register(PS2_0_IRQ, (void*)(&ps2_context), ps2_isr);
-	alt_irq_register(TIMER_0_IRQ, (void*)(&timer_context), (void*)timer_0_ISR);
-	timer_write_period(TIMER_0_BASE, period);
+	//alt_irq_register(TIMER_0_IRQ, (void*)(&timer_context), (void*)timer_0_ISR);
+	//timer_write_period(TIMER_0_BASE, period);
 	//start_timer(TIMER_0_BASE);
 	//Stop timer and setup the interrupt, then start with 100ms period (default)
-	stop_timer(TIMER_0_BASE);
+	//stop_timer(TIMER_0_BASE);
 	//init recfiller
-	recfiller_init(640, 480);
+	//recfiller_init(640, 480);
 	//Init cursor at the top left of the drawing zone
 
 	/* PIXEL BUFFER setup and background display */
@@ -220,13 +308,19 @@ int main(void)
 	ps2_init(); 		// from ps2_mouse.h
 	printf("init complete\n");
 	//recfiller_draw_rectangle(10, 10, 40, 60, 128);
-	
+	//init random number generator
+	srand(time(NULL));
+	//start the time stamp timer
+	alt_timestamp_start();
+
 	//TBD probablu useless
 	firstPoint.x = 100;
 	firstPoint.y = 100;
 	secondPoint.x = 110;
 	secondPoint.y = 110;
-	
+	empty_software_rectangle_test(1000,pixel_buffer);
+	empty_software_rectangle_test(500, pixel_buffer);
+	filled_software_rectangle_test(100,pixel_buffer);
 #ifdef NIOS_DRAW_IN_MAIN	
 
 	//initiate the drawing zone and tool bar
@@ -597,6 +691,6 @@ int main(void)
 	return 0;
 #endif
 #ifdef NIOS_DRAW_FUNC
-	nios_draw(pixel_buffer);
+	//nios_draw(pixel_buffer);
 #endif // NIOS_DRAW_FUNC
 }

@@ -25,7 +25,7 @@ void soft_draw_line_low(int x1, int y1,
     				int color, int erasePreviousWork, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer);
 
 
-void soft_empty_rectangle_draw(int x_left, int y_top,
+uint32_t soft_empty_rectangle_draw(int x_left, int y_top,
 	int x_right, int y_bottom,
 	int color, int erasePreviousWork, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer)
 {
@@ -100,7 +100,7 @@ void soft_empty_rectangle_draw(int x_left, int y_top,
 		y = y_top;
 		
 		lastDrawingData->numberOfPixelForLastDraw = 0;
-
+		uint32_t nbPixels = 0;
 		//draw top line
 		while (x < x_right) {
 			lastDrawingData->lastPixelMemory[lastDrawingData->numberOfPixelForLastDraw].color = get_pixel_color2(x, y);
@@ -109,6 +109,7 @@ void soft_empty_rectangle_draw(int x_left, int y_top,
 			alt_up_pixel_buffer_dma_draw(pixel_buffer, color, x, y);
 			x++;
 			lastDrawingData->numberOfPixelForLastDraw++;
+			nbPixels++;
 		}
 		//draw right veritcal line
 		while (y < y_bottom) {
@@ -118,6 +119,7 @@ void soft_empty_rectangle_draw(int x_left, int y_top,
 			alt_up_pixel_buffer_dma_draw(pixel_buffer, color, x, y);
 			y++;
 			lastDrawingData->numberOfPixelForLastDraw++;
+			nbPixels++;
 		}
 		//draw bottom line
 		while (x > x_left) {
@@ -127,6 +129,7 @@ void soft_empty_rectangle_draw(int x_left, int y_top,
 			alt_up_pixel_buffer_dma_draw(pixel_buffer, color, x, y);
 			x--;
 			lastDrawingData->numberOfPixelForLastDraw++;
+			nbPixels++;
 		}
 		//draw left line
 		while (y > y_top) {
@@ -136,8 +139,11 @@ void soft_empty_rectangle_draw(int x_left, int y_top,
 			alt_up_pixel_buffer_dma_draw(pixel_buffer, color, x, y);
 			y--;
 			lastDrawingData->numberOfPixelForLastDraw++;
+			nbPixels++;
 		}
-	}	
+		return nbPixels;
+	}
+	return 0;
 }
 
 void init_last_drawing_Var(lastDrawingVar* lastDrawingData) {
@@ -373,9 +379,9 @@ void fill_to_edge_zone(int startX, int startY, int fillColor, alt_up_pixel_buffe
 		//printf("FILL early exit\n\r");
 	//}
 	//else {
-		printf("lunch recursion\n\r");
+		//printf("lunch recursion\n\r");
 	fill_to_edge_sub(startX, startY, fillColor, pixel_buffer);
-		printf("END_FILL\n\r");
+		//printf("END_FILL\n\r");
 	//}
 }
 
