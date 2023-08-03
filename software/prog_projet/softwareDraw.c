@@ -44,10 +44,11 @@ uint32_t soft_empty_rectangle_draw(int x_left, int y_top,
 	 * pixel_buffer is the pointer used to write in the pixel_buffer of the video pipeline
 	 *
 	 * Return value
-	 * none
+	 * return 0 if invalid coordinate otherwise return the number of pixel drawn
 	 *
 	 * Side effects
-	 * none
+	 * x_left can'T equal x_right. it is the same for the y top and bottom
+	 * Draw an empty rectangle with two coordinate. 
 	 *************************************************************************/
 	
 	int tempReorder;

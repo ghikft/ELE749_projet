@@ -59,6 +59,7 @@ void empty_software_rectangle_test(int numberIter,alt_up_pixel_buffer_dma_dev* p
 	uint32_t temp0 = alt_timestamp();
 	int nbDrawMiss = 0;
 	uint32_t intermediatePixelCount = 0;
+	
 	for (int j = 0; j < numberIter; j++) {
 		//generate random number
 		int x1 = rand() % 640;
@@ -78,7 +79,6 @@ void empty_software_rectangle_test(int numberIter,alt_up_pixel_buffer_dma_dev* p
 	uint32_t numberOfCycle = temp1 - temp0;
 	float totalTime = (float)numberOfCycle * 2.0e-8;
 	//print Result
-	printf("t0: %lu    t1: %lu\n\r", temp0, temp1);
 	printf("Random EMPTY RECTANGLE test: Number of draw missed %d\n\r",nbDrawMiss);
 	printf("NUmber of rectangle: %d   |   number of cycle: %lu   |   Total time(s): %.2f  |   Pixel/s: %0.1f   |   cycle/pixel : %.2f\n\n\r",
 		numberIter, numberOfCycle, totalTime, (float)nbPixels/ totalTime, (float)numberOfCycle /nbPixels);
@@ -134,6 +134,140 @@ void filled_software_rectangle_test(int numberIter, alt_up_pixel_buffer_dma_dev*
 	float totalTime = (float)numberOfCycle * 2.0e-8;;
 	//print Result
 	printf("Random FILLED RECTANGLE test:  Number of draw missed %d\n\r", nbDrawMiss);
+	printf("NUmber of rectangle: %d   |   number of cycle: %lu   |   Total time(s): %.2f  |   Pixel/s: %0.1f   |   cycle/pixel : %.2f\n\n\r",
+		numberIter, numberOfCycle, totalTime, (float)nbPixels / totalTime, (float)numberOfCycle / nbPixels);
+}
+
+void software_line_test(int numberIter, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+	uint32_t nbPixels = 0;
+	lastDrawingVar lastDrawingData;
+	uint32_t temp0 = alt_timestamp();	
+	
+	for (int j = 0; j < numberIter; j++) {
+		//generate random number
+		int x1 = rand() % 640;
+		int y1 = rand() % 480;
+		int x2 = rand() % 640;
+		int y2 = rand() % 480;
+		int color = rand() % 255;
+		soft_draw_line(x1, y1, x2, y2, color, NOT_ERASE_PREVIOUS_WORK, &lastDrawingData, pixel_buffer);
+		nbPixels = nbPixels + lastDrawingData.numberOfPixelForLastDraw;
+		
+	}
+
+	uint32_t temp1 = alt_timestamp();
+	uint32_t numberOfCycle = temp1 - temp0;
+	float totalTime = (float)numberOfCycle * 2.0e-8;
+	//print Result
+	//printf("t0: %lu    t1: %lu\n\r", temp0, temp1);
+	printf("Random LINE test: Number of draw missed %d\n\r", 0);
+	printf("NUmber of rectangle: %d   |   number of cycle: %lu   |   Total time(s): %.2f  |   Pixel/s: %0.1f   |   cycle/pixel : %.2f\n\n\r",
+		numberIter, numberOfCycle, totalTime, (float)nbPixels / totalTime, (float)numberOfCycle / nbPixels);
+}
+
+void software_empty_ellipse_test(int numberIter, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+	uint32_t nbPixels = 0;
+	lastDrawingVar lastDrawingData;
+	int nbDrawMiss = 0;
+	uint32_t temp0 = alt_timestamp();
+	for (int j = 0; j < numberIter; j++) {
+		//generate random number
+		int centerX = rand() % 640;
+		int centerY = rand() % 480;
+		int radiusX = rand() % 640;
+		int radiusY = rand() % 480;
+		int color = rand() % 255;
+		
+		
+		//check if the ellipse is drawn or retry it if not
+		if (draw_empty_ellipse(centerX, centerY, radiusX, radiusY, color, pixel_buffer,
+			NOT_ERASE_PREVIOUS_WORK,&lastDrawingData)){
+			
+			nbPixels = nbPixels + lastDrawingData.numberOfPixelForLastDraw;
+		}
+		else {
+			j--;//make the test draw another rectangle since the dimension where invalid
+			nbDrawMiss++;
+		}
+
+
+	}
+	uint32_t temp1 = alt_timestamp();
+	uint32_t numberOfCycle = temp1 - temp0;
+	float totalTime = (float)numberOfCycle * 2.0e-8;;
+	//print Result
+	printf("Random EMPTY ELLIPSE test:  Number of draw missed %d\n\r", nbDrawMiss);
+	printf("NUmber of rectangle: %d   |   number of cycle: %lu   |   Total time(s): %.2f  |   Pixel/s: %0.1f   |   cycle/pixel : %.2f\n\n\r",
+		numberIter, numberOfCycle, totalTime, (float)nbPixels / totalTime, (float)numberOfCycle / nbPixels);
+}
+
+void software_copy_paste_test(int numberIter, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+	uint32_t nbPixels = 0;
+	lastDrawingVar lastDrawingData;
+	int nbDrawMiss = 0;
+	uint32_t temp0 = alt_timestamp();
+	for (int j = 0; j < numberIter; j++) {
+		//generate random number
+		int centerX = rand() % 640;
+		int centerY = rand() % 480;
+		int radiusX = rand() % 640;
+		int radiusY = rand() % 480;
+		int color = rand() % 255;
+
+
+		//check if the ellipse is drawn or retry it if not
+		if (draw_empty_ellipse(centerX, centerY, radiusX, radiusY, color, pixel_buffer,
+			NOT_ERASE_PREVIOUS_WORK, &lastDrawingData)) {
+
+			nbPixels = nbPixels + lastDrawingData.numberOfPixelForLastDraw;
+		}
+		else {
+			j--;//make the test draw another rectangle since the dimension where invalid
+			nbDrawMiss++;
+		}
+
+
+	}
+	uint32_t temp1 = alt_timestamp();
+	uint32_t numberOfCycle = temp1 - temp0;
+	float totalTime = (float)numberOfCycle * 2.0e-8;;
+	//print Result
+	printf("Random EMPTY ELLIPSE test:  Number of draw missed %d\n\r", nbDrawMiss);
+	printf("NUmber of rectangle: %d   |   number of cycle: %lu   |   Total time(s): %.2f  |   Pixel/s: %0.1f   |   cycle/pixel : %.2f\n\n\r",
+		numberIter, numberOfCycle, totalTime, (float)nbPixels / totalTime, (float)numberOfCycle / nbPixels);
+}
+void software_cut_paste_test(int numberIter, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+	uint32_t nbPixels = 0;
+	lastDrawingVar lastDrawingData;
+	int nbDrawMiss = 0;
+	uint32_t temp0 = alt_timestamp();
+	for (int j = 0; j < numberIter; j++) {
+		//generate random number
+		int centerX = rand() % 640;
+		int centerY = rand() % 480;
+		int radiusX = rand() % 640;
+		int radiusY = rand() % 480;
+		int color = rand() % 255;
+
+
+		//check if the ellipse is drawn or retry it if not
+		if (draw_empty_ellipse(centerX, centerY, radiusX, radiusY, color, pixel_buffer,
+			NOT_ERASE_PREVIOUS_WORK, &lastDrawingData)) {
+
+			nbPixels = nbPixels + lastDrawingData.numberOfPixelForLastDraw;
+		}
+		else {
+			j--;//make the test draw another rectangle since the dimension where invalid
+			nbDrawMiss++;
+		}
+
+
+	}
+	uint32_t temp1 = alt_timestamp();
+	uint32_t numberOfCycle = temp1 - temp0;
+	float totalTime = (float)numberOfCycle * 2.0e-8;;
+	//print Result
+	printf("Random EMPTY ELLIPSE test:  Number of draw missed %d\n\r", nbDrawMiss);
 	printf("NUmber of rectangle: %d   |   number of cycle: %lu   |   Total time(s): %.2f  |   Pixel/s: %0.1f   |   cycle/pixel : %.2f\n\n\r",
 		numberIter, numberOfCycle, totalTime, (float)nbPixels / totalTime, (float)numberOfCycle / nbPixels);
 }
@@ -319,7 +453,9 @@ int main(void)
 	secondPoint.x = 110;
 	secondPoint.y = 110;
 	empty_software_rectangle_test(1000,pixel_buffer);
-	empty_software_rectangle_test(500, pixel_buffer);
+	software_line_test(1000, pixel_buffer);
+	software_empty_ellipse_test(1000, pixel_buffer);
+	//empty_software_rectangle_test(500, pixel_buffer);
 	filled_software_rectangle_test(100,pixel_buffer);
 #ifdef NIOS_DRAW_IN_MAIN	
 
