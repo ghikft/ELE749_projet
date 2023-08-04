@@ -25,6 +25,7 @@
 # include "sys/alt_stdio.h"
 /*Module Hardware*/
 #include "recfiller.h"
+#include "hwellipse.h"
 #include "project_variables.h"
 
 /*Module software*/

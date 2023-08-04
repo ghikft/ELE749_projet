@@ -218,7 +218,7 @@
    {
       datum baseAddress
       {
-         value = "134492208";
+         value = "134754512";
          type = "String";
       }
    }
@@ -798,6 +798,15 @@
    end="ps2_0.avalon_ps2_slave">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x080830e8" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="18.1"
+   start="cpu.data_master"
+   end="rgb_resampler_pixel.avalon_rgb_slave">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x080830d0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
