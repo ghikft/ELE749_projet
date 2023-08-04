@@ -63,9 +63,16 @@ begin
 		-- scenario de test 1
 		-- dessin d'une ellipse à x:160, y: 100 de rayon x: 4, y:4
 		-- dans une memoire situee a 0x00000000 (pour deboguer) pour un pixel buffer
-		-- de 640 x 450 (76800 octets). 
-		-- les addresses attendues sont (en decimal):
-		--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+		-- de 640 x 480
+		-- les addresses attendues sont (en hex):
+		-- faa4, fa9c, fa9c, faa4
+		-- fd24, fd1c, f81c, f824
+		-- ffa3, ff9d, f59d, f5a3
+		-- 104a0, 104a0, f0a0, f0a0
+		-- 104a1, 1049f, f09f, f0a1
+		-- 10222, 1021e, f31e, f322
+
+
 		rf_write     <= '1';
 		rf_address   <= x"1";
 		rf_writedata <= x"08000000";
@@ -119,9 +126,17 @@ begin
 		-- scenario de test 1
 		-- dessin d'une ellipse à x:100, y: 100 de rayon x: 6, y:4
 		-- dans une memoire situee a 0x00000000 (pour deboguer) pour un pixel buffer
-		-- de 640 x 450 (76800 octets). 
-		-- les addresses attendues sont (en decimal):
-		--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+		-- de 640 x 480
+		-- les addresses attendues sont (en hex):
+		--fa6a, fa5e, fa5e, fa6a
+		--fcea, fcde, f7de, f7ea
+		--ff69, ff5f, f55f, f569
+		--10464, 10464, f064, f064
+		--410465, 10463, f063, f065
+		--10466, 10462, f062, f066
+		--101e7, 101e1, f2e1, f2e7
+		--101e8, 101e0, f2e0, f2e8
+
 
 		rf_write     <= '1';
 		rf_address   <= x"4";
@@ -129,7 +144,7 @@ begin
 		wait for 10 ns;
 
 		rf_address   <= x"5";
-		rf_writedata <= x"00000064"; -- y_center = 1000
+		rf_writedata <= x"00000064"; -- y_center = 100
 		wait for 10 ns;
 
 		rf_address   <= x"6";
