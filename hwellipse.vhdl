@@ -37,7 +37,7 @@ architecture rtl of recfiller is
 	signal start    	: std_logic_vector(31 downto 0);
 
 	-- signaux pour machine a etat
-	type state_type is (idle, setup1P1, setup2P1, drawP1, setup1P2, setup2P2, drawP2);
+	type state_type is (idle, setup1P1, setup2P1, drawP1_1, drawP1_2, drawP1_3, drawP1_4, setup1P2, setup2P2, drawP2_1, drawP2_2, drawP2_3, drawP2_4);
 	signal state_reg : state_type;
 
 	-- signaux internes
@@ -135,7 +135,7 @@ begin
 						total      <= (others => '0');
 
 
-					when drawP1 =>
+					when drawP1_1 =>
 						ready      <= x"00000000";
 						fb_write   <= '1';
 
@@ -154,12 +154,26 @@ begin
 									ellipseError <= ellipseError+xChange;
 									xChange <= xChange+twoBSquare;
 								end if;
+								addr <= fb_base + (y_center+y) * x_max;
+								fb_address <= std_logic_vector(addr + (x_center+x));
+								state_reg <= drawP1_2;
 							end if;
-							addr <= fb_base + (y_center+y) * x_max;
-							fb_address <= std_logic_vector(addr + (x_center+x));
 						end if;
 					
-						--Point set 2
+					when drawP1_2 =>
+						state_reg <= drawP1_3;
+						addr <= fb_base + (y_center+y) * x_max;
+						fb_address <= std_logic_vector(addr + (x_center-x));
+					when drawP1_3 =>
+						state_reg <= drawP1_4;
+						addr <= fb_base + (y_center-y) * x_max;
+						fb_address <= std_logic_vector(addr + (x_center-x));
+					when drawP1_4 =>
+						state_reg <= drawP1_1;
+						addr <= fb_base + (y_center-y) * x_max;
+						fb_address <= std_logic_vector(addr + (x_center+x));
+						
+					--Point set 2
 					when setup1P2 =>
 						start <= x"00000000";
 						
@@ -181,7 +195,7 @@ begin
 						state_reg  <= drawP2;
 						total      <= (others => '0');
 
-					when drawP2 =>
+					when drawP2_1 =>
 						ready      <= x"00000000";
 						fb_write   <= '1';
 
@@ -200,10 +214,24 @@ begin
 									ellipseError <= ellipseError+yChange;
 									yChange <= yChange+twoASquare;
 								end if;
+								state_reg <= drawP1_1;
+								addr <= fb_base + (y_center+y) * x_max;
+								fb_address <= std_logic_vector(addr + (x_center+x));
 							end if;
-							addr <= fb_base + (y_center+y) * x_max;
-							fb_address <= std_logic_vector(addr + (x_center+x));
 						end if;
+					
+					when drawP2_2 =>
+						state_reg <= drawP1_3;
+						addr <= fb_base + (y_center+y) * x_max;
+						fb_address <= std_logic_vector(addr + (x_center-x));
+					when drawP2_3 =>
+						state_reg <= drawP1_4;
+						addr <= fb_base + (y_center+y) * x_max;
+						fb_address <= std_logic_vector(addr + (x_center-x));
+					when drawP2_4 =>
+						state_reg <= drawP1_1;
+						addr <= fb_base + (y_center+y) * x_max;
+						fb_address <= std_logic_vector(addr + (x_center-x));
 				end case;
 			end if;
 		end if;
