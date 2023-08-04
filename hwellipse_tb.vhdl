@@ -116,31 +116,28 @@ begin
 		wait for 10 ns;
 		rf_read <= '0';
 
-		-- scenario de test 2
-		-- remplissage d'un rectangle de 3x3 pixels
+		-- scenario de test 1
+		-- dessin d'une ellipse à x:100, y: 100 de rayon x: 6, y:4
 		-- dans une memoire situee a 0x00000000 (pour deboguer) pour un pixel buffer
-		-- de 320 x 240 (76800 octets). Le rectangle est situe au point
-		-- x:0-2 et y:0-2
+		-- de 640 x 450 (76800 octets). 
 		-- les addresses attendues sont (en decimal):
-		-- 0000, 0001, 0002
-		-- 0320, 0321, 0322
-		-- 0640, 0641, 0642
+		--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 		rf_write     <= '1';
 		rf_address   <= x"4";
-		rf_writedata <= x"00000064"; -- x_left = 100
+		rf_writedata <= x"00000064"; -- x_center = 100
 		wait for 10 ns;
 
 		rf_address   <= x"5";
-		rf_writedata <= x"00000064"; -- y_top = 1000
+		rf_writedata <= x"00000064"; -- y_center = 1000
 		wait for 10 ns;
 
 		rf_address   <= x"6";
-		rf_writedata <= x"00000006"; -- x_right = 1
+		rf_writedata <= x"00000006"; -- x_radius = 6
 		wait for 10 ns;
 
 		rf_address   <= x"7";
-		rf_writedata <= x"00000004"; -- y_bottom = 1
+		rf_writedata <= x"00000004"; -- y_radius = 4
 		wait for 10 ns;
 
 		rf_address   <= x"8";
