@@ -7,6 +7,8 @@
 #include "alt_types.h"
 #include "system.h"
 #include "altera_up_avalon_video_pixel_buffer_dma.h"
+#include <stdint.h>
+
 
 /*typedef enum drawingOpp_En {
     EMPTY_RECT,
@@ -38,7 +40,7 @@ void soft_recfiller_init(int x_size, int y_size);
 unsigned char get_pixel_color2(int x, int y);
 
 
-void soft_empty_rectangle_draw(int x_left, int y_top,
+uint32_t soft_empty_rectangle_draw(int x_left, int y_top,
                          int x_right, int y_bottom,
                          int color, int erasePreviousWork, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer);
 
