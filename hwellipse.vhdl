@@ -131,7 +131,7 @@ begin
 						ready      <= x"00000000";
 						fb_write   <= '1';
 						fb_address <= std_logic_vector(addr + (x_center+x));
-						state_reg  <= drawP1;
+						state_reg  <= drawP1_1;
 						total      <= (others => '0');
 
 
@@ -192,7 +192,7 @@ begin
 						ready      <= x"00000000";
 						fb_write   <= '1';
 						fb_address <= std_logic_vector(addr + (x_center+x));
-						state_reg  <= drawP2;
+						state_reg  <= drawP2_1;
 						total      <= (others => '0');
 
 					when drawP2_1 =>
