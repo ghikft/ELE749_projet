@@ -17,6 +17,22 @@
          type = "int";
       }
    }
+   element button
+   {
+      datum _sortIndex
+      {
+         value = "18";
+         type = "int";
+      }
+   }
+   element button.s1
+   {
+      datum baseAddress
+      {
+         value = "134754480";
+         type = "String";
+      }
+   }
    element character_buffer_with_dma
    {
       datum _sortIndex
@@ -37,7 +53,7 @@
    {
       datum baseAddress
       {
-         value = "134754504";
+         value = "134754552";
          type = "String";
       }
    }
@@ -106,7 +122,7 @@
    {
       datum baseAddress
       {
-         value = "134754496";
+         value = "134754544";
          type = "String";
       }
    }
@@ -138,7 +154,7 @@
    {
       datum baseAddress
       {
-         value = "134754464";
+         value = "134754512";
          type = "String";
       }
    }
@@ -154,7 +170,7 @@
    {
       datum baseAddress
       {
-         value = "134754488";
+         value = "134754536";
          type = "String";
       }
    }
@@ -171,6 +187,22 @@
       datum baseAddress
       {
          value = "134754368";
+         type = "String";
+      }
+   }
+   element remote
+   {
+      datum _sortIndex
+      {
+         value = "19";
+         type = "int";
+      }
+   }
+   element remote.s1
+   {
+      datum baseAddress
+      {
+         value = "134754464";
          type = "String";
       }
    }
@@ -206,6 +238,22 @@
          type = "String";
       }
    }
+   element switche
+   {
+      datum _sortIndex
+      {
+         value = "17";
+         type = "int";
+      }
+   }
+   element switche.s1
+   {
+      datum baseAddress
+      {
+         value = "134754496";
+         type = "String";
+      }
+   }
    element sysid
    {
       datum _sortIndex
@@ -218,7 +266,7 @@
    {
       datum baseAddress
       {
-         value = "134754480";
+         value = "134754528";
          type = "String";
       }
    }
@@ -275,15 +323,30 @@
  <parameter name="timeStamp" value="0" />
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
+ <interface
+   name="button_i"
+   internal="button.external_connection"
+   type="conduit"
+   dir="end" />
  <interface name="clk" internal="clocks.ref_clk" type="clock" dir="end" />
  <interface
    name="ps2_external"
    internal="ps2_0.external_interface"
    type="conduit"
    dir="end" />
+ <interface
+   name="remote_i"
+   internal="remote.external_connection"
+   type="conduit"
+   dir="end" />
  <interface name="reset" internal="clocks.ref_reset" type="reset" dir="end" />
  <interface name="sdram_clk" internal="clocks.sdram_clk" type="clock" dir="start" />
  <interface name="sdram_wires" internal="sdram.wire" type="conduit" dir="end" />
+ <interface
+   name="sw_i"
+   internal="switche.external_connection"
+   type="conduit"
+   dir="end" />
  <interface
    name="vga_controller_external"
    internal="vga_controller_0.external_interface"
@@ -297,6 +360,20 @@
   <parameter name="AUTO_CLK_CLOCK_RATE" value="50000000" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone V" />
   <parameter name="mode" value="Simple" />
+ </module>
+ <module name="button" kind="altera_avalon_pio" version="18.1" enabled="1">
+  <parameter name="bitClearingEdgeCapReg" value="false" />
+  <parameter name="bitModifyingOutReg" value="false" />
+  <parameter name="captureEdge" value="false" />
+  <parameter name="clockRate" value="50000000" />
+  <parameter name="direction" value="Input" />
+  <parameter name="edgeType" value="RISING" />
+  <parameter name="generateIRQ" value="false" />
+  <parameter name="irqType" value="LEVEL" />
+  <parameter name="resetValue" value="0" />
+  <parameter name="simDoTestBenchWiring" value="false" />
+  <parameter name="simDrivenValue" value="0" />
+  <parameter name="width" value="1" />
  </module>
  <module
    name="character_buffer_with_dma"
@@ -336,7 +413,7 @@
   <parameter name="cpuReset" value="false" />
   <parameter name="customInstSlavesSystemInfo" value="&lt;info/&gt;" />
   <parameter name="dataAddrWidth" value="28" />
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='sdram.s1' start='0x4000000' end='0x8000000' /><slave name='onchip_mem.s1' start='0x8000000' end='0x804B000' /><slave name='character_buffer_with_dma.avalon_char_buffer_slave' start='0x8080000' end='0x8082000' /><slave name='cpu.jtag_debug_module' start='0x8082800' end='0x8083000' /><slave name='hwellipse_0.avalon_slave' start='0x8083000' end='0x8083040' /><slave name='recfiller_0.avalon_slave' start='0x8083040' end='0x8083080' /><slave name='timer_0.s1' start='0x8083080' end='0x80830A0' /><slave name='pixel_buffer_dma_0.avalon_control_slave' start='0x80830A0' end='0x80830B0' /><slave name='sysid.control_slave' start='0x80830B0' end='0x80830B8' /><slave name='ps2_0.avalon_ps2_slave' start='0x80830B8' end='0x80830C0' /><slave name='jtag_uart.avalon_jtag_slave' start='0x80830C0' end='0x80830C8' /><slave name='character_buffer_with_dma.avalon_char_control_slave' start='0x80830C8' end='0x80830D0' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='sdram.s1' start='0x4000000' end='0x8000000' /><slave name='onchip_mem.s1' start='0x8000000' end='0x804B000' /><slave name='character_buffer_with_dma.avalon_char_buffer_slave' start='0x8080000' end='0x8082000' /><slave name='cpu.jtag_debug_module' start='0x8082800' end='0x8083000' /><slave name='hwellipse_0.avalon_slave' start='0x8083000' end='0x8083040' /><slave name='recfiller_0.avalon_slave' start='0x8083040' end='0x8083080' /><slave name='timer_0.s1' start='0x8083080' end='0x80830A0' /><slave name='remote.s1' start='0x80830A0' end='0x80830B0' /><slave name='button.s1' start='0x80830B0' end='0x80830C0' /><slave name='switche.s1' start='0x80830C0' end='0x80830D0' /><slave name='pixel_buffer_dma_0.avalon_control_slave' start='0x80830D0' end='0x80830E0' /><slave name='sysid.control_slave' start='0x80830E0' end='0x80830E8' /><slave name='ps2_0.avalon_ps2_slave' start='0x80830E8' end='0x80830F0' /><slave name='jtag_uart.avalon_jtag_slave' start='0x80830F0' end='0x80830F8' /><slave name='character_buffer_with_dma.avalon_char_control_slave' start='0x80830F8' end='0x8083100' /></address-map>]]></parameter>
   <parameter name="dcache_bursts" value="false" />
   <parameter name="dcache_lineSize" value="32" />
   <parameter name="dcache_numTCDM" value="0" />
@@ -536,6 +613,20 @@
   <parameter name="avalon_bus_type" value="Memory Mapped" />
  </module>
  <module name="recfiller_0" kind="recfiller" version="1.0" enabled="1" />
+ <module name="remote" kind="altera_avalon_pio" version="18.1" enabled="1">
+  <parameter name="bitClearingEdgeCapReg" value="false" />
+  <parameter name="bitModifyingOutReg" value="false" />
+  <parameter name="captureEdge" value="false" />
+  <parameter name="clockRate" value="50000000" />
+  <parameter name="direction" value="Input" />
+  <parameter name="edgeType" value="RISING" />
+  <parameter name="generateIRQ" value="false" />
+  <parameter name="irqType" value="LEVEL" />
+  <parameter name="resetValue" value="0" />
+  <parameter name="simDoTestBenchWiring" value="false" />
+  <parameter name="simDrivenValue" value="0" />
+  <parameter name="width" value="6" />
+ </module>
  <module
    name="rgb_resampler_pixel"
    kind="altera_up_avalon_video_rgb_resampler"
@@ -575,6 +666,20 @@
   <parameter name="refreshPeriod" value="7.8125" />
   <parameter name="registerDataIn" value="true" />
   <parameter name="rowWidth" value="13" />
+ </module>
+ <module name="switche" kind="altera_avalon_pio" version="18.1" enabled="1">
+  <parameter name="bitClearingEdgeCapReg" value="false" />
+  <parameter name="bitModifyingOutReg" value="false" />
+  <parameter name="captureEdge" value="false" />
+  <parameter name="clockRate" value="50000000" />
+  <parameter name="direction" value="Input" />
+  <parameter name="edgeType" value="RISING" />
+  <parameter name="generateIRQ" value="false" />
+  <parameter name="irqType" value="LEVEL" />
+  <parameter name="resetValue" value="0" />
+  <parameter name="simDoTestBenchWiring" value="false" />
+  <parameter name="simDrivenValue" value="0" />
+  <parameter name="width" value="1" />
  </module>
  <module
    name="sysid"
@@ -665,7 +770,7 @@
    start="cpu.data_master"
    end="character_buffer_with_dma.avalon_char_control_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x080830c8" />
+  <parameter name="baseAddress" value="0x080830f8" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -674,7 +779,7 @@
    start="cpu.data_master"
    end="pixel_buffer_dma_0.avalon_control_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x080830a0" />
+  <parameter name="baseAddress" value="0x080830d0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -683,7 +788,7 @@
    start="cpu.data_master"
    end="jtag_uart.avalon_jtag_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x080830c0" />
+  <parameter name="baseAddress" value="0x080830f0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -692,7 +797,7 @@
    start="cpu.data_master"
    end="ps2_0.avalon_ps2_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x080830b8" />
+  <parameter name="baseAddress" value="0x080830e8" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -719,7 +824,7 @@
    start="cpu.data_master"
    end="sysid.control_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x080830b0" />
+  <parameter name="baseAddress" value="0x080830e0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -748,6 +853,21 @@
  <connection kind="avalon" version="18.1" start="cpu.data_master" end="timer_0.s1">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x08083080" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection kind="avalon" version="18.1" start="cpu.data_master" end="switche.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x080830c0" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection kind="avalon" version="18.1" start="cpu.data_master" end="button.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x080830b0" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection kind="avalon" version="18.1" start="cpu.data_master" end="remote.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x080830a0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -823,6 +943,9 @@
    start="clocks.sys_clk"
    end="pixel_buffer_dma_0.clk" />
  <connection kind="clock" version="18.1" start="clocks.sys_clk" end="timer_0.clk" />
+ <connection kind="clock" version="18.1" start="clocks.sys_clk" end="switche.clk" />
+ <connection kind="clock" version="18.1" start="clocks.sys_clk" end="button.clk" />
+ <connection kind="clock" version="18.1" start="clocks.sys_clk" end="remote.clk" />
  <connection
    kind="clock"
    version="18.1"
@@ -936,6 +1059,21 @@
    version="18.1"
    start="clocks.reset_source"
    end="hwellipse_0.reset" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="clocks.reset_source"
+   end="switche.reset" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="clocks.reset_source"
+   end="button.reset" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="clocks.reset_source"
+   end="remote.reset" />
  <connection
    kind="reset"
    version="18.1"
