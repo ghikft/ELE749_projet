@@ -55,16 +55,7 @@ void pong_io(char* P1up, char* P1down, char* P2up, char* P2down) {
 	*P2up = remoteStatus & 0x20;
 }
 
-void snake_io(char* snakeUp, char* snakeDown, char* snakeLeft, char* snakeRight) {
-	char remoteStatus = 0;
-	get_remote(REMOTE_BASE, &remoteStatus);
 
-	*snakeUp = remoteStatus & 0x08;
-	*snakeDown = remoteStatus & 0x04;
-
-	*snakeLeft = remoteStatus & 0x02;
-	*snakeRight = remoteStatus & 0x01;
-}
 
 void test_USER_IO(void) {
 	char switchStatus = 0;
@@ -420,8 +411,9 @@ alt_up_ps2_dev* tim;
 
 
 
-#define IO_TEST
-#define NIOS_DRAW_FUNC
+//#define IO_TEST
+//#define NIOS_DRAW_FUNC
+#define SNAKE_TEST
 int main(void)
 {	
 	alt_u32 period = 8;
@@ -503,9 +495,13 @@ int main(void)
 	firstPoint.y = 100;
 	secondPoint.x = 110;
 	secondPoint.y = 110;
+#ifdef SNAKE_TEST
+	play_snake(pixel_buffer);
+#endif
 #ifdef IO_TEST
 	while (1) {
 		test_USER_IO();
+		usleep(1000000);
 	}
 #endif
 #ifdef DRAW_CARACTERISATION	
@@ -887,6 +883,6 @@ int main(void)
 	return 0;
 #endif
 #ifdef NIOS_DRAW_FUNC
-	//nios_draw(pixel_buffer);
+	nios_draw(pixel_buffer);
 #endif // NIOS_DRAW_FUNC
 }
