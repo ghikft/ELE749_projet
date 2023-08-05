@@ -46,7 +46,10 @@ entity ELE749_projet is
 			DRAM_LDQM		: out std_logic;
 			DRAM_UDQM		: out std_logic;
 			DRAM_RAS_N		: out std_logic;
-			DRAM_WE_N		: out std_logic
+			DRAM_WE_N		: out std_logic;
+			
+			sw					: in std_logic_vector(9 downto 0);
+			gpio_0			: in std_logic_vector(35 downto 0)
 	);
 end ELE749_projet;
 
@@ -100,7 +103,13 @@ architecture structural of ELE749_projet is
 			-- .G
 			vga_controller_external_G     : out   std_logic_vector(7 downto 0); 
 			-- .B
-			vga_controller_external_B     : out   std_logic_vector(7 downto 0)                      
+			vga_controller_external_B     : out   std_logic_vector(7 downto 0);
+			--return button to exit games
+			button_i_export					: in    std_logic	:= '0';
+			--switch between caracterisation and application mode
+			sw_i_export							: in    std_logic	:= '0';
+			--inputs to play games
+			remote_i_export		: in	std_logic_vector(5 downto 0) := (others => '0')
 		);
 	end component;
 	
@@ -135,7 +144,17 @@ begin
 		vga_controller_external_SYNC 	=> VGA_SYNC_N,
 		vga_controller_external_R 		=> vga_r,
 		vga_controller_external_G 		=> vga_g,
-		vga_controller_external_B 		=> vga_b
+		vga_controller_external_B 		=> vga_b,
+		
+		--inputs to interact with the sowftware
+		button_i_export					=> key(0),
+		sw_i_export							=> sw(0),
+		remote_i_export (5 downto 0)	=> gpio_0(31 downto 26)		
+		--remote_external_connection_export (1)	=> gpio_0(27),	
+		--remote_external_connection_export (2)	=> gpio_0(28),	
+		--remote_external_connection_export (3)	=> gpio_0(29),	
+		--remote_external_connection_export (4)	=> gpio_0(30),	
+		--remote_external_connection_export (5)	=> gpio_0(31)
 	);
 end structural;
 			
