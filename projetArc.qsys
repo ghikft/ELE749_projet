@@ -21,7 +21,7 @@
    {
       datum _sortIndex
       {
-         value = "18";
+         value = "19";
          type = "int";
       }
    }
@@ -194,7 +194,7 @@
    {
       datum _sortIndex
       {
-         value = "19";
+         value = "18";
          type = "int";
       }
    }
@@ -413,7 +413,7 @@
   <parameter name="cpuReset" value="false" />
   <parameter name="customInstSlavesSystemInfo" value="&lt;info/&gt;" />
   <parameter name="dataAddrWidth" value="28" />
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='sdram.s1' start='0x4000000' end='0x8000000' /><slave name='onchip_mem.s1' start='0x8000000' end='0x804B000' /><slave name='character_buffer_with_dma.avalon_char_buffer_slave' start='0x8080000' end='0x8082000' /><slave name='cpu.jtag_debug_module' start='0x8082800' end='0x8083000' /><slave name='hwellipse_0.avalon_slave' start='0x8083000' end='0x8083040' /><slave name='recfiller_0.avalon_slave' start='0x8083040' end='0x8083080' /><slave name='timer_0.s1' start='0x8083080' end='0x80830A0' /><slave name='remote.s1' start='0x80830A0' end='0x80830B0' /><slave name='button.s1' start='0x80830B0' end='0x80830C0' /><slave name='switche.s1' start='0x80830C0' end='0x80830D0' /><slave name='pixel_buffer_dma_0.avalon_control_slave' start='0x80830D0' end='0x80830E0' /><slave name='sysid.control_slave' start='0x80830E0' end='0x80830E8' /><slave name='ps2_0.avalon_ps2_slave' start='0x80830E8' end='0x80830F0' /><slave name='jtag_uart.avalon_jtag_slave' start='0x80830F0' end='0x80830F8' /><slave name='character_buffer_with_dma.avalon_char_control_slave' start='0x80830F8' end='0x8083100' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='button.s1' start='0x0' end='0x10' /><slave name='sdram.s1' start='0x4000000' end='0x8000000' /><slave name='onchip_mem.s1' start='0x8000000' end='0x804B000' /><slave name='character_buffer_with_dma.avalon_char_buffer_slave' start='0x8080000' end='0x8082000' /><slave name='cpu.jtag_debug_module' start='0x8082800' end='0x8083000' /><slave name='hwellipse_0.avalon_slave' start='0x8083000' end='0x8083040' /><slave name='recfiller_0.avalon_slave' start='0x8083040' end='0x8083080' /><slave name='timer_0.s1' start='0x8083080' end='0x80830A0' /><slave name='remote.s1' start='0x80830A0' end='0x80830B0' /><slave name='switche.s1' start='0x80830C0' end='0x80830D0' /><slave name='pixel_buffer_dma_0.avalon_control_slave' start='0x80830D0' end='0x80830E0' /><slave name='sysid.control_slave' start='0x80830E0' end='0x80830E8' /><slave name='ps2_0.avalon_ps2_slave' start='0x80830E8' end='0x80830F0' /><slave name='jtag_uart.avalon_jtag_slave' start='0x80830F0' end='0x80830F8' /><slave name='character_buffer_with_dma.avalon_char_control_slave' start='0x80830F8' end='0x8083100' /></address-map>]]></parameter>
   <parameter name="dcache_bursts" value="false" />
   <parameter name="dcache_lineSize" value="32" />
   <parameter name="dcache_numTCDM" value="0" />
@@ -619,7 +619,7 @@
   <parameter name="captureEdge" value="false" />
   <parameter name="clockRate" value="50000000" />
   <parameter name="direction" value="Input" />
-  <parameter name="edgeType" value="RISING" />
+  <parameter name="edgeType" value="FALLING" />
   <parameter name="generateIRQ" value="false" />
   <parameter name="irqType" value="LEVEL" />
   <parameter name="resetValue" value="0" />
@@ -860,14 +860,14 @@
   <parameter name="baseAddress" value="0x080830c0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
- <connection kind="avalon" version="18.1" start="cpu.data_master" end="button.s1">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x080830b0" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
  <connection kind="avalon" version="18.1" start="cpu.data_master" end="remote.s1">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x080830a0" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection kind="avalon" version="18.1" start="cpu.data_master" end="button.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -944,8 +944,8 @@
    end="pixel_buffer_dma_0.clk" />
  <connection kind="clock" version="18.1" start="clocks.sys_clk" end="timer_0.clk" />
  <connection kind="clock" version="18.1" start="clocks.sys_clk" end="switche.clk" />
- <connection kind="clock" version="18.1" start="clocks.sys_clk" end="button.clk" />
  <connection kind="clock" version="18.1" start="clocks.sys_clk" end="remote.clk" />
+ <connection kind="clock" version="18.1" start="clocks.sys_clk" end="button.clk" />
  <connection
    kind="clock"
    version="18.1"
@@ -1068,12 +1068,12 @@
    kind="reset"
    version="18.1"
    start="clocks.reset_source"
-   end="button.reset" />
+   end="remote.reset" />
  <connection
    kind="reset"
    version="18.1"
    start="clocks.reset_source"
-   end="remote.reset" />
+   end="button.reset" />
  <connection
    kind="reset"
    version="18.1"

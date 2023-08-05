@@ -31,6 +31,7 @@
 /*Module software*/
 #include "softwareDraw.h"
 #include "nios_draw.h"
+#include "userIO.h"
 #include "snake.h"
 /* Mouse driver */
 #include "ps2_mouse.h"
@@ -43,10 +44,40 @@
 #define TIMER_PERIODH_REG_OFT 	3 	// period register, bits 31:16
 
 
+void pong_io(char* P1up, char* P1down, char* P2up, char* P2down) {
+	char remoteStatus = 0;
+	get_remote(REMOTE_BASE, &remoteStatus);
 
+	*P1down = remoteStatus & 0x04;
+	*P1up = remoteStatus & 0x08;
 
+	*P2down = remoteStatus & 0x10;
+	*P2up = remoteStatus & 0x20;
+}
 
+void snake_io(char* snakeUp, char* snakeDown, char* snakeLeft, char* snakeRight) {
+	char remoteStatus = 0;
+	get_remote(REMOTE_BASE, &remoteStatus);
 
+	*snakeUp = remoteStatus & 0x08;
+	*snakeDown = remoteStatus & 0x04;
+
+	*snakeLeft = remoteStatus & 0x02;
+	*snakeRight = remoteStatus & 0x01;
+}
+
+void test_USER_IO(void) {
+	char switchStatus = 0;
+	char buttonStatus = 0;
+	char remoteStatus = 0;
+	get_switche(SWITCHE_BASE, &switchStatus);
+	get_button(BUTTON_BASE, &buttonStatus);
+	get_remote(REMOTE_BASE, &remoteStatus);
+
+	printf("Return button: %d   |   Mode_switche: %d\n\r",buttonStatus,switchStatus);
+	printf("Pong REMOTE|   UP: %d   |   DOWN: %d\n\r", (remoteStatus & 0x20), (remoteStatus & 0x10));
+	printf("Snake REMOTE|   UP: %d   |   DOWN: %d   |   LEFT: %d   |   RIGHT: %d\n\r", (remoteStatus & 0x08), (remoteStatus & 0x04), (remoteStatus & 0x02), (remoteStatus & 0x01));
+}
 //Screen border limts
 //#define TOP_LIMIT 0
 //#define LEFT_LIMIT 0
@@ -389,7 +420,7 @@ alt_up_ps2_dev* tim;
 
 
 
-
+#define IO_TEST
 #define NIOS_DRAW_FUNC
 int main(void)
 {	
@@ -472,17 +503,19 @@ int main(void)
 	firstPoint.y = 100;
 	secondPoint.x = 110;
 	secondPoint.y = 110;
-
-	
+#ifdef IO_TEST
+	while (1) {
+		test_USER_IO();
+	}
+#endif
+#ifdef DRAW_CARACTERISATION	
 	//caracterisation test 
 	/*filled_software_rectangle_test(100, pixel_buffer);
 	empty_software_rectangle_test(1000,pixel_buffer);
 	software_copy_paste_test(100, pixel_buffer);
 	software_line_test(1000, pixel_buffer);
 	software_empty_ellipse_test(1000, pixel_buffer);
-	software_cut_paste_test(100, pixel_buffer);	*/
-
-	play_snake(pixel_buffer);
+	software_cut_paste_test(100, pixel_buffer);	
 	
 #ifdef NIOS_DRAW_IN_MAIN	
 
