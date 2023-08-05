@@ -2,8 +2,8 @@
 *Description
 * Librairie pour controler l'accelerateur de rectangles
 *********************************************************************/
-#ifndef RECFILLER_H_
-#define RECFILLER_H_
+#ifndef HWELLIPSE_H_
+#define HWELLIPSE_H_
 
 #define RF_FB_BASE_ADDR     (1*sizeof(int))
 #define RF_X_MAX_ADDR 		(2*sizeof(int))
