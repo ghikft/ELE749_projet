@@ -33,6 +33,7 @@
 #include "nios_draw.h"
 #include "userIO.h"
 #include "snake.h"
+#include "pong.h"
 /* Mouse driver */
 #include "ps2_mouse.h"
 #include "io.h"
@@ -42,19 +43,6 @@
 #define TIMER_CTRL_REG_OFT		1 	// control register
 #define TIMER_PERIODL_REG_OFT 	2 	// period register, bits 15:0
 #define TIMER_PERIODH_REG_OFT 	3 	// period register, bits 31:16
-
-
-void pong_io(char* P1up, char* P1down, char* P2up, char* P2down) {
-	char remoteStatus = 0;
-	get_remote(REMOTE_BASE, &remoteStatus);
-
-	*P1down = remoteStatus & 0x04;
-	*P1up = remoteStatus & 0x08;
-
-	*P2down = remoteStatus & 0x10;
-	*P2up = remoteStatus & 0x20;
-}
-
 
 
 void test_USER_IO(void) {
@@ -413,7 +401,8 @@ alt_up_ps2_dev* tim;
 
 //#define IO_TEST
 //#define NIOS_DRAW_FUNC
-#define SNAKE_TEST
+//#define SNAKE_TEST
+#define PONG_TEST
 int main(void)
 {	
 	alt_u32 period = 8;
@@ -495,6 +484,9 @@ int main(void)
 	firstPoint.y = 100;
 	secondPoint.x = 110;
 	secondPoint.y = 110;
+#ifdef PONG_TEST
+	play_pong(pixel_buffer);
+#endif
 #ifdef SNAKE_TEST
 	play_snake(pixel_buffer);
 #endif
