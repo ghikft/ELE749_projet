@@ -138,3 +138,5 @@ software/prog_projet/.vs/
 software/prog_projet/.force_relink
 
 software/prog_projet/obj/default/.force_relink
+
+software/.vscode/settings.json
