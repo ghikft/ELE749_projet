@@ -31,6 +31,7 @@
 /*Module software*/
 #include "softwareDraw.h"
 #include "nios_draw.h"
+#include "snake.h"
 /* Mouse driver */
 #include "ps2_mouse.h"
 #include "io.h"
@@ -462,9 +463,9 @@ int main(void)
 	printf("init complete\n");
 	//recfiller_draw_rectangle(10, 10, 40, 60, 128);
 	//init random number generator
-	srand(time(NULL));
+	//srand(time(NULL));
 	//start the time stamp timer
-	alt_timestamp_start();
+	//alt_timestamp_start();
 
 	//TBD probablu useless
 	firstPoint.x = 100;
@@ -474,12 +475,14 @@ int main(void)
 
 	
 	//caracterisation test 
-	filled_software_rectangle_test(100, pixel_buffer);
+	/*filled_software_rectangle_test(100, pixel_buffer);
 	empty_software_rectangle_test(1000,pixel_buffer);
 	software_copy_paste_test(100, pixel_buffer);
 	software_line_test(1000, pixel_buffer);
 	software_empty_ellipse_test(1000, pixel_buffer);
-	software_cut_paste_test(100, pixel_buffer);	
+	software_cut_paste_test(100, pixel_buffer);	*/
+
+	play_snake(pixel_buffer);
 	
 #ifdef NIOS_DRAW_IN_MAIN	
 
