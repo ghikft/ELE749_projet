@@ -322,7 +322,7 @@ int main(void){
 
 	printf("init complete\n");
 
-	if (characterization){
+	if (characterization){//output function caracterisation to terminal
 		filled_software_rectangle_test(100, pixel_buffer);
 		empty_software_rectangle_test(1000,pixel_buffer);
 		software_copy_paste_test(100, pixel_buffer);
@@ -330,7 +330,7 @@ int main(void){
 		software_empty_ellipse_test(1000, pixel_buffer);
 		software_cut_paste_test(100, pixel_buffer);
 	}
-	else{
+	else{//apllication nios draw,pong & snake
 		nios_draw(pixel_buffer);
 	}
 }

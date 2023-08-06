@@ -1,3 +1,7 @@
+/******hwellipse.c *********************************************************
+*Description
+* Library to accelerate the empty ellipse drawing
+*********************************************************************/
 #include "hwellipse.h"
 #include "io.h"
 #include "system.h"

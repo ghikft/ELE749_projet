@@ -1,6 +1,6 @@
-/******recfiller.h *********************************************************
+/******hwellipse.h *********************************************************
 *Description
-* Librairie pour controler l'accelerateur de rectangles
+* Library to accelerate the empty ellipse drawing
 *********************************************************************/
 #ifndef HWELLIPSE_H_
 #define HWELLIPSE_H_
@@ -21,4 +21,4 @@ unsigned int hwellipse_draw_ellipse(int x_center, int y_center,
                                     int x_radius, int y_radius, 
                                     int color);
 
-#endif  // RECFILLER_H_
+#endif  // HWELLIPSE_H_

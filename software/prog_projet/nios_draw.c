@@ -1,5 +1,6 @@
 /* Description
 * Library used to drive the nios draw application
+* Pong and snake game can be launch from the nios draw app
 * Autor: Nicolas & Robin
 *********************************************************************/
 #include "nios_draw.h"
@@ -265,6 +266,19 @@ int cursorSprite[25] = { 1,1,1,1,1,
 //*****************************************************
 
 void nios_draw(alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+	/**************************************************************************
+	 * nios_draw
+	 **************************************************************************
+	 * Parametres
+	 * pixel_buffer
+	 *
+	 * Return
+	 * None
+	 *
+	 * Side effects
+	 * run the drawing app and the pong/snake games
+	 *
+	 *************************************************************************/
 	printf("START NIOS DRAW APP\n\r");
 	// Variables for PS2 mouse
 	static int x_mov = 0;
