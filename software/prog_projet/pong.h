@@ -34,5 +34,4 @@
 
 void play_pong(alt_up_pixel_buffer_dma_dev* pixel_buffer);
 
-
 #endif

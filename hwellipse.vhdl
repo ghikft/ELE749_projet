@@ -2,7 +2,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity recfiller is
+entity hwellipse is
 	port (
 		clk   : in std_logic;
 		reset : in std_logic;
@@ -21,9 +21,9 @@ entity recfiller is
 		fb_waitrequest : in  std_logic
 	--fb_byteenable  : out std_logic_vector(3 downto 0)
 	);
-end entity recfiller;
+end entity hwellipse;
 
-architecture rtl of recfiller is
+architecture rtl of hwellipse is
 	-- signaux pour registres de controle
 	signal ready    	: std_logic_vector(31 downto 0);
 	signal fb_base  	: unsigned(31 downto 0);
@@ -236,4 +236,4 @@ begin
 			end if;
 		end if;
 	end process;
-end architecture; -- rtl of recfiller
+end architecture; -- rtl of hwellipse

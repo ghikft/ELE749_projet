@@ -4,11 +4,11 @@ library vunit_lib;
 context vunit_lib.vunit_context;
 library rf_lib;
 -----------------------------------------------------------
-entity recfiller_tb is
+entity hwellipse_tb is
 	generic (runner_cfg : string);
-end entity recfiller_tb;
+end entity hwellipse_tb;
 -----------------------------------------------------------
-architecture testbench of recfiller_tb is
+architecture testbench of hwellipse_tb is
 
 	-- Testbench DUT generics
 
@@ -184,7 +184,7 @@ begin
 	-----------------------------------------------------------
 	-- Entity Under Test
 	-----------------------------------------------------------
-	DUT : entity work.recfiller
+	DUT : entity work.hwellipse
 		port map (
 			clk            => clk,
 			reset          => reset,
