@@ -32,6 +32,18 @@
 #define  DOWN   2
 #define  NONE   0
 
+//	/**************************************************************************
+//	 * Start the game pong
+//	 **************************************************************************
+//	 * Parametres
+//	 * pixel_buffer: pointer to the pixel buffer
+//	 *
+//	 * Return
+//	 * None
+//	 *
+//	 * Side effects
+//	 *
+//	 *************************************************************************/
 void play_pong(alt_up_pixel_buffer_dma_dev* pixel_buffer);
 
 #endif

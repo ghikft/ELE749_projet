@@ -44,6 +44,7 @@ void create_ball(void);
 void draw_ball_in_board(void);
 void process_ball(void);
 void show_score(alt_up_pixel_buffer_dma_dev* pixel_buffer);
+void exitButton_io_pong(char* exitButton);
 
 //public functions
 void play_pong(alt_up_pixel_buffer_dma_dev* pixel_buffer){
@@ -53,9 +54,11 @@ void play_pong(alt_up_pixel_buffer_dma_dev* pixel_buffer){
     totalTime = (float)temps1*2.0e-8;
     //butons
     char p1Up, p1Down, p2Up, p2Down;
+    char exitButton = 0;
+    int exitGame = 0;
 
     setup_pong(pixel_buffer);
-    while (1){
+    while (exitGame == 0){
         if (!alt_up_pixel_buffer_dma_check_swap_buffers_status(pixel_buffer)) {
 
             //get timer
@@ -87,6 +90,10 @@ void play_pong(alt_up_pixel_buffer_dma_dev* pixel_buffer){
             }
 
             pong_io(&p1Up,&p1Down,&p2Up,&p2Down);
+            exitButton_io_pong(&exitButton);
+            if(exitButton == 0){
+                exitGame = 1;
+            }
 
             if (p1Up==0){
                 directionP1 = UP;
@@ -362,4 +369,10 @@ void show_score(alt_up_pixel_buffer_dma_dev* pixel_buffer){
     for(int i=0;i<p2Score;i++){
         alt_up_pixel_buffer_dma_draw_box(pixel_buffer,PLAY_AREA_WIDTH-(i*10+5+5*i+SQUARE_WIDTH_PONG+10),5,PLAY_AREA_WIDTH-(i*10+5+5*i+10),15,BLACK,0);
     }
+}
+
+void exitButton_io_pong(char* exitButton){
+    char buttonStatus = 0;
+    get_button(BUTTON_BASE, &buttonStatus);
+    *exitButton = buttonStatus & 0x01;
 }

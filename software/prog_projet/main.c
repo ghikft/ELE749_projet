@@ -401,8 +401,8 @@ alt_up_ps2_dev* tim;
 
 //#define IO_TEST
 //#define NIOS_DRAW_FUNC
-#define SNAKE_TEST
-//#define PONG_TEST
+//#define SNAKE_TEST
+#define PONG_TEST
 int main(void)
 {	
 	alt_u32 period = 8;
@@ -486,9 +486,11 @@ int main(void)
 	secondPoint.y = 110;
 #ifdef PONG_TEST
 	play_pong(pixel_buffer);
+	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 0,0,640,480,BACKGROUD_COLOR,0);
 #endif
 #ifdef SNAKE_TEST
 	play_snake(pixel_buffer);
+	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 0,0,640,480,BACKGROUD_COLOR,0);
 #endif
 #ifdef IO_TEST
 	while (1) {
