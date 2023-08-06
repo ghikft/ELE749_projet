@@ -1,5 +1,10 @@
+/* Description
+* Library used to drive the nios draw application
+* Autor: Nicolas & Robin
+*********************************************************************/
 #include "nios_draw.h"
 
+//Icons Data array
 int fillIconBmp[729] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 							0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 							0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -257,6 +262,7 @@ int cursorSprite[25] = { 1,1,1,1,1,
 							1,0,1,1,0,
 							1,0,0,1,1,
 							0,0,0,0,1 };
+//*****************************************************
 
 void nios_draw(alt_up_pixel_buffer_dma_dev* pixel_buffer) {
 	printf("START NIOS DRAW APP\n\r");

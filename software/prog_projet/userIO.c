@@ -1,3 +1,7 @@
+/* Description
+* Library Read external user input
+* Autor: Nicolas & Robin
+*********************************************************************/
 #include "userIO.h"
 
 void get_switche(alt_u32 sw_base, char* switchStatus)

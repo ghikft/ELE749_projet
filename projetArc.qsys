@@ -9,19 +9,11 @@
    categories="System" />
  <parameter name="bonusData"><![CDATA[bonusData 
 {
-   element alpha_blender_0
-   {
-      datum _sortIndex
-      {
-         value = "11";
-         type = "int";
-      }
-   }
    element button
    {
       datum _sortIndex
       {
-         value = "19";
+         value = "18";
          type = "int";
       }
    }
@@ -29,31 +21,7 @@
    {
       datum baseAddress
       {
-         value = "134754480";
-         type = "String";
-      }
-   }
-   element character_buffer_with_dma
-   {
-      datum _sortIndex
-      {
-         value = "10";
-         type = "int";
-      }
-   }
-   element character_buffer_with_dma.avalon_char_buffer_slave
-   {
-      datum baseAddress
-      {
-         value = "134742016";
-         type = "String";
-      }
-   }
-   element character_buffer_with_dma.avalon_char_control_slave
-   {
-      datum baseAddress
-      {
-         value = "134754552";
+         value = "134746336";
          type = "String";
       }
    }
@@ -82,7 +50,23 @@
    {
       datum baseAddress
       {
-         value = "134752256";
+         value = "134744064";
+         type = "String";
+      }
+   }
+   element cursor_0
+   {
+      datum _sortIndex
+      {
+         value = "14";
+         type = "int";
+      }
+   }
+   element cursor_0.avalon_slave
+   {
+      datum baseAddress
+      {
+         value = "134746112";
          type = "String";
       }
    }
@@ -90,7 +74,7 @@
    {
       datum _sortIndex
       {
-         value = "12";
+         value = "10";
          type = "int";
       }
    }
@@ -98,7 +82,7 @@
    {
       datum _sortIndex
       {
-         value = "15";
+         value = "13";
          type = "int";
       }
    }
@@ -106,7 +90,7 @@
    {
       datum baseAddress
       {
-         value = "134754304";
+         value = "134746176";
          type = "String";
       }
    }
@@ -122,7 +106,7 @@
    {
       datum baseAddress
       {
-         value = "134754544";
+         value = "134746416";
          type = "String";
       }
    }
@@ -154,7 +138,23 @@
    {
       datum baseAddress
       {
-         value = "134754512";
+         value = "134746384";
+         type = "String";
+      }
+   }
+   element projetArc
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Cyclone V";
+         type = "String";
+      }
+   }
+   element projetArc
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Cyclone V";
          type = "String";
       }
    }
@@ -170,7 +170,7 @@
    {
       datum baseAddress
       {
-         value = "134754536";
+         value = "134746408";
          type = "String";
       }
    }
@@ -178,7 +178,7 @@
    {
       datum _sortIndex
       {
-         value = "14";
+         value = "12";
          type = "int";
       }
    }
@@ -186,7 +186,7 @@
    {
       datum baseAddress
       {
-         value = "134754368";
+         value = "134746240";
          type = "String";
       }
    }
@@ -194,7 +194,7 @@
    {
       datum _sortIndex
       {
-         value = "18";
+         value = "17";
          type = "int";
       }
    }
@@ -202,7 +202,7 @@
    {
       datum baseAddress
       {
-         value = "134754464";
+         value = "134746352";
          type = "String";
       }
    }
@@ -242,7 +242,7 @@
    {
       datum _sortIndex
       {
-         value = "17";
+         value = "16";
          type = "int";
       }
    }
@@ -250,7 +250,7 @@
    {
       datum baseAddress
       {
-         value = "134754496";
+         value = "134746368";
          type = "String";
       }
    }
@@ -266,7 +266,7 @@
    {
       datum baseAddress
       {
-         value = "134754528";
+         value = "134746400";
          type = "String";
       }
    }
@@ -274,7 +274,7 @@
    {
       datum _sortIndex
       {
-         value = "16";
+         value = "15";
          type = "int";
       }
    }
@@ -282,7 +282,7 @@
    {
       datum baseAddress
       {
-         value = "134754432";
+         value = "134746304";
          type = "String";
       }
    }
@@ -290,7 +290,7 @@
    {
       datum _sortIndex
       {
-         value = "13";
+         value = "11";
          type = "int";
       }
    }
@@ -352,15 +352,6 @@
    internal="vga_controller_0.external_interface"
    type="conduit"
    dir="end" />
- <module
-   name="alpha_blender_0"
-   kind="altera_up_avalon_video_alpha_blender"
-   version="18.0"
-   enabled="1">
-  <parameter name="AUTO_CLK_CLOCK_RATE" value="50000000" />
-  <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone V" />
-  <parameter name="mode" value="Simple" />
- </module>
  <module name="button" kind="altera_avalon_pio" version="18.1" enabled="1">
   <parameter name="bitClearingEdgeCapReg" value="false" />
   <parameter name="bitModifyingOutReg" value="false" />
@@ -374,18 +365,6 @@
   <parameter name="simDoTestBenchWiring" value="false" />
   <parameter name="simDrivenValue" value="0" />
   <parameter name="width" value="1" />
- </module>
- <module
-   name="character_buffer_with_dma"
-   kind="altera_up_avalon_video_character_buffer_with_dma"
-   version="18.0"
-   enabled="1">
-  <parameter name="AUTO_CLK_CLOCK_RATE" value="50000000" />
-  <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone V" />
-  <parameter name="color_bits" value="1-bit" />
-  <parameter name="enable_transparency" value="true" />
-  <parameter name="resolution" value="80 x 60" />
-  <parameter name="vga_device" value="On-board VGA DAC" />
  </module>
  <module
    name="clocks"
@@ -413,7 +392,7 @@
   <parameter name="cpuReset" value="false" />
   <parameter name="customInstSlavesSystemInfo" value="&lt;info/&gt;" />
   <parameter name="dataAddrWidth" value="28" />
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='button.s1' start='0x0' end='0x10' /><slave name='sdram.s1' start='0x4000000' end='0x8000000' /><slave name='onchip_mem.s1' start='0x8000000' end='0x804B000' /><slave name='character_buffer_with_dma.avalon_char_buffer_slave' start='0x8080000' end='0x8082000' /><slave name='cpu.jtag_debug_module' start='0x8082800' end='0x8083000' /><slave name='hwellipse_0.avalon_slave' start='0x8083000' end='0x8083040' /><slave name='recfiller_0.avalon_slave' start='0x8083040' end='0x8083080' /><slave name='timer_0.s1' start='0x8083080' end='0x80830A0' /><slave name='remote.s1' start='0x80830A0' end='0x80830B0' /><slave name='switche.s1' start='0x80830C0' end='0x80830D0' /><slave name='pixel_buffer_dma_0.avalon_control_slave' start='0x80830D0' end='0x80830E0' /><slave name='sysid.control_slave' start='0x80830E0' end='0x80830E8' /><slave name='ps2_0.avalon_ps2_slave' start='0x80830E8' end='0x80830F0' /><slave name='jtag_uart.avalon_jtag_slave' start='0x80830F0' end='0x80830F8' /><slave name='character_buffer_with_dma.avalon_char_control_slave' start='0x80830F8' end='0x8083100' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='sdram.s1' start='0x4000000' end='0x8000000' /><slave name='onchip_mem.s1' start='0x8000000' end='0x804B000' /><slave name='cpu.jtag_debug_module' start='0x8080800' end='0x8081000' /><slave name='cursor_0.avalon_slave' start='0x8081000' end='0x8081040' /><slave name='hwellipse_0.avalon_slave' start='0x8081040' end='0x8081080' /><slave name='recfiller_0.avalon_slave' start='0x8081080' end='0x80810C0' /><slave name='timer_0.s1' start='0x80810C0' end='0x80810E0' /><slave name='button.s1' start='0x80810E0' end='0x80810F0' /><slave name='remote.s1' start='0x80810F0' end='0x8081100' /><slave name='switche.s1' start='0x8081100' end='0x8081110' /><slave name='pixel_buffer_dma_0.avalon_control_slave' start='0x8081110' end='0x8081120' /><slave name='sysid.control_slave' start='0x8081120' end='0x8081128' /><slave name='ps2_0.avalon_ps2_slave' start='0x8081128' end='0x8081130' /><slave name='jtag_uart.avalon_jtag_slave' start='0x8081130' end='0x8081138' /></address-map>]]></parameter>
   <parameter name="dcache_bursts" value="false" />
   <parameter name="dcache_lineSize" value="32" />
   <parameter name="dcache_numTCDM" value="0" />
@@ -440,7 +419,7 @@
   <parameter name="icache_tagramBlockType" value="Automatic" />
   <parameter name="impl" value="Fast" />
   <parameter name="instAddrWidth" value="28" />
-  <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='sdram.s1' start='0x4000000' end='0x8000000' /><slave name='cpu.jtag_debug_module' start='0x8082800' end='0x8083000' /></address-map>]]></parameter>
+  <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='sdram.s1' start='0x4000000' end='0x8000000' /><slave name='cpu.jtag_debug_module' start='0x8080800' end='0x8081000' /></address-map>]]></parameter>
   <parameter name="internalIrqMaskSystemInfo" value="7" />
   <parameter name="manuallyAssignCpuID" value="true" />
   <parameter name="mmu_TLBMissExcOffset" value="0" />
@@ -530,6 +509,7 @@
   <parameter name="tightlyCoupledInstructionMaster3MapParam" value="" />
   <parameter name="userDefinedSettings" value="" />
  </module>
+ <module name="cursor_0" kind="cursor" version="1.2" enabled="1" />
  <module
    name="dual_clock_buffer_0"
    kind="altera_up_avalon_video_dual_clock_buffer"
@@ -749,6 +729,15 @@
  <connection
    kind="avalon"
    version="18.1"
+   start="cursor_0.avalon_master"
+   end="onchip_mem.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x08000000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="18.1"
    start="pixel_buffer_dma_0.avalon_pixel_dma_master"
    end="onchip_mem.s1">
   <parameter name="arbitrationPriority" value="1" />
@@ -759,27 +748,9 @@
    kind="avalon"
    version="18.1"
    start="cpu.data_master"
-   end="character_buffer_with_dma.avalon_char_buffer_slave">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08080000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="18.1"
-   start="cpu.data_master"
-   end="character_buffer_with_dma.avalon_char_control_slave">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x080830f8" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="18.1"
-   start="cpu.data_master"
    end="pixel_buffer_dma_0.avalon_control_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x080830d0" />
+  <parameter name="baseAddress" value="0x08081110" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -788,7 +759,7 @@
    start="cpu.data_master"
    end="jtag_uart.avalon_jtag_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x080830f0" />
+  <parameter name="baseAddress" value="0x08081130" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -797,7 +768,7 @@
    start="cpu.data_master"
    end="ps2_0.avalon_ps2_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x080830e8" />
+  <parameter name="baseAddress" value="0x08081128" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -806,7 +777,7 @@
    start="cpu.data_master"
    end="recfiller_0.avalon_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08083040" />
+  <parameter name="baseAddress" value="0x08081080" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -815,7 +786,16 @@
    start="cpu.data_master"
    end="hwellipse_0.avalon_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08083000" />
+  <parameter name="baseAddress" value="0x08081040" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="18.1"
+   start="cpu.data_master"
+   end="cursor_0.avalon_slave">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x08081000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -824,7 +804,7 @@
    start="cpu.data_master"
    end="sysid.control_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x080830e0" />
+  <parameter name="baseAddress" value="0x08081120" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -833,7 +813,7 @@
    start="cpu.data_master"
    end="cpu.jtag_debug_module">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08082800" />
+  <parameter name="baseAddress" value="0x08080800" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection kind="avalon" version="18.1" start="cpu.data_master" end="sdram.s1">
@@ -852,22 +832,22 @@
  </connection>
  <connection kind="avalon" version="18.1" start="cpu.data_master" end="timer_0.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08083080" />
+  <parameter name="baseAddress" value="0x080810c0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection kind="avalon" version="18.1" start="cpu.data_master" end="switche.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x080830c0" />
+  <parameter name="baseAddress" value="0x08081100" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection kind="avalon" version="18.1" start="cpu.data_master" end="remote.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x080830a0" />
+  <parameter name="baseAddress" value="0x080810f0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection kind="avalon" version="18.1" start="cpu.data_master" end="button.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="baseAddress" value="0x080810e0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -876,7 +856,7 @@
    start="cpu.instruction_master"
    end="cpu.jtag_debug_module">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08082800" />
+  <parameter name="baseAddress" value="0x08080800" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -891,16 +871,6 @@
  <connection
    kind="avalon_streaming"
    version="18.1"
-   start="alpha_blender_0.avalon_blended_source"
-   end="dual_clock_buffer_0.avalon_dc_buffer_sink" />
- <connection
-   kind="avalon_streaming"
-   version="18.1"
-   start="character_buffer_with_dma.avalon_char_source"
-   end="alpha_blender_0.avalon_foreground_sink" />
- <connection
-   kind="avalon_streaming"
-   version="18.1"
    start="dual_clock_buffer_0.avalon_dc_buffer_source"
    end="vga_controller_0.avalon_vga_sink" />
  <connection
@@ -912,7 +882,7 @@
    kind="avalon_streaming"
    version="18.1"
    start="rgb_resampler_pixel.avalon_rgb_source"
-   end="alpha_blender_0.avalon_background_sink" />
+   end="dual_clock_buffer_0.avalon_dc_buffer_sink" />
  <connection kind="clock" version="18.1" start="clocks.sys_clk" end="cpu.clk" />
  <connection kind="clock" version="18.1" start="clocks.sys_clk" end="sysid.clk" />
  <connection
@@ -926,17 +896,7 @@
    kind="clock"
    version="18.1"
    start="clocks.sys_clk"
-   end="alpha_blender_0.clk" />
- <connection
-   kind="clock"
-   version="18.1"
-   start="clocks.sys_clk"
    end="rgb_resampler_pixel.clk" />
- <connection
-   kind="clock"
-   version="18.1"
-   start="clocks.sys_clk"
-   end="character_buffer_with_dma.clk" />
  <connection
    kind="clock"
    version="18.1"
@@ -961,6 +921,11 @@
    version="18.1"
    start="clocks.sys_clk"
    end="hwellipse_0.clock" />
+ <connection
+   kind="clock"
+   version="18.1"
+   start="clocks.sys_clk"
+   end="cursor_0.clock" />
  <connection
    kind="clock"
    version="18.1"
@@ -1023,17 +988,7 @@
    kind="reset"
    version="18.1"
    start="clocks.reset_source"
-   end="alpha_blender_0.reset" />
- <connection
-   kind="reset"
-   version="18.1"
-   start="clocks.reset_source"
    end="rgb_resampler_pixel.reset" />
- <connection
-   kind="reset"
-   version="18.1"
-   start="clocks.reset_source"
-   end="character_buffer_with_dma.reset" />
  <connection
    kind="reset"
    version="18.1"
@@ -1074,6 +1029,11 @@
    version="18.1"
    start="clocks.reset_source"
    end="button.reset" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="clocks.reset_source"
+   end="cursor_0.reset" />
  <connection
    kind="reset"
    version="18.1"

@@ -1,5 +1,6 @@
 /* Description
-* Library to draw with software
+* Library Read external user input
+* Autor: Nicolas & Robin
 *********************************************************************/
 #ifndef USER_IO_h_
 #define USER_IO_h_

@@ -1,4 +1,7 @@
-
+/* Description
+* Library used to drive the nios draw application
+* Autor: Nicolas & Robin
+*********************************************************************/
 #ifndef NIOS_DRAW_H_
 #define NIOS_DRAW_H_
 #include "project_variables.h"
