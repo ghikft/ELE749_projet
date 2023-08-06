@@ -296,19 +296,12 @@ void software_cut_paste_test(int numberIter, alt_up_pixel_buffer_dma_dev* pixel_
 	printf("NUmber of rectangle: %d   |   number of cycle: %lu   |   Total time(s): %.2f  |   Pixel/s: %0.1f   |   cycle/pixel : %.2f\n\n\r",
 		numberIter, numberOfCycle, totalTime, (float)nbPixels / totalTime, (float)numberOfCycle / nbPixels);
 }
-context_t timer_context;
-alt_up_ps2_dev* tim;
 
-//#define IO_TEST
-#define NIOS_DRAW_FUNC
-//#define SNAKE_TEST
-//#define PONG_TEST
 int main(void){	
 
 	/* PIXEL BUFFER setup and background display */
 	alt_up_pixel_buffer_dma_dev *pixel_buffer;
 	pixel_buffer=alt_up_pixel_buffer_dma_open_dev(PIXEL_BUFFER_DMA_0_NAME);
-	
 	if(pixel_buffer == NULL){
 		alt_putstr("pixel buff is dead \n\r");
 	}else{
@@ -320,33 +313,24 @@ int main(void){
 	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 0,0,640,480,BACKGROUD_COLOR,0);
 	printf("start ps2\n");
 	ps2_init(); 		// from ps2_mouse.h
+	char switchState = 0;
+	int characterization = 0;
+	get_switche(SWITCHE_BASE, &switchState);
+	if((switchState & 0x01)==0){
+		characterization = 1;
+	}
+
 	printf("init complete\n");
 
-#ifdef PONG_TEST
-	play_pong(pixel_buffer);
-	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 0,0,640,480,BACKGROUD_COLOR,0);
-#endif
-#ifdef SNAKE_TEST
-	play_snake(pixel_buffer);
-	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 0,0,640,480,BACKGROUD_COLOR,0);
-#endif
-#ifdef IO_TEST
-	while (1) {
-		test_USER_IO();
-		usleep(1000000);
+	if (characterization){
+		filled_software_rectangle_test(100, pixel_buffer);
+		empty_software_rectangle_test(1000,pixel_buffer);
+		software_copy_paste_test(100, pixel_buffer);
+		software_line_test(1000, pixel_buffer);
+		software_empty_ellipse_test(1000, pixel_buffer);
+		software_cut_paste_test(100, pixel_buffer);
 	}
-#endif
-#ifdef DRAW_CARACTERISATION	
-	//caracterisation test 
-	filled_software_rectangle_test(100, pixel_buffer);
-	empty_software_rectangle_test(1000,pixel_buffer);
-	software_copy_paste_test(100, pixel_buffer);
-	software_line_test(1000, pixel_buffer);
-	software_empty_ellipse_test(1000, pixel_buffer);
-	software_cut_paste_test(100, pixel_buffer);
-
-#endif
-#ifdef NIOS_DRAW_FUNC
-	nios_draw(pixel_buffer);
-#endif // NIOS_DRAW_FUNC
+	else{
+		nios_draw(pixel_buffer);
+	}
 }
