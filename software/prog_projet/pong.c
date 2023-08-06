@@ -133,7 +133,19 @@ void play_pong(alt_up_pixel_buffer_dma_dev* pixel_buffer){
     }
     
 }
-//initial setup for the pong game
+
+//	/**************************************************************************
+//	 * initial setup for the pong game
+//	 **************************************************************************
+//	 * Parametres
+//   * pixel_buffer: pointer to the pixel buffer
+//	 *
+//	 * Return
+//	 * None
+//	 *
+//	 * Side effects
+//	 * pixel_buffer will be mofified
+//	 *************************************************************************/
 void setup_pong(alt_up_pixel_buffer_dma_dev* pixel_buffer){
     srand(time(NULL));
 	//start the time stamp timer
@@ -145,7 +157,19 @@ void setup_pong(alt_up_pixel_buffer_dma_dev* pixel_buffer){
     draw_paddles_in_board();
     create_ball();
 }
-//erase everything in the 46x63 board
+
+//	/**************************************************************************
+//	 * erase everything in the 46x63 board
+//	 **************************************************************************
+//	 * Parametres
+//   * None
+//	 *
+//	 * Return
+//	 * None
+//	 *
+//	 * Side effects
+//	 * None
+//	 *************************************************************************/
 void clear_board_pong(void){
     //set every cell to white on board
     for(int i=0;i<46;i++){
@@ -154,7 +178,19 @@ void clear_board_pong(void){
         }
     }
 }
-//create both paddles for each player
+
+//	/**************************************************************************
+//	 * create both paddles for each player
+//	 **************************************************************************
+//	 * Parametres
+//   * None
+//	 *
+//	 * Return
+//	 * None
+//	 *
+//	 * Side effects
+//	 * None
+//	 *************************************************************************/
 void create_paddles(void){
     for(int i=0;i<PADDLE_HEIGHT;i++){
         //player 1
@@ -165,21 +201,57 @@ void create_paddles(void){
         rightPaddle[i].y = 18+i;
     }
 }
-//draw the paddles in the 46x63 board
+
+//	/**************************************************************************
+//	 * draw the paddles in the 46x63 board
+//	 **************************************************************************
+//	 * Parametres
+//   * None
+//	 *
+//	 * Return
+//	 * None
+//	 *
+//	 * Side effects
+//	 * None
+//	 *************************************************************************/
 void draw_paddles_in_board(void){
     for(int i =0;i<PADDLE_HEIGHT;i++){
         board_pong[leftPaddle[i].y][leftPaddle[i].x] = PADDLE_COLOUR;
         board_pong[rightPaddle[i].y][rightPaddle[i].x] = PADDLE_COLOUR;
     }
 }
-//draw the play area
+
+//	/**************************************************************************
+//	 * draw the play area
+//	 **************************************************************************
+//	 * Parametres
+//   * None
+//	 *
+//	 * Return
+//	 * None
+//	 *
+//	 * Side effects
+//	 * None
+//	 *************************************************************************/
 void draw_play_area(alt_up_pixel_buffer_dma_dev* pixel_buffer){
     //top white bar
     alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 0,0,PLAY_AREA_WIDTH,TOP_BAR_HEIGHT,WHITE,0);
     //black play area
     alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 0,20,640,480,BLACK,0);
 }
-//draws the 46x63 board on the screen
+
+//	/**************************************************************************
+//	 * draws the 46x63 board on the screen
+//	 **************************************************************************
+//	 * Parametres
+//   * pixel_buffer: pointer to the pixel buffer
+//	 *
+//	 * Return
+//	 * None
+//	 *
+//	 * Side effects
+//	 * pixel_buffer will be mofified
+//	 *************************************************************************/
 void draw_board_pong(alt_up_pixel_buffer_dma_dev* pixel_buffer){
     //convert the 46x63 grid of snake into somthing that can be displayed
     for(int i=0;i<46;i++){
@@ -196,7 +268,22 @@ void draw_board_pong(alt_up_pixel_buffer_dma_dev* pixel_buffer){
         }
     }
 }
-//gets the value of the buttons of the remotes of p1 and p2
+
+//	/**************************************************************************
+//	 * gets the value of the buttons of the remotes of p1 and p2
+//	 **************************************************************************
+//	 * Parametres
+//   * char* p1up: player 1 up direction
+//   * char* p1down: player 1 down direction
+//   * char* p2up: player 2 up direction
+//   * char* p2down: player 2 down direction
+//	 *
+//	 * Return
+//	 * None
+//	 *
+//	 * Side effects
+//	 * p1up, p1down, p2up, p2down will be modified
+//	 *************************************************************************/
 void pong_io(char* P1up, char* P1down, char* P2up, char* P2down) {
 	char remoteStatus = 0;
 	get_remote(REMOTE_BASE, &remoteStatus);
@@ -207,12 +294,36 @@ void pong_io(char* P1up, char* P1down, char* P2up, char* P2down) {
 	*P2down = remoteStatus & 0x10;
 	*P2up = remoteStatus & 0x20;
 }
-//process the paddle movement
+
+//	/**************************************************************************
+//	 * process the paddle movement
+//	 **************************************************************************
+//	 * Parametres
+//   * None
+//	 *
+//	 * Return
+//	 * None
+//	 *
+//	 * Side effects
+//	 * None
+//	 *************************************************************************/
 void process_paddles(void){
     process_paddle_left();
     process_paddle_right();
 }
-//process the player 1 paddle movement
+
+//	/**************************************************************************
+//	 * process the player 1 paddle movement
+//	 **************************************************************************
+//	 * Parametres
+//   * None
+//	 *
+//	 * Return
+//	 * None
+//	 *
+//	 * Side effects
+//	 * None
+//	 *************************************************************************/
 void process_paddle_left(void){
     if(directionP1 == UP){
         //calculate where the top of the paddle will be
@@ -259,7 +370,19 @@ void process_paddle_left(void){
         }
     }
 }
-//process the player 2 paddle movement
+
+//	/**************************************************************************
+//	 * process the player 2 paddle movement
+//	 **************************************************************************
+//	 * Parametres
+//   * None
+//	 *
+//	 * Return
+//	 * None
+//	 *
+//	 * Side effects
+//	 * None
+//	 *************************************************************************/
 void process_paddle_right(void){
     if(directionP2 == UP){
         //calculate where the top of the paddle will be
@@ -306,7 +429,19 @@ void process_paddle_right(void){
         }
     }
 }
-//create the ball in the middle of the board with initial speed vectors
+
+//	/**************************************************************************
+//	 * create the ball in the middle of the board with initial speed vectors
+//	 **************************************************************************
+//	 * Parametres
+//   * None
+//	 *
+//	 * Return
+//	 * None
+//	 *
+//	 * Side effects
+//	 * None
+//	 *************************************************************************/
 void create_ball(void){
     ball.x = 63/2;
     ball.y = 46/2;
@@ -314,11 +449,35 @@ void create_ball(void){
     ball.x_speed = INIT_X_SPEED;
     ball.y_speed = INIT_Y_SPEED;
 }
-//draw the ball in the 43x63 board
+
+//	/**************************************************************************
+//	 * draw the ball in the 43x63 board
+//	 **************************************************************************
+//	 * Parametres
+//   * None
+//	 *
+//	 * Return
+//	 * None
+//	 *
+//	 * Side effects
+//	 * None
+//	 *************************************************************************/
 void draw_ball_in_board(void){
     board_pong[(int)ball.y][(int)ball.x] = BALL_COLOUR;
 }
-//process the ball movement and interactions with paddles and wall
+
+//	/**************************************************************************
+//	 * process the ball movement and interactions with paddles and wall
+//	 **************************************************************************
+//	 * Parametres
+//   * None
+//	 *
+//	 * Return
+//	 * None
+//	 *
+//	 * Side effects
+//	 * None
+//	 *************************************************************************/
 void process_ball(void){
     //erase previous ball
     board_pong[(int)ball.y][(int)ball.x] = BACKGROUD_COLOUR;
@@ -400,7 +559,19 @@ void process_ball(void){
     ball.x = next_ball_x;
     ball.y = next_ball_y;
 }
-//diplay the score in the form of squares in the top bar
+
+//	/**************************************************************************
+//	 * diplay the score in the form of squares in the top bar
+//	 **************************************************************************
+//	 * Parametres
+//   * pixel_buffer: pointer to the pixel buffer
+//	 *
+//	 * Return
+//	 * None
+//	 *
+//	 * Side effects
+//	 * pixel_buffer will be modified
+//	 *************************************************************************/
 void show_score(alt_up_pixel_buffer_dma_dev* pixel_buffer){
     //display player1 score
     for(int i=0;i<p1Score;i++){
@@ -411,7 +582,19 @@ void show_score(alt_up_pixel_buffer_dma_dev* pixel_buffer){
         alt_up_pixel_buffer_dma_draw_box(pixel_buffer,PLAY_AREA_WIDTH-(i*10+5+5*i+SQUARE_WIDTH_PONG+10),5,PLAY_AREA_WIDTH-(i*10+5+5*i+10),15,BLACK,0);
     }
 }
-//get the value of the exit button
+
+//	/**************************************************************************
+//	 * get the value of the exit button
+//	 **************************************************************************
+//	 * Parametres
+//   * char* exitButton: pointer to the exitButton variable
+//	 *
+//	 * Return
+//	 * None
+//	 *
+//	 * Side effects
+//	 * Value of exitButton will be modified
+//	 *************************************************************************/
 void exitButton_io_pong(char* exitButton){
     char buttonStatus = 0;
     get_button(BUTTON_BASE, &buttonStatus);

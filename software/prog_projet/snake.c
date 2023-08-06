@@ -86,7 +86,20 @@ void play_snake(alt_up_pixel_buffer_dma_dev* pixel_buffer){
         }
     }
 }
-//draw empty snake grid on screen
+
+//	/**************************************************************************
+//	 * draw empty snake grid on screen
+//	 **************************************************************************
+//	 * Parametres
+//   * pixel_buffer: pointer to the pixel buffer
+//   * black_bars: wether of not to draw the black bars on the sides
+//	 *
+//	 * Return
+//	 * None
+//	 *
+//	 * Side effects
+//	 * pixel_buffer will be mofified
+//	 *************************************************************************/
 void draw_grid(alt_up_pixel_buffer_dma_dev* pixel_buffer, int black_bars){
     //draw black bars
     if(black_bars){
@@ -108,7 +121,19 @@ void draw_grid(alt_up_pixel_buffer_dma_dev* pixel_buffer, int black_bars){
         line_y += 12;
     }
 }
-//setup fonction for the game
+
+//	/**************************************************************************
+//	 * setup fonction for the game
+//	 **************************************************************************
+//	 * Parametres
+//   * None
+//	 *
+//	 * Return
+//	 * None
+//	 *
+//	 * Side effects
+//	 * None
+//	 *************************************************************************/
 void setup_snake(void){
     srand(time(NULL));
 	//start the time stamp timer
@@ -125,7 +150,19 @@ void setup_snake(void){
     draw_snake_in_board();
     generate_apple();
 }
-//draw snake in the 40x40 board
+
+//	/**************************************************************************
+//	 * draw snake in the 40x40 board
+//	 **************************************************************************
+//	 * Parametres
+//   * None
+//	 *
+//	 * Return
+//	 * None
+//	 *
+//	 * Side effects
+//	 * None
+//	 *************************************************************************/
 void draw_snake_in_board(void){
     for(int i=0;i<snakeLength;i++){
         //snake head different color
@@ -136,7 +173,19 @@ void draw_snake_in_board(void){
         }
     }
 }
-//erase everything in the 40x40 board
+
+//	/**************************************************************************
+//	 * erase everything in the 40x40 board
+//	 **************************************************************************
+//	 * Parametres
+//   * None
+//	 *
+//	 * Return
+//	 * None
+//	 *
+//	 * Side effects
+//	 * None
+//	 *************************************************************************/
 void clear_board(void){
     //set every cell to white on board
     for(int i=0;i<40;i++){
@@ -145,7 +194,19 @@ void clear_board(void){
         }
     }
 }
-//draws the 40x40 board on screen
+
+//	/**************************************************************************
+//	 * draws the 40x40 board on screen
+//	 **************************************************************************
+//	 * Parametres
+//   * pixel_buffer: pointer to the pixel buffer
+//	 *
+//	 * Return
+//	 * None
+//	 *
+//	 * Side effects
+//	 * pixel_buffer will be modified
+//	 *************************************************************************/
 void draw_board(alt_up_pixel_buffer_dma_dev* pixel_buffer){
     //convert the 40x40 grid of snake into somthing that can be displayed
     for(int i=0;i<40;i++){
@@ -162,7 +223,19 @@ void draw_board(alt_up_pixel_buffer_dma_dev* pixel_buffer){
         }
     }
 }
-//creates an apple for the snake
+
+//	/**************************************************************************
+//	 * creates an apple for the snake
+//	 **************************************************************************
+//	 * Parametres
+//   * None
+//	 *
+//	 * Return
+//	 * None
+//	 *
+//	 * Side effects
+//	 * None
+//	 *************************************************************************/
 void generate_apple(void){
     //generate random coordinates for the apple
     apple.x = rand() % 40;
@@ -177,7 +250,19 @@ void generate_apple(void){
     //place apple in board
     board[apple.x][apple.y] = APPLE;
 }
-//process the snake movements
+
+//	/**************************************************************************
+//	 * process the snake movements
+//	 **************************************************************************
+//	 * Parametres
+//   * None
+//	 *
+//	 * Return
+//	 * None
+//	 *
+//	 * Side effects
+//	 * None
+//	 *************************************************************************/
 void process_snake(void){
     switch (direction)
     {
@@ -225,7 +310,19 @@ void process_snake(void){
         break;
     }
 }
-//process the up movement of the snake
+
+//	/**************************************************************************
+//	 * process the up movement of the snake
+//	 **************************************************************************
+//	 * Parametres
+//   * None
+//	 *
+//	 * Return
+//	 * None
+//	 *
+//	 * Side effects
+//	 * None
+//	 *************************************************************************/
 void process_snake_up(void){
     //calculate next head position
     int x_next = snake[0].x;
@@ -270,7 +367,19 @@ void process_snake_up(void){
         generate_apple();
     }
 }
-//process the down movement of the snake
+
+//	/**************************************************************************
+//	 * process the down movement of the snake
+//	 **************************************************************************
+//	 * Parametres
+//   * None
+//	 *
+//	 * Return
+//	 * None
+//	 *
+//	 * Side effects
+//	 * None
+//	 *************************************************************************/
 void process_snake_down(void){
     //calculate next head position
     int x_next = snake[0].x;
@@ -315,7 +424,19 @@ void process_snake_down(void){
         generate_apple();
     }
 }
-//process the left movement of the snake
+
+//	/**************************************************************************
+//	 * process the left movement of the snake
+//	 **************************************************************************
+//	 * Parametres
+//   * None
+//	 *
+//	 * Return
+//	 * None
+//	 *
+//	 * Side effects
+//	 * None
+//	 *************************************************************************/
 void process_snake_left(void){
     //calculate next head position
     int x_next = snake[0].x-1;
@@ -360,7 +481,19 @@ void process_snake_left(void){
         generate_apple();
     }
 }
-//process the right movement of the snake
+
+//	/**************************************************************************
+//	 * process the right movement of the snake
+//	 **************************************************************************
+//	 * Parametres
+//   * None
+//	 *
+//	 * Return
+//	 * None
+//	 *
+//	 * Side effects
+//	 * None
+//	 *************************************************************************/
 void process_snake_right(void){
     //calculate next head position
     int x_next = snake[0].x+1;
@@ -405,7 +538,22 @@ void process_snake_right(void){
         generate_apple();
     }
 }
-//gets the value of the buttons on the remote
+
+//	/**************************************************************************
+//	 * gets the value of the buttons on the remote
+//	 **************************************************************************
+//	 * Parametres
+//   * char* snakeUp: up button on remote
+//   * char* snakeDown: down button on remote
+//   * char* snakeLeft: left button on remote
+//   * char* snakeRight: right button on remote
+//	 *
+//	 * Return
+//	 * None
+//	 *
+//	 * Side effects
+//	 * Value of snakeUp, snakeDown, snakeLeft, snakeRight will be modified
+//	 *************************************************************************/
 void snake_io(char* snakeUp, char* snakeDown, char* snakeLeft, char* snakeRight) {
 	char remoteStatus = 0;
     //get the status of the buttons on the remote
@@ -417,7 +565,19 @@ void snake_io(char* snakeUp, char* snakeDown, char* snakeLeft, char* snakeRight)
 	*snakeLeft = remoteStatus & 0x02;
 	*snakeRight = remoteStatus & 0x01;
 }
-//gets the value of the stop game button on the board
+
+//	/**************************************************************************
+//	 * gets the value of the stop game button on the board
+//	 **************************************************************************
+//	 * Parametres
+//   * char* exitButton: exit button on board
+//	 *
+//	 * Return
+//	 * None
+//	 *
+//	 * Side effects
+//	 * Value of exitButton will be modified
+//	 *************************************************************************/
 void exitButton_io(char* exitButton){
     char buttonStatus = 0;
     get_button(BUTTON_BASE, &buttonStatus);
