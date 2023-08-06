@@ -36,6 +36,18 @@
 #define  LEFT   3
 #define  RIGHT  4
 
+//	/**************************************************************************
+//	 * Start the game snake
+//	 **************************************************************************
+//	 * Parametres
+//	 * pixel_buffer: pointer to the pixel buffer
+//	 *
+//	 * Return
+//	 * None
+//	 *
+//	 * Side effects
+//	 *
+//	 *************************************************************************/
 void play_snake(alt_up_pixel_buffer_dma_dev* pixel_buffer);
 
 #endif
