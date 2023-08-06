@@ -213,7 +213,7 @@ void draw_board(alt_up_pixel_buffer_dma_dev* pixel_buffer){
         for(int j=0;j<40;j++){
             //only draw what changed
             if(board[i][j] != board_old[i][j]){
-                board_old[i][j] = board[i][j];
+                //board_old[i][j] = board[i][j];
                 //calculate square position based on grid and square size in pixel
                 int x = BLACKBAR_WIDTH+(i*SQUARE_WIDTH)+1;
                 int y = (j*SQUARE_WIDTH)+1;

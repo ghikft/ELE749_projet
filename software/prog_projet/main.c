@@ -400,9 +400,9 @@ alt_up_ps2_dev* tim;
 
 
 //#define IO_TEST
-//#define NIOS_DRAW_FUNC
+#define NIOS_DRAW_FUNC
 //#define SNAKE_TEST
-#define PONG_TEST
+//#define PONG_TEST
 int main(void)
 {	
 	alt_u32 period = 8;
