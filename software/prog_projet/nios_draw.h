@@ -6,6 +6,8 @@
 #define NIOS_DRAW_H_
 #include "project_variables.h"
 #include "softwareDraw.h"
+#include "pong.h"
+#include "snake.h"
 
 
 void draw_icon(tool icon, char selected,

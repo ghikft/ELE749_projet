@@ -333,13 +333,15 @@ void nios_draw(alt_up_pixel_buffer_dma_dev* pixel_buffer) {
 
 			//need to press the start button on screen before being able to do anything else
 			if (startButtonPressed == 0) {
-				start_button(currentTool, &startButtonPressed, &left_btn, &lastLeft, cursorMem, &currentCursor, &lastDrawingData, pixel_buffer);
+				start_button(currentTool, &startButtonPressed, &left_btn, &lastLeft, 
+				cursorMem, &currentCursor, &lastDrawingData, pixel_buffer);
 				//draw_icon(currentTool, 1, &lastDrawingData, pixel_buffer);
 				draw_color_palette(selectedColor, &lastDrawingData, pixel_buffer);
 			}
 			else {
 				//Check for tool selection if not using a tool and cursor inside the tool bar
-				tool_selection(&currentCursor, &currentTool, startUsingTool, &selectedColor, &left_btn, &lastDrawingData, pixel_buffer);
+				tool_selection(&currentCursor, &currentTool, startUsingTool, 
+				&selectedColor, &left_btn, &lastDrawingData, pixel_buffer);
 
 				/* process clicks */
 				//left click
@@ -353,7 +355,8 @@ void nios_draw(alt_up_pixel_buffer_dma_dev* pixel_buffer) {
 							lastCursor.y = currentCursor.y;
 							startUsingTool = 1;
 						}
-						alt_up_pixel_buffer_dma_draw_line(pixel_buffer, lastCursor.x, lastCursor.y, currentCursor.x, currentCursor.y, selectedColor, 0);
+						alt_up_pixel_buffer_dma_draw_line(pixel_buffer, lastCursor.x, lastCursor.y, 
+						currentCursor.x, currentCursor.y, selectedColor, 0);
 						lastCursor.x = currentCursor.x;
 						lastCursor.y = currentCursor.y;
 						lastCursorColor = selectedColor;//save color of the last drawn pixel
@@ -390,7 +393,6 @@ void nios_draw(alt_up_pixel_buffer_dma_dev* pixel_buffer) {
 					else if (currentTool == CPY_PASTE || currentTool == CUT_PASTE) {
 						if (currentCursor.x > DRAWING_ZONE_LEFT_LIMIT) {
 							if (startUsingTool == 0 && cpyRngSelected == 0) {
-								//alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
 								cursor_erase(&currentCursor, cursorMem, pixel_buffer);
 								printf("first point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
 								firstPoint.x = currentCursor.x;
@@ -406,13 +408,13 @@ void nios_draw(alt_up_pixel_buffer_dma_dev* pixel_buffer) {
 								cpyRngSelected = 0;
 								if (currentTool == CUT_PASTE) {
 									soft_empty_rectangle_draw(0, 0, 0, 0, 1, 1, &lastDrawingData, pixel_buffer);
-									soft_copy_paste(firstPoint.x, firstPoint.y, secondPoint.x, secondPoint.y, currentCursor.x, currentCursor.y, 1, selectedColor, pixel_buffer);
-									//soft_empty_rectangle_draw(0, 0, 0, 0,1, 1, &lastDrawingData, pixel_buffer);
+									soft_copy_paste(firstPoint.x, firstPoint.y, secondPoint.x, secondPoint.y, 
+									currentCursor.x, currentCursor.y, 1, selectedColor, pixel_buffer);
 								}
 								else {
 									soft_empty_rectangle_draw(0, 0, 0, 0, 1, 1, &lastDrawingData, pixel_buffer);
-									soft_copy_paste(firstPoint.x, firstPoint.y, secondPoint.x, secondPoint.y, currentCursor.x, currentCursor.y, 0, 0, pixel_buffer);
-									//soft_empty_rectangle_draw(0, 0, 0, 0,1, 1, &lastDrawingData, pixel_buffer);
+									soft_copy_paste(firstPoint.x, firstPoint.y, secondPoint.x, secondPoint.y, 
+									currentCursor.x, currentCursor.y, 0, 0, pixel_buffer);
 								}
 								while (left_btn) {
 									ps2_process(&left_btn, &right_btn, &x_mov, &y_mov);
@@ -431,7 +433,6 @@ void nios_draw(alt_up_pixel_buffer_dma_dev* pixel_buffer) {
 					}
 					else if (currentTool == EMPTY_ELLIPSE || currentTool == FILLED_ELLIPSE) {		//elipse
 						if (startUsingTool == 0) {
-							//alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
 							cursor_erase(&currentCursor, cursorMem, pixel_buffer);
 							printf("first point at: X:%d Y:%d\n\r", currentCursor.x, currentCursor.y);
 							firstPoint.x = currentCursor.x;
@@ -455,12 +456,10 @@ void nios_draw(alt_up_pixel_buffer_dma_dev* pixel_buffer) {
 							lastLeft = 1;
 							firstPoint.x = currentCursor.x;
 							firstPoint.y = currentCursor.y;
-							cursor_erase(&currentCursor, cursorMem, pixel_buffer);
-							//printf("\n\n\nSTART_FILL first click\n\r");
-							//printf("selected color: %d\n\r", selectedColor);						
+							cursor_erase(&currentCursor, cursorMem, pixel_buffer);				
 						}
 					}
-					//}//clear in an exception it only activable when cursor is on the icon
+					//clear in an exception it only activable when cursor is on the icon
 					else if (currentTool == CLEAR) {
 						if (currentCursor.x <= 29 && currentCursor.y < 464 && currentCursor.y > 437) {
 							if (startUsingTool == 0) {
@@ -471,29 +470,37 @@ void nios_draw(alt_up_pixel_buffer_dma_dev* pixel_buffer) {
 					}
 					else if (currentTool == LINE) {
 						if (startUsingTool == 0) {
-							//alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, currentCursor.x, currentCursor.y);
 							cursor_erase(&currentCursor, cursorMem, pixel_buffer);
 							firstPoint.x = currentCursor.x;
 							firstPoint.y = currentCursor.y;
 							startUsingTool = 1;
 							lastLeft = 1;
-							soft_draw_line(firstPoint.x, firstPoint.y, currentCursor.x, currentCursor.y, selectedColor, 0, &lastDrawingData, pixel_buffer);
+							soft_draw_line(firstPoint.x, firstPoint.y, currentCursor.x, 
+							currentCursor.y, selectedColor, 0, &lastDrawingData, pixel_buffer);
 						}
 						else {
 							lastLeft = 1;
-							soft_draw_line(firstPoint.x, firstPoint.y, currentCursor.x, currentCursor.y, selectedColor, 1, &lastDrawingData, pixel_buffer);
+							soft_draw_line(firstPoint.x, firstPoint.y, currentCursor.x, 
+							currentCursor.y, selectedColor, 1, &lastDrawingData, pixel_buffer);
 						}
 					}
-					else startUsingTool = 0;//for testing while some tool are not created
-				}
-				else if (right_btn) { //erase whole screen if right click
-					//alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 62, 0, 640, 480, BACKGROUD_COLOR, 0);
-					//draw_tool_bar(&lastDrawingData, pixel_buffer);
-					//draw_icon(currentTool, 1, &lastDrawingData, pixel_buffer);
-					//if (!lastRight) {
-					printf("right click (X:%d,Y:%d), CLEAR SCREEN\n\r", currentCursor.x, currentCursor.y);
-					//}
-					//lastRight = 1;
+					else if (currentTool == SNAKE){
+						play_snake(pixel_buffer);
+						alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 62, 0, 640, 480, BACKGROUD_COLOR, 0);
+						draw_tool_bar(currentTool, &lastDrawingData, pixel_buffer);
+						draw_color_palette(selectedColor, &lastDrawingData, pixel_buffer);
+						init_last_drawing_Var(&lastDrawingData);
+						startButtonPressed = 0;
+					}
+					else if (currentTool == PONG){
+						play_pong(pixel_buffer);
+						alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 62, 0, 640, 480, BACKGROUD_COLOR, 0);
+						draw_tool_bar(currentTool, &lastDrawingData, pixel_buffer);
+						draw_color_palette(selectedColor, &lastDrawingData, pixel_buffer);
+						init_last_drawing_Var(&lastDrawingData);
+						startButtonPressed = 0;
+					}
+					else startUsingTool = 0;
 				}
 				else { //clear click flags
 					if (lastLeft) {
@@ -524,7 +531,8 @@ void nios_draw(alt_up_pixel_buffer_dma_dev* pixel_buffer) {
 									secondPoint.x, secondPoint.y,
 									selectedColor, 1, &lastDrawingData, pixel_buffer);
 								if (currentTool == FILLED_RECTANGLE) {
-									alt_up_pixel_buffer_dma_draw_box(pixel_buffer, firstPoint.x, firstPoint.y, secondPoint.x, secondPoint.y, selectedColor, 0);
+									alt_up_pixel_buffer_dma_draw_box(pixel_buffer, firstPoint.x, 
+									firstPoint.y, secondPoint.x, secondPoint.y, selectedColor, 0);
 									draw_tool_bar(currentTool, &lastDrawingData, pixel_buffer);
 								}
 								//save the background at new position to avoid missing a pixel
@@ -575,7 +583,8 @@ void nios_draw(alt_up_pixel_buffer_dma_dev* pixel_buffer) {
 								secondPoint.x = currentCursor.x;
 								secondPoint.y = currentCursor.y;
 								lastCursorColor = get_pixel_color(secondPoint.x, secondPoint.y);
-								soft_draw_line(firstPoint.x, firstPoint.y, secondPoint.x, secondPoint.y, selectedColor, 1, &lastDrawingData, pixel_buffer);
+								soft_draw_line(firstPoint.x, firstPoint.y, secondPoint.x, 
+								secondPoint.y, selectedColor, 1, &lastDrawingData, pixel_buffer);
 								lastDrawingData.firstErase = 1;
 								lastLeft = 0;
 							}
@@ -604,8 +613,6 @@ void nios_draw(alt_up_pixel_buffer_dma_dev* pixel_buffer) {
 						else if (currentTool == FILL) {
 							startUsingTool = 0;
 							lastLeft = 0;
-							//clear the cursor and launch the fill operation
-							//alt_up_pixel_buffer_dma_draw(pixel_buffer, lastCursorColor, firstPoint.x, firstPoint.y);
 							cursor_erase(&firstPoint, cursorMem, pixel_buffer);
 							flood_fill_zone(firstPoint.x, firstPoint.y, selectedColor, pixel_buffer);
 							cursor_save(&firstPoint, cursorMem);
@@ -616,16 +623,12 @@ void nios_draw(alt_up_pixel_buffer_dma_dev* pixel_buffer) {
 							lastLeft = 0;
 							startUsingTool = 0;
 							alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 62, 0, 640, 480, BACKGROUD_COLOR, 0);
-							//draw_tool_bar(currentTool, &lastDrawingData, pixel_buffer);
-							//draw_icon(currentTool, 1, &lastDrawingData, pixel_buffer);
 						}
 						draw_tool_bar(currentTool, &lastDrawingData, pixel_buffer);
 						draw_color_palette(selectedColor, &lastDrawingData, pixel_buffer);
-						//lastLeft = 0;
 					}
 					if (currentTool == CPY_PASTE || currentTool == CUT_PASTE) {
 						if (cpyRngSelected) {
-							//cursor_erase(&currentCursor, &cursorMem, pixel_buffer);
 							printf("entered condition \n\r");
 							int rngX = currentCursor.x + (secondPoint.x - firstPoint.x);
 							int rngY = currentCursor.y + (secondPoint.y - firstPoint.y);
@@ -634,7 +637,6 @@ void nios_draw(alt_up_pixel_buffer_dma_dev* pixel_buffer) {
 								BLACK, 1, &lastDrawingData, pixel_buffer);
 						}
 					}
-					//lastLeft = 0;
 					lastRight = 0;
 				}
 			}
@@ -864,7 +866,8 @@ void cursor_draw_sprite(Cursor* coordinate, alt_up_pixel_buffer_dma_dev* pixel_b
 	}
 }
 
-void draw_color_palette(int selectedColor, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+void draw_color_palette(int selectedColor, lastDrawingVar* lastDrawingData, 
+alt_up_pixel_buffer_dma_dev* pixel_buffer) {
 	/**************************************************************************
 	 * draw_color_palette
 	 **************************************************************************
@@ -881,34 +884,52 @@ void draw_color_palette(int selectedColor, lastDrawingVar* lastDrawingData, alt_
 	 * Draw the color palette in the tool bar
 	 *************************************************************************/
 	 //draw the selected color
-	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 3, 147, SECOND_COLUMN_X_END, 174, selectedColor, 0);
+	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 3, 147, SECOND_COLUMN_X_END, 
+	174, selectedColor, 0);
 	//draw the color palette
-	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, FIRST_COLUMN_X_START, 176, FIRST_COLUMN_X_END, 203, BLACK, 0);
-	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, SECOND_COLUMN_X_START, 176, SECOND_COLUMN_X_END, 203, WHITE, 0);
+	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, FIRST_COLUMN_X_START, 
+	176, FIRST_COLUMN_X_END, 203, BLACK, 0);
+	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, SECOND_COLUMN_X_START, 
+	176, SECOND_COLUMN_X_END, 203, WHITE, 0);
 
-	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, FIRST_COLUMN_X_START, 205, FIRST_COLUMN_X_END, 232, LILLA, 0);
-	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, SECOND_COLUMN_X_START, 205, SECOND_COLUMN_X_END, 232, PURPLE, 0);
+	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, FIRST_COLUMN_X_START, 
+	205, FIRST_COLUMN_X_END, 232, LILLA, 0);
+	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, SECOND_COLUMN_X_START, 
+	205, SECOND_COLUMN_X_END, 232, PURPLE, 0);
 
-	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, FIRST_COLUMN_X_START, 234, FIRST_COLUMN_X_END, 261, RED, 0);
-	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, SECOND_COLUMN_X_START, 234, SECOND_COLUMN_X_END, 261, BROWN, 0);
+	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, FIRST_COLUMN_X_START, 
+	234, FIRST_COLUMN_X_END, 261, RED, 0);
+	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, SECOND_COLUMN_X_START, 
+	234, SECOND_COLUMN_X_END, 261, BROWN, 0);
 
-	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, FIRST_COLUMN_X_START, 263, FIRST_COLUMN_X_END, 290, SKY_BLUE, 0);
-	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, SECOND_COLUMN_X_START, 263, SECOND_COLUMN_X_END, 290, BLUE, 0);
+	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, FIRST_COLUMN_X_START, 
+	263, FIRST_COLUMN_X_END, 290, SKY_BLUE, 0);
+	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, SECOND_COLUMN_X_START, 
+	263, SECOND_COLUMN_X_END, 290, BLUE, 0);
 
-	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, FIRST_COLUMN_X_START, 292, FIRST_COLUMN_X_END, 319, LIGHT_PINK, 0);
-	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, SECOND_COLUMN_X_START, 292, SECOND_COLUMN_X_END, 319, PINK, 0);
+	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, FIRST_COLUMN_X_START, 
+	292, FIRST_COLUMN_X_END, 319, LIGHT_PINK, 0);
+	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, SECOND_COLUMN_X_START, 
+	292, SECOND_COLUMN_X_END, 319, PINK, 0);
 
-	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, FIRST_COLUMN_X_START, 321, FIRST_COLUMN_X_END, 348, YELLOW, 0);
-	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, SECOND_COLUMN_X_START, 321, SECOND_COLUMN_X_END, 348, ORANGE, 0);
+	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, FIRST_COLUMN_X_START, 
+	321, FIRST_COLUMN_X_END, 348, YELLOW, 0);
+	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, SECOND_COLUMN_X_START, 
+	321, SECOND_COLUMN_X_END, 348, ORANGE, 0);
 
-	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, FIRST_COLUMN_X_START, 350, FIRST_COLUMN_X_END, 377, DARK_GREEN, 0);
-	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, SECOND_COLUMN_X_START, 350, SECOND_COLUMN_X_END, 377, NEON_GREEN, 0);
+	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, FIRST_COLUMN_X_START, 
+	350, FIRST_COLUMN_X_END, 377, DARK_GREEN, 0);
+	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, SECOND_COLUMN_X_START, 
+	350, SECOND_COLUMN_X_END, 377, NEON_GREEN, 0);
 
-	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, FIRST_COLUMN_X_START, 379, FIRST_COLUMN_X_END, 406, FLUO_GREEN, 0);
-	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, SECOND_COLUMN_X_START, 379, SECOND_COLUMN_X_END, 406, DARK_BLUE, 0);
+	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, FIRST_COLUMN_X_START, 
+	379, FIRST_COLUMN_X_END, 406, FLUO_GREEN, 0);
+	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, SECOND_COLUMN_X_START, 
+	379, SECOND_COLUMN_X_END, 406, DARK_BLUE, 0);
 
 	//draw frame around the current color
-	soft_empty_rectangle_draw(3, 147, SECOND_COLUMN_X_END, 174, NOT_ERASE_PREVIOUS_WORK, BLACK, lastDrawingData, pixel_buffer);
+	soft_empty_rectangle_draw(3, 147, SECOND_COLUMN_X_END, 174, 
+	NOT_ERASE_PREVIOUS_WORK, BLACK, lastDrawingData, pixel_buffer);
 }
 
 void draw_selection_Frame(int x1, int y1, int x2, int y2, char selected,
@@ -936,12 +957,16 @@ void draw_selection_Frame(int x1, int y1, int x2, int y2, char selected,
 	 *************************************************************************/
 	 //draw selection perimiter 2 pixel wide
 	if (selected) {
-		soft_empty_rectangle_draw(x1, y1, x2, y2, SELECTION_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
-		soft_empty_rectangle_draw(x1 + 1, y1 + 1, x2 - 1, y2 - 1, SELECTION_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
+		soft_empty_rectangle_draw(x1, y1, x2, y2, SELECTION_COLOR, 
+		NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
+		soft_empty_rectangle_draw(x1 + 1, y1 + 1, x2 - 1, y2 - 1, 
+		SELECTION_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
 	}
 	else {
-		soft_empty_rectangle_draw(x1, y1, x2, y2, TOOL_BOX_BACKGROUND_COLOR, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
-		soft_empty_rectangle_draw(x1 + 1, y1 + 1, x2 - 1, y2 - 1, BLACK, NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
+		soft_empty_rectangle_draw(x1, y1, x2, y2, TOOL_BOX_BACKGROUND_COLOR, 
+		NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
+		soft_empty_rectangle_draw(x1 + 1, y1 + 1, x2 - 1, y2 - 1, BLACK, 
+		NOT_ERASE_PREVIOUS_WORK, lastDrawingData, pixel_buffer);
 	}
 }
 
@@ -1002,10 +1027,13 @@ void draw_tool_bar(tool currentTool, lastDrawingVar* lastDrawingData, alt_up_pix
 	 *
 	 *************************************************************************/
 	 //draw tool bar background
-	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, LEFT_LIMIT, TOP_LIMIT, DRAWING_ZONE_LEFT_LIMIT, BOTTOM_LIMIT, TOOL_BOX_BACKGROUND_COLOR, 0);
+	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, LEFT_LIMIT, TOP_LIMIT, 
+	DRAWING_ZONE_LEFT_LIMIT, BOTTOM_LIMIT, TOOL_BOX_BACKGROUND_COLOR, 0);
 	//Draw all icon of the tool bar
-	soft_empty_rectangle_draw(LEFT_LIMIT, TOP_LIMIT, DRAWING_ZONE_LEFT_LIMIT, BOTTOM_LIMIT, NOT_ERASE_PREVIOUS_WORK, BLACK, lastDrawingData, pixel_buffer);
-	soft_empty_rectangle_draw(LEFT_LIMIT + 1, TOP_LIMIT + 1, DRAWING_ZONE_LEFT_LIMIT - 1, BOTTOM_LIMIT - 1, NOT_ERASE_PREVIOUS_WORK, BLACK, lastDrawingData, pixel_buffer);
+	soft_empty_rectangle_draw(LEFT_LIMIT, TOP_LIMIT, DRAWING_ZONE_LEFT_LIMIT, 
+	BOTTOM_LIMIT, NOT_ERASE_PREVIOUS_WORK, BLACK, lastDrawingData, pixel_buffer);
+	soft_empty_rectangle_draw(LEFT_LIMIT + 1, TOP_LIMIT + 1, DRAWING_ZONE_LEFT_LIMIT - 1, 
+	BOTTOM_LIMIT - 1, NOT_ERASE_PREVIOUS_WORK, BLACK, lastDrawingData, pixel_buffer);
 	draw_icon(EMPTY_RECTANGLE, 0, lastDrawingData, pixel_buffer);
 	draw_icon(FILLED_RECTANGLE, 0, lastDrawingData, pixel_buffer);
 	draw_icon(EMPTY_ELLIPSE, 0, lastDrawingData, pixel_buffer);
@@ -1150,7 +1178,8 @@ void process_cursor_pos(Cursor* currentCursor, int* x_pos, int* y_pos) {
 	}
 }
 
-void start_button(tool currentTool, char* startButtonPressed, unsigned char* left_btn, unsigned char* lastLeft, alt_u8* cursorMem,
+void start_button(tool currentTool, char* startButtonPressed, 
+	unsigned char* left_btn, unsigned char* lastLeft, alt_u8* cursorMem,
 	Cursor* currentCursor, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
 	/**************************************************************************
 	 * start_button
@@ -1198,7 +1227,8 @@ void start_button(tool currentTool, char* startButtonPressed, unsigned char* lef
 
 }
 
-void cursor_draw(char startUsingTool, Cursor* currentCursor, alt_u8* cursorMem, int* x_pos, int* y_pos, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+void cursor_draw(char startUsingTool, Cursor* currentCursor, 
+	alt_u8* cursorMem, int* x_pos, int* y_pos, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
 	/**************************************************************************
 	 * cursor_draw
 	 **************************************************************************
