@@ -98,9 +98,6 @@ begin
 		-- FFA0, (x)FFA1, FFA2, FFA3, FFA4,
 		-- 10220, (x)10221, (x)10222, 10223, 10224,
 		-- (x)104A0, v104A1, (x)104A2, (x)104A3, 104A4
-		
-
-
 		rf_write     <= '1';
 		rf_address   <= x"1";
 		rf_writedata <= x"00000000";

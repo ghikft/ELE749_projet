@@ -1,3 +1,17 @@
+--------------------------------------------------------------------------------
+-- Title       : cursor controller 
+-- Project     : ELE749
+--------------------------------------------------------------------------------
+-- File        : cursor.vhdl
+-- Author      : Robin
+-- Created     : Tue Jul  20 2023
+-- Last update : Sun Aug  6 14:31:26 2023
+-- Standard    : <VHDL-2008>
+--------------------------------------------------------------------------------
+-- 
+--------------------------------------------------------------------------------
+-- Description: Hardware description for cursor controller
+--------------------------------------------------------------------------------
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
@@ -7,14 +21,14 @@ entity cursor is
 		clk   : in std_logic;
 		reset : in std_logic;
 
-		-- interface avalon slave depuis CPU
+		-- interface avalon slave from CPU
 		rf_address   : in  std_logic_vector(3 downto 0); -- 4 bits = 16 addr
 		rf_write     : in  std_logic;
 		rf_writedata : in  std_logic_vector(31 downto 0);
 		rf_read      : in  std_logic;
 		rf_readdata  : out std_logic_vector(31 downto 0);
 
-		-- interface avalon master vers MEM
+		-- interface avalon master to OnChipMEM
 		fb_address     : out std_logic_vector(31 downto 0);
 		fb_write       : out std_logic;
 		fb_writedata   : out std_logic_vector( 7 downto 0);
@@ -25,7 +39,7 @@ entity cursor is
 end entity cursor;
 
 architecture rtl of cursor is
-	-- signaux pour registres de controle
+	-- signals for control registers
 	signal ready    	: std_logic_vector(31 downto 0);
 	signal fb_base  	: unsigned(31 downto 0);
 	signal x_max    	: unsigned(15 downto 0);
@@ -35,11 +49,11 @@ architecture rtl of cursor is
 	signal command		: unsigned(7 downto 0);
 	signal start    	: std_logic_vector(31 downto 0);
 
-	-- signaux pour machine a etat
+	-- signals for state machine
 	type state_type is (idle, setup1, setup2, draw, save, erase);
 	signal state_reg : state_type;
 
-	-- signaux internes
+	-- Internal signals
 	type pixel_array is array (24 downto 0) of unsigned(7 downto 0);
 	signal cursor_memory: pixel_array := (  x"FF",x"FF",x"FF",x"FF",x"FF",
 											x"FF",x"FF",x"FF",x"FF",x"FF",
@@ -66,7 +80,7 @@ begin
 	process(clk)
 	begin
 		if rising_edge(clk) then
-			if reset = '1' then
+			if reset = '1' then--iniitalise signals on reset
 				ready     		<= (others => '0');
 				fb_base   		<= (others => '0');
 				x_max     		<= (others => '0');
@@ -79,12 +93,11 @@ begin
 				y_iter         	<= (others => '0');
 				total    		<= (others => '0');
 				state_reg 		<= idle;
-
 			else
 				rf_readdata  <= ready;
 				fb_write     <= '0';
 				fb_read 	 <= '0';
-				
+				--start of state machine
 				case state_reg is
 					when idle =>
 						ready <= x"00000001";
@@ -138,10 +151,13 @@ begin
 					when draw =>
 						ready      <= x"00000000";
 						fb_write   <= '1';
-						if fb_waitrequest = '0' then -- previous read accepted, move to next
-							if y_iter = 4 and x_iter = 4 then--at the end of the 5x5 cursor sprite
+						-- previous read accepted, move to next
+						if fb_waitrequest = '0' then 
+							--at the end of the 5x5 cursor sprite
+							if y_iter = 4 and x_iter = 4 then-
 								state_reg <= idle;
 							else
+								--loop on the 5 by 5 square to draw the cursor
 								if x_iter = 4 then
 									x    <= x_coordinate;
 									x_iter <= x"0000";
@@ -154,8 +170,8 @@ begin
 								end if;
 							end if;
 							total <= total + 1;
-							
-							color <= cursor_sprite(to_integer((x_iter+(y_iter*x"05"))));--signal for debug purpose	
+							--signal for debug purpose	in test bench
+							color <= cursor_sprite(to_integer((x_iter+(y_iter*x"05"))));
 							--only update the output to on chip mem if there is a pixel
 							--to draw fron the cursor
 							if cursor_sprite(to_integer((x_iter+(y_iter*x"05")))) = x"01" then
@@ -167,10 +183,13 @@ begin
 					when erase =>
 						ready      <= x"00000000";
 						fb_write   <= '1';
-						if fb_waitrequest = '0' then -- previous write accepted, move to next
-							if y_iter = 4 and x_iter = 4 then--at the end of the 5x5 cursor sprite
+						-- previous write accepted, move to next
+						if fb_waitrequest = '0' then 
+							--at the end of the 5x5 cursor sprite
+							if y_iter = 4 and x_iter = 4 then
 								state_reg <= idle;
 							else
+								--loop on the 5 by 5 square to erase the cursor
 								if x_iter = 4 then
 									x    <= x_coordinate;
 									x_iter <= x"0000";
@@ -183,8 +202,8 @@ begin
 								end if;
 							end if;
 							total <= total + 1;
-							
-							color <= cursor_memory(to_integer((x_iter+(y_iter*x"05"))));--signal for debug purpose							
+							--signal for debug purpose
+							color <= cursor_memory(to_integer((x_iter+(y_iter*x"05"))));							
 					 		--draw the content of the saved memory bloc of 25 pixels
 					 		--which was filled by a previous call with command save
 					 		fb_address <= std_logic_vector(addr + x);
@@ -194,10 +213,14 @@ begin
 					when save =>
 						ready      <= x"00000000";
 						fb_read   <= '1';
-						if fb_waitrequest = '0' then -- previous write accepted, move to next
-							if y_iter = 4 and x_iter = 4 then--at the end of the 5x5 cursor sprite
+						-- previous write accepted, move to next
+						if fb_waitrequest = '0' then 
+							--at the end of the 5x5 cursor sprite
+							if y_iter = 4 and x_iter = 4 then
 								state_reg <= idle;
 							else
+								--loop on the 5 by 5 square to save pixel value
+								--in the internal memory
 								if x_iter = 4 then
 									x    <= x_coordinate;
 									x_iter <= x"0000";
@@ -213,7 +236,7 @@ begin
 					 		--read the data of the onChipMemory and save it in the
 					 		-- memory bloc of 25 pixels (cursor_memory)
 					 		fb_address <= std_logic_vector(addr + x);
-					 		cursor_memory(to_integer((x_iter+(y_iter*x"05")))) <= unsigned(fb_readdata);--unsigned(fb_readdata);
+					 		cursor_memory(to_integer((x_iter+(y_iter*x"05")))) <= unsigned(fb_readdata);
 							end if;
 				end case;
 			end if;
