@@ -60,6 +60,23 @@ void test_USER_IO(void) {
 
 #define NUMBER_OF_TEST_LOOP 1000
 void empty_software_rectangle_test(int numberIter,alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+	/**************************************************************************
+	 *draw a number of random empty rectangle 
+	 **************************************************************************
+	 * Parameters
+	 * numberIter	: is the number of rectangle to draw in the test
+	 * pixel_buffer : pointer to the On-chip memory used as pixel buffer
+	 *
+	 * Return
+	 * none
+	 *
+	 * Side effects
+	 * Print random empty rectangle on the screen then calculate some
+	 * performance metric and finally print it on the terminal
+	 *
+	 * Notes
+	 * None
+	 *************************************************************************/
 	alt_timestamp_start();
 	uint32_t nbPixels = 0;
 	lastDrawingVar lastDrawingData;
@@ -93,6 +110,26 @@ void empty_software_rectangle_test(int numberIter,alt_up_pixel_buffer_dma_dev* p
 }
 
 void filled_software_rectangle_test(int numberIter, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+	/**************************************************************************
+	 *draw a number of random filled rectangle
+	 **************************************************************************
+	 * Parameters
+	 * numberIter	: is the number of rectangle to draw in the test
+	 * pixel_buffer : pointer to the On-chip memory used as pixel buffer
+	 *
+	 * Return
+	 * none
+	 *
+	 * Side effects
+	 * Print random empty rectangle and fill them with the fill_to_edge_zone
+	 * function. Then calculate some performance metric
+	 * and finally print it on the terminal
+	 *
+	 * Notes
+	 * If the random value for the two point used to draw the rectangle are invalid
+	 * and result in the rectangle not drawn. The function retry so the numberIter 
+	 * represent the number of rectangle drawn on screen.
+	 *************************************************************************/
 	alt_timestamp_start();
 	uint32_t nbPixels = 0;
 	lastDrawingVar lastDrawingData;
@@ -149,6 +186,22 @@ void filled_software_rectangle_test(int numberIter, alt_up_pixel_buffer_dma_dev*
 }
 
 void software_line_test(int numberIter, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+	/**************************************************************************
+	 *draw a number of random line
+	 **************************************************************************
+	 * Parameters
+	 * numberIter	: is the number of rectangle to draw in the test
+	 * pixel_buffer : pointer to the On-chip memory used as pixel buffer
+	 *
+	 * Return
+	 * none
+	 *
+	 * Print random line on the screen then calculate some
+	 * performance metric and finally print it on the terminal
+	 *
+	 * Notes
+	 * None
+	 *************************************************************************/
 	alt_timestamp_start();
 	uint32_t nbPixels = 0;
 	lastDrawingVar lastDrawingData;
@@ -178,6 +231,25 @@ void software_line_test(int numberIter, alt_up_pixel_buffer_dma_dev* pixel_buffe
 }
 
 void software_empty_ellipse_test(int numberIter, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+	/**************************************************************************
+	 *draw a number of random empty ellipse
+	 **************************************************************************
+	 * Parameters
+	 * numberIter	: is the number of rectangle to draw in the test
+	 * pixel_buffer : pointer to the On-chip memory used as pixel buffer
+	 *
+	 * Return
+	 * none
+	 *
+	 * Side effects
+	 * Print random empty ellipse ont the screen. Then calculate some performance
+	 * metric and finally print it on the terminal
+	 *
+	 * Notes
+	 * If the random value for the two point used to draw the ellipse are invalid
+	 * and result in the ellipse not drawn. The function retry so the numberIter
+	 * represent the number of ellipse drawn on screen.
+	 *************************************************************************/
 	alt_timestamp_start();
 	uint32_t nbPixels = 0;
 	lastDrawingVar lastDrawingData;
@@ -215,6 +287,23 @@ void software_empty_ellipse_test(int numberIter, alt_up_pixel_buffer_dma_dev* pi
 }
 
 void software_copy_paste_test(int numberIter, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+	/**************************************************************************
+	 copy and paste random region at random place
+	 **************************************************************************
+	 * Parameters
+	 * numberIter	: is the number of rectangle to draw in the test
+	 * pixel_buffer : pointer to the On-chip memory used as pixel buffer
+	 *
+	 * Return
+	 * none
+	 *
+	 * Side effects
+	 * select random region to copy then paste it at random place.Then calculate
+	 * some performance metric and finally print it on the terminal 
+	 *
+	 * Notes
+	 * None
+	 *************************************************************************/
 	alt_timestamp_start();
 	uint32_t nbPixels = 0;
 	uint32_t temp0 = alt_timestamp();
@@ -257,6 +346,24 @@ void software_copy_paste_test(int numberIter, alt_up_pixel_buffer_dma_dev* pixel
 }
 
 void software_cut_paste_test(int numberIter, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+	/**************************************************************************
+	 cut and paste random region at random place
+	 **************************************************************************
+	 * Parameters
+	 * numberIter	: is the number of rectangle to draw in the test
+	 * pixel_buffer : pointer to the On-chip memory used as pixel buffer
+	 *
+	 * Return
+	 * none
+	 *
+	 * Side effects
+	 * select random region to cut then paste it at random place. The cut
+	 * region is then filled with uniforThen calculate
+	 * some performance metric and finally print it on the terminal
+	 *
+	 * Notes
+	 * None
+	 *************************************************************************/
 	alt_timestamp_start();
 	uint32_t nbPixels = 0;
 	uint32_t temp0 = alt_timestamp();
