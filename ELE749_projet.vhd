@@ -1,7 +1,6 @@
 -------------------------------------------------------------------------------
 --projet.vhd
 --
---	created on 2023-05-05
 --
 --	Autor: Robin Galipeau, Nicolas Gagnier
 --
@@ -9,16 +8,17 @@
 --		Material implementation of a VGA video output and a PS2 mouse port
 --		used to support a simple drawing aplication on a NIOS II cpu core.
 --		
---		module used:	-Onchip memory						--Nios2 core
+--		module used:	-Onchip memory						--Nios2 f core
 --							-SDRAM	controller				--JTAG controller
 --							-pixel and carachter buffer	--PS2 contoller
 --							-RGB resample						--sysID
 --							-Scaler								--IO port for push button
---							-Alpha Blender
---							-FIFO
---							-VGA controller
---							video PLL
---					 
+--							-Alpha Blender						--HWellipse
+--							-FIFO									--recfiller
+--							-VGA controller					--cursor
+--							-video PLL							--GPIO	
+--					 		-Buttons								--Switches
+--									
 -------------------------------------------------------------------------------
 library ieee;
 use ieee.std_logic_1164.all;

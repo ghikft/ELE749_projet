@@ -1,3 +1,7 @@
+/* Description
+* Library used to for the 2d drawing
+* Author: Nicolas & Robin
+*********************************************************************/
 #include "softwareDraw.h"
 #include "alt_types.h"
 #include "system.h"
@@ -10,10 +14,6 @@
 
 #define H_RES 640
 #define V_RES 480
-
-//extern alt_up_pixel_buffer_dma_dev *pixel_buffer;
-
-//alt_u8 lastDrawnOp = lastDrawingOpp;
 
 int absoluteV(int x);
 void soft_draw_line_high(int x1, int y1,
@@ -172,6 +172,28 @@ void init_last_drawing_Var(lastDrawingVar* lastDrawingData) {
 int draw_empty_ellipse(int x_center, int y_center, int x_radius, int y_radius, 
 						int color, alt_up_pixel_buffer_dma_dev* pixel_buffer, 
 						int erasePreviousWork, lastDrawingVar* lastDrawingData){
+
+	/**************************************************************************
+	 * draw_empty_ellipse
+	 **************************************************************************
+	 * Parameters
+	 * x_center	: x coordinate of center of the ellipse
+	 * y_center	: y coordinate of center of the ellipse
+	 * x_radius	: radius of the ellipse in X
+	 * y_radius : radius of the ellipse in Y
+	 * color	: color to draw the empty ellipse
+	 * erasePreviousWork	: Delete the previous rectangle stored in lastDrawingData 1=erase 0 = not erase
+	 * lastDrawingData		: Structure that save multiple variable used to keep track of previous 
+	 *						  shape drawn during the interactive draw
+	 * pixel_buffer is the pointer used to write in the pixel_buffer of the video pipeline
+	 *
+	 * Return value
+	 * return 0 if ellipse was not drawn
+	 * return 1 if ellipse was drawn
+	 *
+	 * Side effects
+	 * none
+	 *************************************************************************/
 	
 	//flip the radiuses if they are negative
 	if(x_radius<0){
@@ -336,6 +358,20 @@ unsigned char get_pixel_color2(int x, int y) {
 }
 
 void flood_fill_zone(int startX, int startY, int fillColor, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+	/**************************************************************************
+	 * flood fill a zone
+	 **************************************************************************
+	 * Parameters
+	 * startX : x coordinate of the pixel
+	 * startY : y coordinate of the pixel
+	 * fillColor : color to fill
+	 *
+	 * Valeur de retour
+	 * none
+	 *
+	 * Side effects
+	 * none
+	 *************************************************************************/
 	int initialColor = get_pixel_color2(startX, startY);
 	//printf("initial color %d\n\r",initialColor);
 	if (fillColor == initialColor) {
@@ -349,6 +385,22 @@ void flood_fill_zone(int startX, int startY, int fillColor, alt_up_pixel_buffer_
 }
 
 char flood_fill_sub(int x, int y, int fillColor, int initialColor, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+	/**************************************************************************
+	 * flood fill a zone of a the color of the selected pixel
+	 **************************************************************************
+	 * Parameters
+	 * startX : x coordinate of the pixel
+	 * startY : y coordinate of the pixel
+	 * fillColor : color to fill
+	 * initialColor : color to replace
+	 *
+	 * Valeur de retour
+	 * none
+	 *
+	 * Side effects
+	 * none
+	 *************************************************************************/
+	
 	//check if outside drawing zone, if the current color is diffiernt from the initailColor to replace
 	//or if the currentColor is the same as the one we are filling with
 	if (x <= DRAWING_ZONE_LEFT_LIMIT || x > RIGHT_LIMIT || y<TOP_LIMIT || y> BOTTOM_LIMIT) {
@@ -375,19 +427,39 @@ char flood_fill_sub(int x, int y, int fillColor, int initialColor, alt_up_pixel_
 }
 
 void fill_to_edge_zone(int startX, int startY, int fillColor, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
-	//int initialColor = get_pixel_color2(startX, startY);
-	//printf("initial color %d\n\r",initialColor);
-	//if (fillColor == initialColor) {
-		//printf("FILL early exit\n\r");
-	//}
-	//else {
-		//printf("lunch recursion\n\r");
+	/**************************************************************************
+	 * wraper for fill_to_edge_sub
+	 **************************************************************************
+	 * Parameters
+	 * startX : x coordinate of the pixel
+	 * startY : y coordinate of the pixel
+	 * fillColor : color to fill
+	 *
+	 * Valeur de retour
+	 * none
+	 *
+	 * Side effects
+	 * none
+	 *************************************************************************/
 	fill_to_edge_sub(startX, startY, fillColor, pixel_buffer);
-		//printf("END_FILL\n\r");
-	//}
 }
 
 char fill_to_edge_sub(int x, int y, int fillColor, alt_up_pixel_buffer_dma_dev* pixel_buffer) {
+	/**************************************************************************
+	 * flood fill a zone to until it encounters a specific colour
+	 **************************************************************************
+	 * Parameters
+	 * startX : x coordinate of the pixel
+	 * startY : y coordinate of the pixel
+	 * fillColor : color to fill
+	 *
+	 * Valeur de retour
+	 * none
+	 *
+	 * Side effects
+	 * none
+	 *************************************************************************/
+
 	//check if outside drawing zone, if the current color is diffiernt from the initailColor to replace
 	//or if the currentColor is the same as the one we are filling with
 	if (x <= LEFT_LIMIT || x > RIGHT_LIMIT || y<TOP_LIMIT || y> BOTTOM_LIMIT) {
@@ -416,7 +488,26 @@ char fill_to_edge_sub(int x, int y, int fillColor, alt_up_pixel_buffer_dma_dev* 
 void soft_draw_line(int x1, int y1,
     				int x2, int y2,
     				int color, int erasePreviousWork, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer){
-	
+	/**************************************************************************
+	 * Draws a line between 2 points
+	 **************************************************************************
+	 * Parameters
+	 * x1 : x coordinate of the first point
+	 * y1 : y coordinate of the first point
+	 * x2 : x coordinate of the second point
+	 * y2 : y coordinate of the second point
+	 * color : color of the line
+	 * erasePreviousWork : Delete the previous rectangle stored in lastDrawingData 1=erase 0 = not erase
+	 * lastDrawingData : Structure that save multiple variable used to keep track of previous 
+	 *					 shape drawn during the interactive draw
+	 * pixel_buffer is the pointer used to write in the pixel_buffer of the video pipeline
+	 *
+	 * Valeur de retour
+	 * none
+	 *
+	 * Side effects
+	 * none
+	 *************************************************************************/
 	//erase previous work
 	if(erasePreviousWork){
 		for (int j=0; j<lastDrawingData->numberOfPixelForLastDraw;j++){
@@ -450,6 +541,26 @@ void soft_draw_line(int x1, int y1,
 void soft_draw_line_low(int x1, int y1,
     				int x2, int y2,
     				int color, int erasePreviousWork, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer){
+	/**************************************************************************
+	 * Draws a line between 2 points in the bottom quadrants
+	 **************************************************************************
+	 * Parameters
+	 * x1 : x coordinate of the first point
+	 * y1 : y coordinate of the first point
+	 * x2 : x coordinate of the second point
+	 * y2 : y coordinate of the second point
+	 * color : color of the line
+	 * erasePreviousWork : Delete the previous rectangle stored in lastDrawingData 1=erase 0 = not erase
+	 * lastDrawingData : Structure that save multiple variable used to keep track of previous 
+	 *					 shape drawn during the interactive draw
+	 * pixel_buffer is the pointer used to write in the pixel_buffer of the video pipeline
+	 *
+	 * Valeur de retour
+	 * none
+	 *
+	 * Side effects
+	 * none
+	 *************************************************************************/
 	
 	int dx = x2-x1;
 	int dy = y2-y1;
@@ -483,6 +594,26 @@ void soft_draw_line_low(int x1, int y1,
 void soft_draw_line_high(int x1, int y1,
     				int x2, int y2,
     				int color, int erasePreviousWork, lastDrawingVar* lastDrawingData, alt_up_pixel_buffer_dma_dev* pixel_buffer){
+/**************************************************************************
+ * Draws a line between 2 points in the top quadrants
+ **************************************************************************
+	* Parameters
+	* x1 : x coordinate of the first point
+	* y1 : y coordinate of the first point
+	* x2 : x coordinate of the second point
+	* y2 : y coordinate of the second point
+	* color : color of the line
+	* erasePreviousWork : Delete the previous rectangle stored in lastDrawingData 1=erase 0 = not erase
+	* lastDrawingData : Structure that save multiple variable used to keep track of previous 
+	*					 shape drawn during the interactive draw
+	* pixel_buffer is the pointer used to write in the pixel_buffer of the video pipeline
+	*
+	* Valeur de retour
+	* none
+	*
+	* Side effects
+	* none
+	*************************************************************************/
 	int dx = x2-x1;
 	int dy = y2-y1;
 
@@ -513,6 +644,18 @@ void soft_draw_line_high(int x1, int y1,
 }
 
 int absoluteV(int x){
+	/**************************************************************************
+	 * Calculate absolute value
+	 **************************************************************************
+	 * Parameters
+	 * x : value to calculate the absolute value on
+	 *
+	 * Valeur de retour
+	 * absolute value of x
+	 *
+	 * Side effects
+	 * none
+	 *************************************************************************/
 	if(x<0){
 		return x*-1;
 	}
@@ -522,7 +665,26 @@ int absoluteV(int x){
 }
 
 void soft_copy_paste(int x1_copy, int y1_copy, int x2_copy, int y2_copy, int x1_paste, int y1_paste, int cut, char color, alt_up_pixel_buffer_dma_dev* pixel_buffer){
-	
+	/**************************************************************************
+	 * copy paste a section of the screen to another
+	 **************************************************************************
+	 * Parameters
+	 * x1_copy : x coordinate of the first point
+	 * y1_copy : y coordinate of the first point
+	 * x2_copy : x coordinate of the second point
+	 * y2_copy : y coordinate of the second point
+	 * x1_paste : x coordinate of the top corner of the paste
+	 * y1_paste : y coordinate of the top corner of the paste
+	 * cut : 1 to cut and paste, 0 to copy paste
+	 * color : color of the fill if cut
+	 * pixel_buffer is the pointer used to write in the pixel_buffer of the video pipeline
+	 *
+	 * Valeur de retour
+	 * none
+	 *
+	 * Side effects
+	 * none
+	 *************************************************************************/
 	char copyMem[307200];
 	int nbPts=0;
 
@@ -584,5 +746,4 @@ void soft_copy_paste(int x1_copy, int y1_copy, int x2_copy, int y2_copy, int x1_
 		
 		x_paste++;
 	}
-
 }
