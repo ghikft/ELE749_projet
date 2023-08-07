@@ -75,7 +75,7 @@ begin
 
 		rf_write     <= '1';
 		rf_address   <= x"1";
-		rf_writedata <= x"08000000";
+		rf_writedata <= x"00000000";
 		wait for 10 ns;
 
 		rf_address   <= x"2";
@@ -83,11 +83,11 @@ begin
 		wait for 10 ns;
 
 		rf_address   <= x"3";
-		rf_writedata <= x"000001E0"; -- y_max = 240
+		rf_writedata <= x"000001E0"; -- y_max = 480
 		wait for 10 ns;
 
 		rf_address   <= x"4";
-		rf_writedata <= x"000000A0"; -- x_center = 160
+		rf_writedata <= x"00000064"; -- x_center = 100
 		wait for 10 ns;
 
 		rf_address   <= x"5";
@@ -95,11 +95,11 @@ begin
 		wait for 10 ns;
 
 		rf_address   <= x"6";
-		rf_writedata <= x"00000004"; -- x_radius = 164
+		rf_writedata <= x"00000004"; -- x_radius = 4
 		wait for 10 ns;
 
 		rf_address   <= x"7";
-		rf_writedata <= x"00000004"; -- y_radius = 103
+		rf_writedata <= x"00000004"; -- y_radius = 4
 		wait for 10 ns;
 
 		rf_address   <= x"8";
@@ -111,7 +111,7 @@ begin
 		wait for 10 ns;
 
 		rf_write <= '0';
-		wait for 280 ns;
+		wait for 900 ns;
 
 		rf_read    <= '1';
 		rf_address <= x"0"; -- read ready

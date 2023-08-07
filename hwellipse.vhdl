@@ -37,7 +37,8 @@ architecture rtl of hwellipse is
 	signal start    	: std_logic_vector(31 downto 0);
 
 	-- signaux pour machine a etat
-	type state_type is (idle, setup1P1, setup2P1, drawP1_1, drawP1_2, drawP1_3, drawP1_4, setup1P2, setup2P2, drawP2_1, drawP2_2, drawP2_3, drawP2_4);
+	type state_type is (idle, setup1P1, setup2P1, drawP1_1, drawP1_2, drawP1_3, drawP1_4, compute1_1, compute1_2, compute1_3,
+							  setup1P2, setup2P2, drawP2_1, drawP2_2, drawP2_3, drawP2_4, compute2_1, compute2_2, compute2_3);
 	signal state_reg : state_type;
 
 	-- signaux internes
@@ -113,7 +114,8 @@ begin
 
 					when setup1P1 =>
 						start <= x"00000000";
-						
+						ready      <= x"00000000";
+						fb_write   <= '0';
 						twoASquare <= resize(2*x_radius*x_radius,16);
 						twoBSquare <= resize(2*y_radius*y_radius,16);
 						x <= x_radius;
@@ -121,117 +123,140 @@ begin
 						xChange <= resize(y_radius*y_radius*(1-2*x_radius),16);
 						yChange <= resize(x_radius*x_radius,16);
 						ellipseError <= x"0000";
-						stoppingX <= resize(twoBSquare*x_radius,16);
-						stoppingY <= x"0000";
-
-						addr      <= fb_base + (y_center+y) * x_max;
 						state_reg <= setup2P1;
-
+					
 					when setup2P1 =>
 						ready      <= x"00000000";
-						fb_write   <= '1';
-						fb_address <= std_logic_vector(addr + (x_center+x));
-						state_reg  <= drawP1_1;
-						total      <= (others => '0');
+						fb_write   <= '0';
+						stoppingX <= resize(twoBSquare*x_radius,16);
+						stoppingY <= x"0000";
+						state_reg <= compute1_3;
 
-
-					when drawP1_1 =>
+					when drawp1_1 =>
 						ready      <= x"00000000";
 						fb_write   <= '1';
-
-						if fb_waitrequest = '0' then -- previous write accepted, move to next
-							if stoppingX < stoppingY then
-								state_reg <= setup1P2;
-							else
-								y <= y + 1;
-								stoppingY <= stoppingY+twoASquare;
-								ellipseError <= ellipseError+yChange;
-								yChange <= yChange+twoASquare;
-
-								if (2*ellipseError+xChange) > 0 then
-									x <= x - 1;
-									stoppingX <= stoppingX-twoBSquare;
-									ellipseError <= ellipseError+xChange;
-									xChange <= xChange+twoBSquare;
-								end if;
-								addr <= fb_base + (y_center+y) * x_max;
-								fb_address <= std_logic_vector(addr + (x_center+x));
-								state_reg <= drawP1_2;
-							end if;
-						end if;
+						state_reg <= drawp1_2;
+						--addr <= fb_base + (y_center+y) * x_max;
+						fb_address <= std_logic_vector((fb_base + (y_center+y) * x_max) + (x_center+x));
 					
-					when drawP1_2 =>
-						state_reg <= drawP1_3;
-						addr <= fb_base + (y_center+y) * x_max;
-						fb_address <= std_logic_vector(addr + (x_center-x));
-					when drawP1_3 =>
-						state_reg <= drawP1_4;
-						addr <= fb_base + (y_center-y) * x_max;
-						fb_address <= std_logic_vector(addr + (x_center-x));
-					when drawP1_4 =>
-						state_reg <= drawP1_1;
-						addr <= fb_base + (y_center-y) * x_max;
-						fb_address <= std_logic_vector(addr + (x_center+x));
-						
-					--Point set 2
+					when drawp1_2 =>
+						ready      <= x"00000000";
+						fb_write   <= '1';
+						state_reg <= drawp1_3;
+						--addr <= fb_base + (y_center+y) * x_max;
+						fb_address <= std_logic_vector((fb_base + (y_center+y) * x_max) + (x_center-x));
+
+					when drawp1_3 =>
+						ready      <= x"00000000";
+						fb_write   <= '1';
+						state_reg <= drawp1_4;
+						--addr <= fb_base + (y_center-y) * x_max;
+						fb_address <= std_logic_vector((fb_base + (y_center-y) * x_max) + (x_center-x));
+
+					when drawp1_4 =>
+						ready      <= x"00000000";
+						fb_write   <= '1';
+						state_reg <= compute1_1;
+						--addr <= fb_base + (y_center-y) * x_max;
+						fb_address <= std_logic_vector((fb_base + (y_center-y) * x_max) + (x_center+x));
+					
+					when compute1_1 =>
+						y <= y+1;
+						stoppingY <= stoppingY + twoASquare;
+						ellipseError <= ellipseError + yChange;
+						yChange <= yChange + twoASquare;
+						state_reg <= compute1_2;
+
+					
+					when compute1_2 =>
+						if ((2*ellipseError+xChange)>0) then
+							x <= x-1;
+							stoppingX <= stoppingX - twoASquare;
+							ellipseError <= ellipseError + xChange;
+							xChange <= xChange + twoBSquare;
+						end if;
+						state_reg <= compute1_3;
+					
+					when compute1_3 =>
+						if(stoppingX < stoppingY) then
+							state_reg <= setup1P2;
+						else
+							state_reg <= drawp1_1;
+						end if;
+
+					--ponit set 2
 					when setup1P2 =>
-						start <= x"00000000";
-						
+						start 	   <= x"00000000";
+						ready      <= x"00000000";
+						fb_write   <= '0';
+
 						x <= x"0000";
 						y <= y_radius;
 						xChange <= resize(y_radius*y_radius,16);
 						yChange <= resize(x_radius*x_radius*(1-2*y_radius),16);
 						ellipseError <= x"0000";
-						stoppingX <= x"0000";
-						stoppingY <= resize(twoASquare*y_radius,16);
-
-						addr      <= fb_base + (y_center+y) * x_max;
 						state_reg <= setup2P2;
-
+					
 					when setup2P2 =>
 						ready      <= x"00000000";
-						fb_write   <= '1';
-						fb_address <= std_logic_vector(addr + (x_center+x));
-						state_reg  <= drawP2_1;
-						total      <= (others => '0');
+						fb_write   <= '0';
+						stoppingX <= x"0000";
+						stoppingY <= resize(twoASquare*y_radius,16);
+						state_reg <= compute2_3;
 
-					when drawP2_1 =>
+					when drawp2_1 =>
 						ready      <= x"00000000";
 						fb_write   <= '1';
-
-						if fb_waitrequest = '0' then -- previous write accepted, move to next
-							if stoppingX > stoppingY then
-								state_reg <= idle;
-							else
-								x <= x + 1;
-								stoppingX <= stoppingX+twoBSquare;
-								ellipseError <= ellipseError+xChange;
-								xChange <= xChange+twoBSquare;
-
-								if (2*ellipseError+yChange) > 0 then
-									y <= y - 1;
-									stoppingY <= stoppingY-twoASquare;
-									ellipseError <= ellipseError+yChange;
-									yChange <= yChange+twoASquare;
-								end if;
-								state_reg <= drawP1_1;
-								addr <= fb_base + (y_center+y) * x_max;
-								fb_address <= std_logic_vector(addr + (x_center+x));
-							end if;
-						end if;
+						state_reg <= drawp2_2;
+						--addr <= fb_base + (y_center+y) * x_max;
+						fb_address <= std_logic_vector((fb_base + (y_center+y) * x_max) + (x_center+x));
 					
-					when drawP2_2 =>
-						state_reg <= drawP1_3;
-						addr <= fb_base + (y_center+y) * x_max;
-						fb_address <= std_logic_vector(addr + (x_center-x));
-					when drawP2_3 =>
-						state_reg <= drawP1_4;
-						addr <= fb_base + (y_center+y) * x_max;
-						fb_address <= std_logic_vector(addr + (x_center-x));
-					when drawP2_4 =>
-						state_reg <= drawP1_1;
-						addr <= fb_base + (y_center+y) * x_max;
-						fb_address <= std_logic_vector(addr + (x_center-x));
+					when drawp2_2 =>
+						ready      <= x"00000000";
+						fb_write   <= '1';
+						state_reg <= drawp2_3;
+						--addr <= fb_base + (y_center+y) * x_max;
+						fb_address <= std_logic_vector((fb_base + (y_center+y) * x_max) + (x_center-x));
+
+					when drawp2_3 =>
+						ready      <= x"00000000";
+						fb_write   <= '1';
+						state_reg <= drawp2_4;
+						--addr <= fb_base + (y_center-y) * x_max;
+						fb_address <= std_logic_vector((fb_base + (y_center-y) * x_max) + (x_center-x));
+
+					when drawp2_4 =>
+						ready      <= x"00000000";
+						fb_write   <= '1';
+						state_reg <= compute2_1;
+						--addr <= fb_base + (y_center-y) * x_max;
+						fb_address <= std_logic_vector((fb_base + (y_center-y) * x_max) + (x_center+x));
+					
+					when compute2_1 =>
+						ready      <= x"00000000";
+						fb_write   <= '0';
+						
+						x <= x+1;
+						stoppingX <= stoppingX + twoBSquare;
+						ellipseError <= ellipseError + xChange;
+						xChange <= xChange + twoBSquare;
+						state_reg <= compute2_2;
+					
+					when compute2_2 =>
+						if ((2*ellipseError+yChange)>0) then
+							y <= y-1;
+							stoppingY <= stoppingY - twoASquare;
+							ellipseError <= ellipseError + yChange;
+							yChange <= yChange + twoASquare;
+						end if;
+						state_reg <= compute2_3;
+					
+					when compute2_3 =>
+						if(stoppingX > stoppingY) then
+							state_reg <= idle;
+						else
+							state_reg <= drawp2_1;
+						end if;						
 				end case;
 			end if;
 		end if;
